@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">PotHoleApplication</string>
+    <string name="str_sign_in">Sign in</string>
+    <string name="str_email">Email</string>
+    <string name="str_username">Username</string>
+    <string name="str_password">Password</string>
+    <string name="str_confirm_password">Confirm Password</string>
 </resources>

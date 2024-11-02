@@ -3,17 +3,156 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
+    android:background="@drawable/background"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity">
-
-    <TextView
+    <androidx.constraintlayout.widget.Guideline
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello World!"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.2"
+        android:id="@+id/guideTop"/>
+    <androidx.constraintlayout.widget.Guideline
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.95"
+        android:id="@+id/guideBot"/>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/sheetLayout"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/guideBot"
+        app:layout_constraintTop_toTopOf="@+id/guideTop"
+        android:background="@drawable/corner_sheet"
+        android:layout_marginHorizontal="@dimen/dim_sheet_margin_horizontal">
+        <androidx.constraintlayout.widget.Guideline
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/guideLeft"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.1"/>
+        <androidx.constraintlayout.widget.Guideline
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/guideRight"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.9"/>
+        <androidx.constraintlayout.widget.Guideline
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:id="@+id/guideTopSheet"
+            app:layout_constraintGuide_percent="0.1"/>
+        <androidx.constraintlayout.widget.Guideline
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:id="@+id/guideBottomSheet"
+            app:layout_constraintGuide_percent="0.7"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/tvTitle"
+            android:text="@string/str_sign_in"
+            android:textColor="@color/black"
+            android:textSize="35sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toEndOf="@id/guideLeft"
+            app:layout_constraintBottom_toTopOf="@id/guideTopSheet"
+            app:layout_constraintTop_toTopOf="parent" />
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="15dp"
+            android:id="@+id/etlEmail"
+            android:hint="@string/str_email"
+            app:hintTextColor="@color/dark_purple"
+            app:layout_constraintEnd_toStartOf="@id/guideRight"
+            app:layout_constraintStart_toEndOf="@id/guideLeft"
+            app:layout_constraintTop_toBottomOf="@id/guideTopSheet">
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/text_input_layout_corner"
+                android:id="@+id/etEmail"
+                style="@style/ThemeOverlay.Material3.TextInputEditText.OutlinedBox"
+                android:textSize="16sp"
+                android:textColor="@color/black"/>
+        </com.google.android.material.textfield.TextInputLayout>
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="15dp"
+            android:id="@+id/etlUsername"
+            android:hint="@string/str_username"
+            app:hintTextColor="@color/dark_purple"
+            app:layout_constraintEnd_toStartOf="@id/guideRight"
+            app:layout_constraintStart_toEndOf="@id/guideLeft"
+            app:layout_constraintTop_toBottomOf="@id/etlEmail">
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/etUsername"
+                android:background="@drawable/text_input_layout_corner"
+                style="@style/ThemeOverlay.Material3.TextInputEditText.OutlinedBox"
+                android:textSize="16sp"
+                android:textColor="@color/black"/>
+        </com.google.android.material.textfield.TextInputLayout>
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="15dp"
+            android:id="@+id/etlPassword"
+            android:hint="@string/str_password"
+            app:hintTextColor="@color/dark_purple"
+            app:layout_constraintEnd_toStartOf="@id/guideRight"
+            app:layout_constraintStart_toEndOf="@id/guideLeft"
+            app:passwordToggleEnabled="true"
+            app:layout_constraintTop_toBottomOf="@id/etlUsername">
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/text_input_layout_corner"
+                android:id="@+id/etPassword"
+                style="@style/ThemeOverlay.Material3.TextInputEditText.OutlinedBox"
+                android:textSize="16sp"
+                android:textColor="@color/black"/>
+        </com.google.android.material.textfield.TextInputLayout>
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="15dp"
+            android:id="@+id/etlConfirmPassword"
+            android:hint="@string/str_confirm_password"
+            app:passwordToggleEnabled="true"
+            app:hintTextColor="@color/dark_purple"
+            app:layout_constraintEnd_toStartOf="@id/guideRight"
+            app:layout_constraintStart_toEndOf="@id/guideLeft"
+            app:layout_constraintTop_toBottomOf="@id/etlPassword">
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/etConfirmPassword"
+                android:background="@drawable/text_input_layout_corner"
+                style="@style/ThemeOverlay.Material3.TextInputEditText.OutlinedBox"
+                android:textSize="16sp"
+                android:textColor="@color/black"/>
+        </com.google.android.material.textfield.TextInputLayout>
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/btnSignin"
+            android:textSize="25sp"
+            android:text="@string/str_sign_in"
+            app:layout_constraintTop_toBottomOf="@id/guideBottomSheet"
+            app:layout_constraintLeft_toRightOf="@id/guideLeft"
+            app:layout_constraintRight_toLeftOf="@id/guideRight"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
