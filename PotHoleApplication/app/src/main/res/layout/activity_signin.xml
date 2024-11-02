@@ -11,7 +11,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.2"
+        app:layout_constraintGuide_percent="0.25"
         android:id="@+id/guideTop"/>
     <androidx.constraintlayout.widget.Guideline
         android:layout_width="wrap_content"
@@ -19,127 +19,162 @@
         android:orientation="horizontal"
         app:layout_constraintGuide_percent="0.95"
         android:id="@+id/guideBot"/>
+    <androidx.constraintlayout.widget.Guideline
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:id="@+id/guideLeft"
+        app:layout_constraintGuide_percent="0.1"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/str_pothole_map"
+        android:textColor="@color/dark_purple"
+        android:textSize="40sp"
+        android:textStyle="bold"
+        android:id="@+id/tvPotholeMap"
+        app:layout_constraintBottom_toTopOf="@+id/guideTop"
+        app:layout_constraintLeft_toRightOf="@id/guideLeft"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/str_support_your_life"
+        android:textColor="@color/dark_purple"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@+id/guideLeft"
+        app:layout_constraintTop_toBottomOf="@+id/tvPotholeMap" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/sheetLayout"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_marginHorizontal="@dimen/dim_sheet_margin_horizontal"
+        android:background="@drawable/corner_sheet"
         android:elevation="30dp"
         app:layout_constraintBottom_toTopOf="@+id/guideBot"
         app:layout_constraintTop_toTopOf="@+id/guideTop"
-        android:background="@drawable/corner_sheet"
-        android:layout_marginHorizontal="@dimen/dim_sheet_margin_horizontal">
+        app:layout_constraintVertical_bias="1.0"
+        tools:layout_editor_absoluteX="20dp">
+
         <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideLeftSheet"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/guideLeft"
             android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.12"/>
+            app:layout_constraintGuide_percent="0.12" />
+
         <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideRightSheet"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/guideRight"
             android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.88"/>
+            app:layout_constraintGuide_percent="0.88" />
+
         <androidx.constraintlayout.widget.Guideline
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
             android:id="@+id/guideTopSheet"
-            app:layout_constraintGuide_percent="0.15"/>
-        <androidx.constraintlayout.widget.Guideline
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.10" />
+
+        <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideBottomSheet"
-            app:layout_constraintGuide_percent="0.65"/>
-        <androidx.constraintlayout.widget.Guideline
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/guideBottomSheet2"
             android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.7"/>
+            app:layout_constraintGuide_percent="0.7" />
+
         <TextView
+            android:id="@+id/tvTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/tvTitle"
             android:text="@string/str_sign_in"
-            android:textColor="@color/black"
+            android:textColor="@color/dark_purple"
             android:textSize="35sp"
             android:textStyle="bold"
-            app:layout_constraintStart_toEndOf="@id/guideLeft"
             app:layout_constraintBottom_toTopOf="@id/guideTopSheet"
+            app:layout_constraintStart_toEndOf="@id/guideLeftSheet"
             app:layout_constraintTop_toTopOf="parent" />
+
         <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/etlEmail"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:id="@+id/etlEmail"
             android:elevation="10dp"
-            app:boxStrokeColor="@color/purple"
-            app:boxStrokeWidth="1dp"
+            android:hint="@string/str_email"
             app:boxCornerRadiusBottomEnd="30dp"
             app:boxCornerRadiusBottomStart="30dp"
             app:boxCornerRadiusTopEnd="30dp"
-            app:layout_constraintVertical_chainStyle="spread"
             app:boxCornerRadiusTopStart="30dp"
+            app:boxStrokeColor="@color/purple"
+            app:boxStrokeWidth="1dp"
             app:hintTextColor="@color/dark_purple"
-            android:hint="@string/str_email"
-            app:layout_constraintEnd_toStartOf="@id/guideRight"
-            app:layout_constraintStart_toEndOf="@id/guideLeft"
+            app:layout_constraintBottom_toTopOf="@id/etlUsername"
+            app:layout_constraintEnd_toStartOf="@id/guideRightSheet"
+            app:layout_constraintStart_toEndOf="@id/guideLeftSheet"
             app:layout_constraintTop_toBottomOf="@id/guideTopSheet"
-            app:layout_constraintBottom_toTopOf="@id/etlUsername">
+            app:layout_constraintVertical_chainStyle="spread">
+
             <com.google.android.material.textfield.TextInputEditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
                 android:id="@+id/etEmail"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
-                android:textSize="14sp"
-                android:textColor="@color/black"/>
-        </com.google.android.material.textfield.TextInputLayout>
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            app:layout_constraintVertical_chainStyle="spread"
-            android:id="@+id/etlUsername"
-            android:elevation="10dp"
-            app:boxStrokeColor="@color/purple"
-            app:boxStrokeWidth="1dp"
-            app:boxCornerRadiusBottomEnd="30dp"
-            app:boxCornerRadiusBottomStart="30dp"
-            app:boxCornerRadiusTopEnd="30dp"
-            app:boxCornerRadiusTopStart="30dp"
-            android:hint="@string/str_username"
-            app:hintTextColor="@color/dark_purple"
-            app:layout_constraintEnd_toStartOf="@id/guideRight"
-            app:layout_constraintStart_toEndOf="@id/guideLeft"
-            app:layout_constraintTop_toBottomOf="@id/etlEmail"
-            app:layout_constraintBottom_toTopOf="@id/etlPassword">
-            <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/etUsername"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
-                android:textSize="14sp"
-                android:textColor="@color/black"/>
+                android:textColor="@color/black"
+                android:textSize="14sp" />
         </com.google.android.material.textfield.TextInputLayout>
+
         <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/etlUsername"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:id="@+id/etlPassword"
             android:elevation="10dp"
-            app:boxStrokeColor="@color/purple"
-            app:boxStrokeWidth="1dp"
+            android:hint="@string/str_username"
             app:boxCornerRadiusBottomEnd="30dp"
             app:boxCornerRadiusBottomStart="30dp"
             app:boxCornerRadiusTopEnd="30dp"
             app:boxCornerRadiusTopStart="30dp"
-            android:hint="@string/str_password"
+            app:boxStrokeColor="@color/purple"
+            app:boxStrokeWidth="1dp"
             app:hintTextColor="@color/dark_purple"
-            app:layout_constraintEnd_toStartOf="@id/guideRight"
-            app:layout_constraintStart_toEndOf="@id/guideLeft"
-            app:passwordToggleEnabled="true"
+            app:layout_constraintBottom_toTopOf="@id/etlPassword"
+            app:layout_constraintEnd_toStartOf="@id/guideRightSheet"
+            app:layout_constraintStart_toEndOf="@id/guideLeftSheet"
+            app:layout_constraintTop_toBottomOf="@id/etlEmail"
+            app:layout_constraintVertical_chainStyle="spread">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etUsername"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:textSize="14sp" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/etlPassword"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:elevation="10dp"
+            android:hint="@string/str_password"
+            app:boxCornerRadiusBottomEnd="30dp"
+            app:boxCornerRadiusBottomStart="30dp"
+            app:boxCornerRadiusTopEnd="30dp"
+            app:boxCornerRadiusTopStart="30dp"
+            app:boxStrokeColor="@color/purple"
+            app:boxStrokeWidth="1dp"
+            app:hintTextColor="@color/dark_purple"
+            app:layout_constraintBottom_toTopOf="@id/etlConfirmPassword"
+            app:layout_constraintEnd_toStartOf="@id/guideRightSheet"
+            app:layout_constraintStart_toEndOf="@id/guideLeftSheet"
             app:layout_constraintTop_toBottomOf="@id/etlUsername"
-            app:layout_constraintBottom_toTopOf="@id/etlConfirmPassword">
+            app:passwordToggleEnabled="true">
+
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/etPassword"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
@@ -148,70 +183,73 @@
                 android:textColor="@color/black"
                 android:textSize="14sp" />
         </com.google.android.material.textfield.TextInputLayout>
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
 
+        <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/etlConfirmPassword"
+            android:layout_width="0dp"
+
+            android:layout_height="wrap_content"
             android:elevation="10dp"
-            app:boxStrokeColor="@color/purple"
-            app:boxStrokeWidth="1dp"
+            android:hint="@string/str_confirm_password"
             app:boxCornerRadiusBottomEnd="30dp"
             app:boxCornerRadiusBottomStart="30dp"
             app:boxCornerRadiusTopEnd="30dp"
             app:boxCornerRadiusTopStart="30dp"
-            android:hint="@string/str_confirm_password"
-            app:passwordToggleEnabled="true"
+            app:boxStrokeColor="@color/purple"
+            app:boxStrokeWidth="1dp"
             app:hintTextColor="@color/dark_purple"
-            app:layout_constraintEnd_toStartOf="@id/guideRight"
-            app:layout_constraintStart_toEndOf="@id/guideLeft"
+            app:layout_constraintBottom_toTopOf="@id/guideBottomSheet"
+            app:layout_constraintEnd_toStartOf="@id/guideRightSheet"
+            app:layout_constraintStart_toEndOf="@id/guideLeftSheet"
             app:layout_constraintTop_toBottomOf="@id/etlPassword"
-            app:layout_constraintBottom_toTopOf="@id/guideBottomSheet">
+            app:passwordToggleEnabled="true">
+
             <com.google.android.material.textfield.TextInputEditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
                 android:id="@+id/etConfirmPassword"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
-                android:textSize="14sp"
-                android:textColor="@color/black"/>
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:textSize="14sp" />
         </com.google.android.material.textfield.TextInputLayout>
+
         <Button
+            android:id="@+id/btnSignin"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:id="@+id/btnSignin"
-            android:textSize="25sp"
-            android:textColor="@color/white"
             android:backgroundTint="@color/dark_purple"
             android:text="@string/str_sign_in"
-            app:layout_constraintTop_toBottomOf="@id/guideBottomSheet2"
-            app:layout_constraintLeft_toRightOf="@id/guideLeft"
-            app:layout_constraintRight_toLeftOf="@id/guideRight"/>
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            app:layout_constraintLeft_toRightOf="@id/guideLeftSheet"
+            app:layout_constraintRight_toLeftOf="@id/guideRightSheet"
+            app:layout_constraintTop_toBottomOf="@id/guideBottomSheet" />
 
-            <LinearLayout
+        <LinearLayout
+            android:id="@+id/googleLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintLeft_toRightOf="@id/guideLeftSheet"
+            app:layout_constraintRight_toLeftOf="@id/guideRightSheet"
+            app:layout_constraintTop_toBottomOf="@id/btnSignin">
+
+            <ImageView
+                android:layout_width="34dp"
+                android:layout_height="32dp"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_google" />
+
+            <Button
+                android:id="@+id/btnGoogle"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="10dp"
-                android:id="@+id/googleLayout"
-                app:layout_constraintLeft_toRightOf="@id/guideLeft"
-                app:layout_constraintRight_toLeftOf="@id/guideRight"
-                app:layout_constraintTop_toBottomOf="@id/btnSignin"
-                >
-                <ImageView
-                    android:layout_width="34dp"
-                    android:layout_height="32dp"
-                    android:src="@drawable/ic_google"
-                    android:layout_gravity="center"/>
-                <Button
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/btnGoogle"
-                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                    android:clickable="true"
-                    android:textSize="11sp"
-                    android:text="@string/str_continue_with_google"
-                    android:layout_gravity="center_vertical" />
-            </LinearLayout>
+                android:layout_gravity="center_vertical"
+                android:clickable="true"
+                android:text="@string/str_continue_with_google"
+                android:textSize="11sp" />
+        </LinearLayout>
 
         <TextView
             android:id="@+id/tvHaveAccount"
@@ -219,14 +257,11 @@
             android:layout_height="wrap_content"
             android:clickable="true"
             android:text="@string/str_already_have_account"
-            android:textSize="14sp"
             android:textColor="@color/black"
-            android:layout_marginTop="10dp"
-            app:layout_constraintLeft_toRightOf="@id/guideLeft"
-            app:layout_constraintRight_toLeftOf="@id/guideRight"
+            android:textSize="14sp"
+            app:layout_constraintLeft_toRightOf="@id/guideLeftSheet"
+            app:layout_constraintRight_toLeftOf="@id/guideRightSheet"
             app:layout_constraintTop_toBottomOf="@+id/googleLayout" />
-
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

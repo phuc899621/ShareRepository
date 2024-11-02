@@ -7,4 +7,12 @@
     <string name="str_confirm_password">Confirm Password</string>
     <string name="str_continue_with_google">Continue with google</string>
     <string name="str_already_have_account">Already have account</string>
+    <string name="str_pothole_map">Pothole Map</string>
+    <string name="str_support_your_life">Support your life</string>
+    <string name="str_email_verification">Email Verification</string>
+    <string name="str_checkemail">Check your email and enter the provided code in the field below</string>
+    <string name="str_resend_code">Resend Code</string>
+    <string name="str_verification">Verification</string>
+    <string name="email_verification_successful">Email verification successful!</string>
+    <string name="str_login">Login</string>
 </resources>
