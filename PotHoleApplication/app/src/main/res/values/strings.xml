@@ -15,4 +15,5 @@
     <string name="str_verification">Verification</string>
     <string name="email_verification_successful">Email verification successful!</string>
     <string name="str_login">Login</string>
+    <string name="str_unknown">Unknown</string>
 </resources>
