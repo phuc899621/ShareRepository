@@ -17,4 +17,6 @@
     <string name="str_login">Login</string>
     <string name="str_unknown">Unknown</string>
     <string name="str_create_an_account">Create an account</string>
+    <string name="str_analytics">Analytics</string>
+    <string name="str_report">Report</string>
 </resources>

@@ -7,12 +7,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".HomeScreenActivity">
+
     <androidx.constraintlayout.widget.Guideline
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/guideTop1"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.12"/>
+        app:layout_constraintGuide_percent="0.10"/>
     <androidx.constraintlayout.widget.Guideline
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -22,9 +23,21 @@
     <androidx.constraintlayout.widget.Guideline
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:id="@+id/guideMiddle"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.5"/>
+    <androidx.constraintlayout.widget.Guideline
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:id="@+id/guideRight"
         android:orientation="vertical"
         app:layout_constraintGuide_percent="0.95"/>
+    <androidx.constraintlayout.widget.Guideline
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/guideBottom"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.65"
 
     <ImageButton
         android:id="@+id/btnSetting"
@@ -46,7 +59,8 @@
         android:orientation="horizontal"
         app:layout_constraintBottom_toTopOf="@+id/guideTop1"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginEnd="10dp">
 
         <TextView
             android:id="@+id/tvName"
@@ -99,9 +113,96 @@
         <com.github.mikephil.charting.charts.LineChart
             android:id="@+id/lineChart"
             android:layout_width="match_parent"
-            android:layout_height="193dp"
+            android:layout_height="160dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
+    </com.google.android.material.card.MaterialCardView>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/str_pothole_map"
+        android:textSize="26sp"
+        android:textColor="@color/dark_purple"
+        android:textStyle="bold"
+        android:layout_marginTop="10dp"
+        app:layout_constraintTop_toBottomOf="@id/cvChart"
+        app:layout_constraintBottom_toTopOf="@id/cvMap"
+        app:layout_constraintStart_toEndOf="@id/guideLeft"/>
+    <androidx.cardview.widget.CardView
+        android:layout_width="0dp"
+        android:layout_height="160dp"
+        android:id="@+id/cvMap"
+        android:backgroundTint="@color/white"
+        app:layout_constraintRight_toLeftOf="@id/guideRight"
+        app:layout_constraintLeft_toRightOf="@id/guideLeft"
+        app:layout_constraintBottom_toTopOf="@id/guideBottom"
+        app:cardCornerRadius="20dp"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/str_analytics"
+        android:id="@+id/tvAnalytics"
+        android:textSize="24sp"
+        android:textColor="@color/dark_purple"
+        android:textStyle="bold"
+        android:layout_marginTop="10dp"
+        app:layout_constraintTop_toBottomOf="@id/guideBottom"
+        app:layout_constraintLeft_toRightOf="@id/guideLeft"
+        app:layout_constraintBottom_toTopOf="@id/cvAnalytics"
+        app:layout_constraintRight_toLeftOf="@id/guideMiddle"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="@string/str_report"
+        android:textColor="@color/dark_purple"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintLeft_toRightOf="@id/guideMiddle"
+        app:layout_constraintRight_toLeftOf="@id/guideRight"
+        app:layout_constraintBottom_toTopOf="@id/cvReport"
+        app:layout_constraintTop_toBottomOf="@id/guideBottom" />
+
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/cvAnalytics"
+        android:layout_width="0dp"
+        android:layout_height="150dp"
+        app:cardCornerRadius="20dp"
+        android:layout_marginHorizontal="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toRightOf="@id/guideLeft"
+        app:layout_constraintRight_toLeftOf="@id/guideMiddle"
+        app:layout_constraintTop_toTopOf="@+id/guideBottom">
+
+        <ImageButton
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@android:color/transparent"
+            android:scaleType="center"
+            android:src="@drawable/analytics" />
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/cvReport"
+        android:layout_width="0dp"
+        android:layout_height="150dp"
+        app:cardCornerRadius="20dp"
+        android:layout_marginHorizontal="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toRightOf="@id/guideMiddle"
+        app:layout_constraintRight_toLeftOf="@id/guideRight"
+        app:layout_constraintTop_toTopOf="@+id/guideBottom">
+
+        <ImageButton
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@android:color/transparent"
+            android:scaleType="center"
+            android:src="@drawable/report" />
+
     </com.google.android.material.card.MaterialCardView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
