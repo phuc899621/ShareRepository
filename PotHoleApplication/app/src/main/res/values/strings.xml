@@ -27,4 +27,7 @@
     <string name="str_community">Community</string>
     <string name="str_map_downcase">Map</string>
     <string name="str_search_your_location">Search your location</string>
+    <string name="str_your_username">Your Username</string>
+    <string name="str_300">300</string>
+    <string name="str_6">6</string>
 </resources>
