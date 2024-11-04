@@ -3,16 +3,81 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
+    android:background="@drawable/background"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MapViewActivity">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@drawable/searchview"
+        android:id="@+id/topAppBarLayout"
+        android:layout_marginTop="20dp"
+        android:layout_marginHorizontal="5dp"
         android:orientation="horizontal"
-        app:layout_constraintTop_toTopOf="parent"
-        >
+        app:layout_constraintTop_toTopOf="parent">
 
+        <ImageButton
+            android:id="@+id/btnBack"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginHorizontal="10dp"
+            android:background="@android:color/transparent"
+            android:src="@drawable/ic_back"/>
+
+        <SearchView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/searchview"
+            android:queryHint="@string/str_search_your_location"
+            android:searchIcon="@android:color/transparent" />
     </LinearLayout>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/searchview"
+        android:orientation="vertical"
+        app:layout_constraintTop_toBottomOf="@id/topAppBarLayout"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginEnd="10dp"
+        android:layout_marginTop="10dp">
+
+        <ImageButton
+            android:id="@+id/btnZoomIn"
+            android:layout_width="46dp"
+            android:layout_height="46dp"
+            android:layout_marginTop="20dp"
+            android:background="@android:color/transparent"
+            android:src="@drawable/ic_zoomin" />
+
+        <ImageButton
+            android:layout_width="46dp"
+            android:layout_height="46dp"
+            android:src="@drawable/ic_zoomout"
+            android:layout_marginBottom="20dp"
+            android:background="@android:color/transparent"
+            android:id="@+id/btnZoomOut"/>
+    </LinearLayout>
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:fabSize="auto"
+        android:id="@+id/fabReport"
+        app:rippleColor="@color/purple"
+        android:src="@drawable/ic_report"
+        android:tint="@color/dark_purple"
+        app:backgroundTint="@color/white"
+        style="@style/Widget.Material3.FloatingActionButton.Large.Primary"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_margin="20dp"
+        />
+
+
+
+
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
