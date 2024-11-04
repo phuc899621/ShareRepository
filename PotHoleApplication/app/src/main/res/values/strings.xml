@@ -30,4 +30,8 @@
     <string name="str_your_username">Your Username</string>
     <string name="str_300">300</string>
     <string name="str_6">6</string>
+    <string name="str_edit_user_profile">Edit user profile</string>
+    <string name="str_save">Save</string>
+    <string name="str_name">Name</string>
+
 </resources>
