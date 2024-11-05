@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:background="@drawable/background"
-
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".UserActivity">
@@ -36,6 +35,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical|start"
                 android:layout_margin="10dp"
+                android:id="@+id/btnBack"
                 android:background="@android:color/transparent"
                 android:src="@drawable/ic_back"
                 app:tint="@color/dark_purple" />
@@ -55,8 +55,9 @@
             android:id="@+id/cvYourPicture"
             android:layout_width="100dp"
             android:layout_height="100dp"
-            app:cardCornerRadius="50dp"
             android:layout_marginTop="10dp"
+            app:cardCornerRadius="50dp"
+            app:layout_constraintBottom_toTopOf="@+id/guideTopSheet"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/titleLayout">
@@ -68,17 +69,6 @@
                 android:scaleType="fitCenter"
                 android:src="@drawable/actress" />
         </com.google.android.material.card.MaterialCardView>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/tvUsername"
-            android:textColor="@color/purple"
-            android:text="@string/str_your_username"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            app:layout_constraintTop_toBottomOf="@id/cvYourPicture"
-            app:layout_constraintStart_toStartOf="@id/cvYourPicture"
-            app:layout_constraintEnd_toEndOf="@id/cvYourPicture"/>
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideLeftSheet"
@@ -109,7 +99,7 @@
             app:layout_constraintGuide_percent="0.83" />
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/etlEmail"
+            android:id="@+id/etlName"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:elevation="10dp"
@@ -149,10 +139,10 @@
             app:boxStrokeColor="@color/purple"
             app:boxStrokeWidth="1dp"
             app:hintTextColor="@color/dark_purple"
-            app:layout_constraintBottom_toTopOf="@id/etlPassword"
+            app:layout_constraintBottom_toTopOf="@id/etlEmail"
             app:layout_constraintEnd_toStartOf="@id/guideRightSheet"
             app:layout_constraintStart_toEndOf="@id/guideLeftSheet"
-            app:layout_constraintTop_toBottomOf="@id/etlEmail"
+            app:layout_constraintTop_toBottomOf="@id/etlName"
             app:layout_constraintVertical_chainStyle="spread">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -165,7 +155,7 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/etlPassword"
+            android:id="@+id/etlEmail"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:elevation="10dp"
@@ -177,14 +167,14 @@
             app:boxStrokeColor="@color/purple"
             app:boxStrokeWidth="1dp"
             app:hintTextColor="@color/dark_purple"
-            app:layout_constraintBottom_toTopOf="@id/etlConfirmPassword"
+            app:layout_constraintBottom_toTopOf="@id/etlPassword"
             app:layout_constraintEnd_toStartOf="@id/guideRightSheet"
             app:layout_constraintStart_toEndOf="@id/guideLeftSheet"
             app:layout_constraintTop_toBottomOf="@id/etlUsername"
             >
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/etPassword"
+                android:id="@+id/etEmail"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -193,7 +183,7 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/etlConfirmPassword"
+            android:id="@+id/etlPassword"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:elevation="10dp"
@@ -208,11 +198,11 @@
             app:layout_constraintBottom_toTopOf="@id/guideBottomSheet"
             app:layout_constraintEnd_toStartOf="@id/guideRightSheet"
             app:layout_constraintStart_toEndOf="@id/guideLeftSheet"
-            app:layout_constraintTop_toBottomOf="@id/etlPassword"
+            app:layout_constraintTop_toBottomOf="@id/etlEmail"
             app:passwordToggleEnabled="true">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/etConfirmPassword"
+                android:id="@+id/etPassword"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -221,7 +211,7 @@
                 android:textSize="14sp" />
         </com.google.android.material.textfield.TextInputLayout>
         <Button
-            android:id="@+id/btnSignin"
+            android:id="@+id/btnSave"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:backgroundTint="@color/dark_purple"

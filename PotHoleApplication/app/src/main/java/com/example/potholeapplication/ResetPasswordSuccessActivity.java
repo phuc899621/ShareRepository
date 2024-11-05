@@ -1,6 +1,8 @@
 package com.example.potholeapplication;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -25,5 +27,19 @@ public class ResetPasswordSuccessActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+        setClickEvent();
     }
+
+    public void setClickEvent() {
+        binding.btnBackToLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=new Intent(ResetPasswordSuccessActivity.this,
+                        LoginScreenActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
+    }
+
 }

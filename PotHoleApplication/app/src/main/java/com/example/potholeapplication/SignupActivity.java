@@ -10,17 +10,16 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import com.example.potholeapplication.databinding.ActivityResetPasswordBinding;
-import com.example.potholeapplication.databinding.ActivitySettingBinding;
+import com.example.potholeapplication.databinding.ActivitySigninBinding;
+import com.example.potholeapplication.databinding.ActivitySignupBinding;
 
-public class ResetPasswordActivity extends AppCompatActivity {
-    ActivityResetPasswordBinding binding;
-
+public class SignupActivity extends AppCompatActivity {
+    ActivitySignupBinding binding;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        binding= ActivityResetPasswordBinding.inflate(getLayoutInflater());
+        binding=ActivitySignupBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -30,11 +29,17 @@ public class ResetPasswordActivity extends AppCompatActivity {
         setClickEvent();
     }
     public void setClickEvent(){
-        binding.btnResetPassword.setOnClickListener(new View.OnClickListener() {
+        binding.btnSignin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent=new Intent(ResetPasswordActivity.this,
-                        ResetPasswordSuccessActivity.class);
+                Intent intent=new Intent(SignupActivity.this,VerificationActivity.class);
+                startActivity(intent);
+            }
+        });
+        binding.tvHaveAccount.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=new Intent(SignupActivity.this, LoginScreenActivity.class);
                 startActivity(intent);
                 finish();
             }

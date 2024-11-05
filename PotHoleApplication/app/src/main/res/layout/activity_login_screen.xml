@@ -110,7 +110,7 @@
             app:boxStrokeColor="@color/purple"
             app:boxStrokeWidth="1dp"
             app:hintTextColor="@color/dark_purple"
-            app:layout_constraintBottom_toTopOf="@id/etlPassword"
+            app:layout_constraintBottom_toTopOf="@id/etlEmail"
             app:layout_constraintEnd_toStartOf="@id/guideRightSheet"
             app:layout_constraintStart_toEndOf="@id/guideLeftSheet"
             app:layout_constraintTop_toBottomOf="@id/guideTopSheet"
@@ -126,7 +126,7 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/etlPassword"
+            android:id="@+id/etlEmail"
             android:layout_width="283dp"
             android:layout_height="66dp"
             android:elevation="10dp"
@@ -161,7 +161,7 @@
             android:text="@string/str_forgot_your_password"
             app:layout_constraintEnd_toStartOf="@+id/guideRightSheet"
             app:layout_constraintStart_toStartOf="@+id/guideLeftSheet"
-            app:layout_constraintTop_toBottomOf="@+id/etlPassword"
+            app:layout_constraintTop_toBottomOf="@+id/etlEmail"
 
             />
         <Button

@@ -37,7 +37,7 @@
             android:name=".VerificationActivity"
             android:exported="false" />
         <activity
-            android:name=".SigninActivity"
+            android:name=".SignupActivity"
             android:exported="false" />
         <activity
             android:name=".MainActivity"
