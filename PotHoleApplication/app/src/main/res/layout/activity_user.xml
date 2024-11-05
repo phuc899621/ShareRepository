@@ -181,7 +181,7 @@
             app:layout_constraintEnd_toStartOf="@id/guideRightSheet"
             app:layout_constraintStart_toEndOf="@id/guideLeftSheet"
             app:layout_constraintTop_toBottomOf="@id/etlUsername"
-            app:passwordToggleEnabled="true">
+            >
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/etPassword"
@@ -217,6 +217,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="@color/black"
+                android:inputType="textPassword"
                 android:textSize="14sp" />
         </com.google.android.material.textfield.TextInputLayout>
         <Button
