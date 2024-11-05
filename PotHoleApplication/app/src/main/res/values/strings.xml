@@ -23,4 +23,5 @@
     <string name="str_save">Save</string>
     <string name="str_reset_password">Reset password</string>
     <string name="str_new_password">New password</string>
+    <string name="str_setting">Setting</string>
 </resources>
