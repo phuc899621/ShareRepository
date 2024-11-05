@@ -53,6 +53,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical|start"
                 android:layout_margin="10dp"
+                android:id="@+id/btnBack"
                 android:background="@android:color/transparent"
                 android:src="@drawable/ic_back"
                 app:tint="@color/dark_purple" />
@@ -92,6 +93,7 @@
             android:layout_height="wrap_content"
             android:text="@string/str_your_username"
             android:textColor="@color/purple"
+            android:clickable="true"
             android:textSize="20sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="@id/cvYourPicture"
