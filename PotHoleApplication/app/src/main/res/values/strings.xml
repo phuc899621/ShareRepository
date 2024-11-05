@@ -40,4 +40,6 @@
     <string name="str_ranking">Ranking</string>
     <string name="str_forgot_your_password">Forgot your password?</string>
     <string name="str_search_your_location">Search your location</string>
+    <string name="str_change_password_successful">Change password successful!</string>
+    <string name="str_back_to_login">Back to Login</string>
 </resources>
