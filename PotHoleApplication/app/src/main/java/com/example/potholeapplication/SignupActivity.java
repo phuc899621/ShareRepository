@@ -10,7 +10,6 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import com.example.potholeapplication.databinding.ActivitySigninBinding;
 import com.example.potholeapplication.databinding.ActivitySignupBinding;
 
 public class SignupActivity extends AppCompatActivity {
