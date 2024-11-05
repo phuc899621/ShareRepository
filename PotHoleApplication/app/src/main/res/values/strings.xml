@@ -22,4 +22,9 @@
     <string name="str_name">Name</string>
     <string name="str_save">Save</string>
     <string name="str_forgot_your_password">Forgot your password?</string>
+    <string name="str_setting">Setting</string>
+    <string name="str_6">6</string>
+    <string name="str_300">300</string>
+    <string name="str_your_reports">Your reports</string>
+    <string name="str_member_type">Member`s type</string>
 </resources>
