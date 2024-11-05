@@ -17,21 +17,4 @@
     <string name="str_login">Login</string>
     <string name="str_unknown">Unknown</string>
     <string name="str_create_an_account">Create an account</string>
-    <string name="str_analytics">Analytics</string>
-    <string name="str_report">Report</string>
-    <string name="str_dashboard">DASHBOARD</string>
-    <string name="str_home">HOME</string>
-    <string name="str_map">MAP</string>
-    <string name="str_setting">SETTING</string>
-    <string name="str_ranking">Ranking</string>
-    <string name="str_community">Community</string>
-    <string name="str_map_downcase">Map</string>
-    <string name="str_search_your_location">Search your location</string>
-    <string name="str_your_username">Your Username</string>
-    <string name="str_300">300</string>
-    <string name="str_6">6</string>
-    <string name="str_edit_user_profile">Edit user profile</string>
-    <string name="str_save">Save</string>
-    <string name="str_name">Name</string>
-
 </resources>
