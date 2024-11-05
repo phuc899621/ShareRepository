@@ -33,4 +33,11 @@
     <string name="str_notification">Notification</string>
     <string name="str_select_language">Select language</string>
     <string name="str_logout">Logout</string>
+    <string name="str_map_downcase">Map</string>
+    <string name="str_analytics">Analytics</string>
+    <string name="str_community">Community</string>
+    <string name="str_report">Report</string>
+    <string name="str_ranking">Ranking</string>
+    <string name="str_forgot_your_password">Forgot your password?</string>
+    <string name="str_search_your_location">Search your location</string>
 </resources>

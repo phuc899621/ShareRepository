@@ -24,7 +24,8 @@
             android:layout_gravity="center"
             android:layout_marginHorizontal="10dp"
             android:background="@android:color/transparent"
-            android:src="@drawable/ic_back"/>
+            android:src="@drawable/ic_back"
+            app:tint="@color/dark_purple" />
 
         <SearchView
             android:layout_width="match_parent"
@@ -49,7 +50,8 @@
             android:layout_height="46dp"
             android:layout_marginTop="20dp"
             android:background="@android:color/transparent"
-            android:src="@drawable/ic_zoomin" />
+            android:src="@drawable/ic_zoomin"
+            app:tint="@color/dark_purple" />
 
         <ImageButton
             android:layout_width="46dp"
@@ -57,7 +59,8 @@
             android:src="@drawable/ic_zoomout"
             android:layout_marginBottom="20dp"
             android:background="@android:color/transparent"
-            android:id="@+id/btnZoomOut"/>
+            android:id="@+id/btnZoomOut"
+            app:tint="@color/dark_purple" />
     </LinearLayout>
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:layout_width="wrap_content"
