@@ -154,7 +154,7 @@
                 android:textSize="14sp" />
         </com.google.android.material.textfield.TextInputLayout>
         <TextView
-            android:id="@+id/tvCreate"
+            android:id="@+id/tvForgotPassword"
             style="@style/Widget.MaterialComponents.Button.OutlinedButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -202,7 +202,7 @@
         </LinearLayout>
 
         <TextView
-            android:id="@+id/tvHaveAccount"
+            android:id="@+id/tvCreateAccount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
