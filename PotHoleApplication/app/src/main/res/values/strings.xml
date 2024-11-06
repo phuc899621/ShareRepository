@@ -44,5 +44,8 @@
     <string name="str_back_to_login">Back to Login</string>
     <string name="str_sign_up">Sign up</string>
     <string name="str_home">Home</string>
+    <string name="str_forgot_password">Forgot password</string>
+    <string name="str_forgot_reset">Your password has been sent to your registered email.
+Please click on Reset Password below to go to the new password setup screen!</string>
     <string name="API_KEY">AIzaSyDsbnsjqLNP9xWbj4EhGBPT-VwwgdtvXvM</string>
 </resources>
