@@ -44,4 +44,5 @@
     <string name="str_back_to_login">Back to Login</string>
     <string name="str_sign_up">Sign up</string>
     <string name="str_home">Home</string>
+    <string name="API_KEY">AIzaSyDsbnsjqLNP9xWbj4EhGBPT-VwwgdtvXvM</string>
 </resources>

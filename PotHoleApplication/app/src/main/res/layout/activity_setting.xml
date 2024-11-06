@@ -247,21 +247,21 @@
             android:drawablePadding="10dp"
             app:layout_constraintStart_toStartOf="@id/tvLanguage"
             app:layout_constraintTop_toBottomOf="@id/tvLanguage"/>
-        <com.google.android.material.switchmaterial.SwitchMaterial
+        <androidx.appcompat.widget.SwitchCompat
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:thumbTint="@color/switch_thumb_selectedcolor"
-            app:trackTint="@color/switch_trach_selectedcolor"
+            android:thumb="@drawable/thumb"
+            android:track="@drawable/track"
             android:id="@+id/switchNotification"
             app:layout_constraintRight_toLeftOf="@id/guideRight"
             app:layout_constraintTop_toTopOf="@id/tvNotification"
             app:layout_constraintBottom_toBottomOf="@id/tvNotification"
             />
-        <com.google.android.material.switchmaterial.SwitchMaterial
+        <androidx.appcompat.widget.SwitchCompat
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:thumbTint="@color/switch_thumb_selectedcolor"
-            app:trackTint="@color/switch_trach_selectedcolor"
+            android:track="@drawable/track"
+            android:thumb="@drawable/thumb"
             android:id="@+id/switchRealtime"
             app:layout_constraintRight_toLeftOf="@id/guideRight"
             app:layout_constraintTop_toTopOf="@id/tvRealTime"

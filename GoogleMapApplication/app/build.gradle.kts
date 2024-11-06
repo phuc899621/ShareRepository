@@ -3,11 +3,11 @@ plugins {
 }
 
 android {
-    namespace = "com.example.potholeapplication"
+    namespace = "com.example.googlemapapplication"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.example.potholeapplication"
+        applicationId = "com.example.googlemapapplication"
         minSdk = 30
         targetSdk = 34
         versionCode = 1
@@ -15,9 +15,7 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
-    buildFeatures{
-        viewBinding = true
-    }
+
     buildTypes {
         release {
             isMinifyEnabled = false
@@ -39,7 +37,6 @@ dependencies {
     implementation(libs.material)
     implementation(libs.activity)
     implementation(libs.constraintlayout)
-    implementation(libs.mpandroidchart)
     implementation(libs.play.services.maps)
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
