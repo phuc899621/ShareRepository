@@ -46,11 +46,13 @@
         android:layout_width="350dp"
         android:layout_height="0dp"
         android:scaleType="fitCenter"
-        android:src="@drawable/pothole_splash"
+        android:src="@drawable/buildings"
         app:layout_constraintBottom_toTopOf="@+id/guideBot"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/guideTop" />
+
+
 
     <TextView
         android:layout_width="wrap_content"
@@ -74,30 +76,5 @@
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="@+id/tvPotholeMap"
         app:layout_constraintTop_toBottomOf="@+id/tvPotholeMap" />
-
-    <Button
-        android:id="@+id/btnLogin"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:backgroundTint="@color/dark_purple"
-        android:text="@string/str_login"
-        android:textColor="@color/white"
-        android:textSize="20sp"
-        app:layout_constraintEnd_toStartOf="@+id/guideRight2"
-        app:layout_constraintStart_toStartOf="@+id/guideLeft2"
-        app:layout_constraintTop_toBottomOf="@id/guideBot" />
-
-    <TextView
-        android:id="@+id/tvCreate"
-        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:clickable="true"
-        android:text="@string/str_create_an_account"
-        app:layout_constraintEnd_toStartOf="@+id/guideRight2"
-        app:layout_constraintStart_toStartOf="@+id/guideLeft2"
-        app:layout_constraintTop_toBottomOf="@+id/btnLogin"
-
-        />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -2,6 +2,7 @@ package com.example.potholeapplication;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 
 import androidx.activity.EdgeToEdge;
@@ -28,22 +29,15 @@ public class SplashScreenActivity extends AppCompatActivity {
         setClickEvent();
     }
     public void setClickEvent(){
-        binding.tvCreate.setOnClickListener(new View.OnClickListener() {
+        Handler handler=new Handler();
+        handler.postDelayed(new Runnable() {
             @Override
-            public void onClick(View v) {
-                Intent intent=new Intent(SplashScreenActivity.this, SignupActivity.class);
+            public void run() {
+                Intent intent=new Intent(SplashScreenActivity.this,LoginScreenActivity.class);
                 startActivity(intent);
                 finish();
             }
-        });
-        binding.btnLogin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent=new Intent(SplashScreenActivity.this, LoginScreenActivity.class);
-                startActivity(intent);
-                finish();
-            }
-        });
+        },3000);
 
     }
 }
