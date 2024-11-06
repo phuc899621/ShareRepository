@@ -43,7 +43,7 @@
         app:layout_constraintGuide_percent="0.8"/>
 
     <ImageView
-        android:layout_width="350dp"
+        android:layout_width="349dp"
         android:layout_height="0dp"
         android:scaleType="fitCenter"
         android:id="@+id/imaPotholeMap"
