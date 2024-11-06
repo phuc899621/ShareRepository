@@ -43,4 +43,5 @@
     <string name="str_change_password_successful">Change password successful!</string>
     <string name="str_back_to_login">Back to Login</string>
     <string name="str_sign_up">Sign up</string>
+    <string name="str_home">Home</string>
 </resources>

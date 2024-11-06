@@ -1,25 +1,24 @@
 package com.example.potholeapplication;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
 
 import androidx.activity.EdgeToEdge;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.potholeapplication.databinding.ActivityEditUserBinding;
 import com.example.potholeapplication.databinding.ActivityUserBinding;
 
-public class UserActivity extends AppCompatActivity {
-    ActivityUserBinding binding;
+public class EditUserActivity extends AppCompatActivity {
+    ActivityEditUserBinding binding;
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        binding= ActivityUserBinding.inflate(getLayoutInflater());
+        binding=ActivityEditUserBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -28,17 +27,17 @@ public class UserActivity extends AppCompatActivity {
         });
         setClickEvent();
     }
-    public void setClickEvent(){
+    public void setClickEvent() {
         binding.btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //finish();
+                finish();
             }
         });
         binding.btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //finish();
+                finish();
             }
         });
     }

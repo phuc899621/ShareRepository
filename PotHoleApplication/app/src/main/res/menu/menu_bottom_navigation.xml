@@ -5,7 +5,7 @@
         android:title="@string/str_home"/>
     <item android:id="@+id/map"
         android:icon="@drawable/ic_map"
-        android:title="@string/str_map"/>
+        android:title="@string/str_map_downcase"/>
     <item android:id="@+id/setting"
         android:icon="@drawable/ic_setting"
         android:title="@string/str_setting"/>

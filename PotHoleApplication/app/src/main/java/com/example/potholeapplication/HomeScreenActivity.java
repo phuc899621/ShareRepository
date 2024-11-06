@@ -52,10 +52,10 @@ public class HomeScreenActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-        binding.userLayout.setOnClickListener(new View.OnClickListener() {
+        binding.btnUserIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent=new Intent(HomeScreenActivity.this,UserActivity.class);
+                Intent intent=new Intent(HomeScreenActivity.this,EditUserActivity.class);
                 startActivity(intent);
             }
         });
