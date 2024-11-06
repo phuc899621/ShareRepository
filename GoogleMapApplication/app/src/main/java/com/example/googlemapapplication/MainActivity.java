@@ -36,6 +36,6 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
-        googleMap
+
     }
 }

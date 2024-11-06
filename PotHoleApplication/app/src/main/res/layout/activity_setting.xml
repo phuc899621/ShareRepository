@@ -99,7 +99,6 @@
             app:layout_constraintEnd_toEndOf="@id/cvYourPicture"
             app:layout_constraintStart_toStartOf="@id/cvYourPicture"
             app:layout_constraintTop_toBottomOf="@id/cvYourPicture" />
-
         <FrameLayout
             android:id="@+id/showPointLayout"
             android:layout_width="90dp"
@@ -176,7 +175,6 @@
             app:layout_constraintEnd_toEndOf="@id/showPointLayout"
             app:layout_constraintStart_toStartOf="@id/showPointLayout"
             app:layout_constraintTop_toBottomOf="@id/showPointLayout" />
-
         <TextView
             android:id="@+id/tvTextTypeMember"
             android:layout_width="wrap_content"

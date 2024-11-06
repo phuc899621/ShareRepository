@@ -68,7 +68,14 @@
                 android:scaleType="fitCenter"
                 android:src="@drawable/actress" />
         </com.google.android.material.card.MaterialCardView>
-
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_change_picture"
+            android:background="@android:color/transparent"
+            app:layout_constraintEnd_toEndOf="@id/cvYourPicture"
+            app:layout_constraintBottom_toBottomOf="@id/cvYourPicture"
+            app:tint="@color/purple" />
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideLeftSheet"
             android:layout_width="wrap_content"

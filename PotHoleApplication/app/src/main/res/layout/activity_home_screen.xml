@@ -17,6 +17,12 @@
     <androidx.constraintlayout.widget.Guideline
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:id="@id/guideMiddle"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.35"/>
+    <androidx.constraintlayout.widget.Guideline
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:id="@+id/guideLeft"
         android:orientation="vertical"
         app:layout_constraintGuide_percent="0.05"/>
@@ -64,7 +70,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:layout_marginEnd="10dp">
-
         <TextView
             android:id="@+id/tvName"
             android:layout_width="wrap_content"
@@ -106,23 +111,55 @@
         </com.google.android.material.card.MaterialCardView>
     </LinearLayout>
 
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/cvChart"
+    <LinearLayout
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        app:cardCornerRadius="20dp"
-        android:elevation="10dp"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="@id/guideBottom"
         app:layout_constraintEnd_toStartOf="@+id/guideRight"
         app:layout_constraintStart_toStartOf="@+id/guideLeft"
-        app:layout_constraintTop_toTopOf="@+id/guideTop1">
+        app:layout_constraintTop_toBottomOf="@id/guideTop1">
 
-        <com.github.mikephil.charting.charts.LineChart
-            android:id="@+id/lineChart"
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cvChart"
             android:layout_width="match_parent"
-            android:layout_height="160dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
-    </com.google.android.material.card.MaterialCardView>
+            android:layout_height="match_parent"
+            android:layout_weight="4"
+            android:elevation="10dp"
+            app:cardCornerRadius="20dp">
+
+            <com.github.mikephil.charting.charts.LineChart
+                android:id="@+id/lineChart"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </com.google.android.material.card.MaterialCardView>
+
+        <TextView
+            android:id="@+id/tvMap"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="6"
+            android:gravity="bottom|start"
+            android:text="@string/str_map_downcase"
+            android:textColor="@color/dark_purple"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cvMap"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="4"
+            android:elevation="50dp"
+            app:cardCornerRadius="20dp">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="center"
+                android:src="@drawable/map" />
+        </com.google.android.material.card.MaterialCardView>
+    </LinearLayout>
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -240,35 +277,9 @@
             android:scaleType="fitCenter"
             android:src="@drawable/community" />
     </com.google.android.material.card.MaterialCardView>
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/tvMap"
-        android:text="@string/str_map_downcase"
-        android:textStyle="bold"
-        android:textSize="20sp"
-        android:textColor="@color/dark_purple"
-        app:layout_constraintBottom_toTopOf="@id/cvMap"
-        app:layout_constraintLeft_toRightOf="@id/guideLeft"/>
 
-    <com.google.android.material.card.MaterialCardView
-        android:layout_width="0dp"
-        android:layout_height="140dp"
-        android:id="@+id/cvMap"
-        android:layout_marginBottom="10dp"
-        android:layout_marginHorizontal="5dp"
-        app:cardCornerRadius="20dp"
-        android:elevation="10dp"
-        app:layout_constraintLeft_toRightOf="@id/guideLeft"
-        app:layout_constraintRight_toLeftOf="@id/guideRight"
-        app:layout_constraintBottom_toTopOf="@id/guideBottom">
 
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scaleType="center"
-            android:src="@drawable/map" />
-    </com.google.android.material.card.MaterialCardView>
+
 
 
 
