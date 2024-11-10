@@ -47,12 +47,22 @@
         android:layout_height="0dp"
         android:scaleType="fitCenter"
         android:src="@drawable/buildings"
+        android:id="@+id/imaPothole"
         app:layout_constraintBottom_toTopOf="@+id/guideBot"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/guideTop" />
-
-
+    <ProgressBar
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:id="@+id/progressBar"
+        app:layout_constraintTop_toBottomOf="@id/imaPothole"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginTop="30dp"
+        android:progressDrawable="@color/green"
+        android:progressBackgroundTint="@color/green"
+        android:secondaryProgressTint="@color/purple"/>
 
     <TextView
         android:layout_width="wrap_content"

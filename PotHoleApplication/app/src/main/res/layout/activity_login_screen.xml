@@ -137,6 +137,7 @@
             app:boxCornerRadiusTopStart="30dp"
             app:boxStrokeColor="@color/purple"
             app:boxStrokeWidth="1dp"
+            app:passwordToggleEnabled="true"
             app:hintTextColor="@color/dark_purple"
 
             app:layout_constraintBottom_toTopOf="@+id/guideBottomSheet"
@@ -149,6 +150,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="@color/black"
+                android:inputType="textPassword"
                 android:textSize="14sp" />
         </com.google.android.material.textfield.TextInputLayout>
         <TextView
@@ -157,6 +159,7 @@
             android:layout_height="wrap_content"
             android:text="@string/str_forgot_your_password"
             android:textSize="14sp"
+            android:clickable="true"
             android:textColor="@color/dark_purple"
             app:layout_constraintEnd_toStartOf="@+id/guideRightSheet"
             app:layout_constraintStart_toStartOf="@+id/guideLeftSheet"

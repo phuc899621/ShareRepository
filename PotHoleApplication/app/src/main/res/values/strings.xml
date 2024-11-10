@@ -48,4 +48,10 @@
     <string name="str_forgot_reset">Your password has been sent to your registered email.
 Please click on Reset Password below to go to the new password setup screen!</string>
     <string name="API_KEY">AIzaSyDsbnsjqLNP9xWbj4EhGBPT-VwwgdtvXvM</string>
+    <string name="ServerURL">null</string>
+    <string name="LocalhostURL">http://localhost:8000/api/user/auth</string>
+    <string name="str_login_successful">Login successful</string>
+    <string name="ok">Ok</string>
+    <string name="str_confirm">Confirm</string>
+    <string name="str_sign_up_successful">Sign up successful</string>
 </resources>
