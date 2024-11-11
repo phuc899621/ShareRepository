@@ -183,5 +183,11 @@ public class VerificationActivity extends AppCompatActivity {
                 callAPIAddUser();
             }
         });
+        binding.tvResendCode.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                callAPISendEmail();
+            }
+        });
     }
 }

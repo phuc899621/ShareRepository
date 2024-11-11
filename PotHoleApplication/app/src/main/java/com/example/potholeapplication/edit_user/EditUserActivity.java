@@ -74,7 +74,6 @@ public class EditUserActivity extends AppCompatActivity {
                 callSaveInfoAPI();
             }
         });
-
     }
     public void setUserInfo(){
         SharedPreferences sharedPreferences=getSharedPreferences("user_info",MODE_PRIVATE);
