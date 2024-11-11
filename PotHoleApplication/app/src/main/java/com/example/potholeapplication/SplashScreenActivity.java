@@ -1,9 +1,9 @@
 package com.example.potholeapplication;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
-import android.view.View;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -12,6 +12,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.potholeapplication.databinding.ActivitySplashScreenBinding;
+import com.example.potholeapplication.user_auth.login.LoginScreenActivity;
 
 public class SplashScreenActivity extends AppCompatActivity {
     ActivitySplashScreenBinding binding;
@@ -33,11 +34,21 @@ public class SplashScreenActivity extends AppCompatActivity {
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                Intent intent=new Intent(SplashScreenActivity.this,LoginScreenActivity.class);
+                SharedPreferences sharedPreferences=getSharedPreferences(
+                        "user_info",MODE_PRIVATE
+                );
+                boolean isLogin=sharedPreferences.getBoolean("login",false);
+                if(isLogin){
+                    Intent intent=new Intent(SplashScreenActivity.this, HomeScreenActivity.class);
+                    startActivity(intent);
+                    finish();
+                    return;
+                }
+                Intent intent=new Intent(SplashScreenActivity.this, LoginScreenActivity.class);
                 startActivity(intent);
                 finish();
             }
-        },2000);
+        },1500);
 
     }
 }

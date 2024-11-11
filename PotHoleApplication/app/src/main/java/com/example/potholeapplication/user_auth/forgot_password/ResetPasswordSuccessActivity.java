@@ -1,4 +1,4 @@
-package com.example.potholeapplication;
+package com.example.potholeapplication.user_auth.forgot_password;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,15 +10,18 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import com.example.potholeapplication.databinding.ActivityVerificationSuccessBinding;
+import com.example.potholeapplication.R;
+import com.example.potholeapplication.databinding.ActivityResetPasswordSuccessBinding;
+import com.example.potholeapplication.user_auth.login.LoginScreenActivity;
 
-public class VerificationSuccessActivity extends AppCompatActivity {
-    ActivityVerificationSuccessBinding binding;
+public class ResetPasswordSuccessActivity extends AppCompatActivity {
+    ActivityResetPasswordSuccessBinding binding;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        binding=ActivityVerificationSuccessBinding.inflate(getLayoutInflater());
+        binding= ActivityResetPasswordSuccessBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -27,15 +30,17 @@ public class VerificationSuccessActivity extends AppCompatActivity {
         });
         setClickEvent();
     }
-    public void setClickEvent(){
-        binding.btnLogin.setOnClickListener(new View.OnClickListener() {
+
+    public void setClickEvent() {
+        binding.btnBackToLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent=new Intent(VerificationSuccessActivity.this,
+                Intent intent=new Intent(ResetPasswordSuccessActivity.this,
                         LoginScreenActivity.class);
                 startActivity(intent);
                 finish();
             }
         });
     }
+
 }

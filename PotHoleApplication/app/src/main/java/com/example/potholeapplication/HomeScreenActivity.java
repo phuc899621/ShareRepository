@@ -1,6 +1,7 @@
 package com.example.potholeapplication;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 
@@ -11,12 +12,11 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.potholeapplication.databinding.ActivityHomeScreenBinding;
+import com.example.potholeapplication.edit_user.EditUserActivity;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.data.Entry;
-import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
-import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
 
 import java.util.ArrayList;
 
@@ -35,6 +35,7 @@ public class HomeScreenActivity extends AppCompatActivity {
             return insets;
         });
         setClickEvent();// chỗ này cài su kien click
+        setDisplay();
 
     }
     public void setClickEvent(){
@@ -55,12 +56,18 @@ public class HomeScreenActivity extends AppCompatActivity {
         binding.btnUserIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent=new Intent(HomeScreenActivity.this,EditUserActivity.class);
+                Intent intent=new Intent(HomeScreenActivity.this, EditUserActivity.class);
                 startActivity(intent);
             }
         });
     }
-
+    public void setDisplay(){
+        SharedPreferences sharedPreferences=getSharedPreferences(
+                "user_info",MODE_PRIVATE
+        );
+        String name= sharedPreferences.getString("name","not found");
+        binding.tvName.setText(name);
+    }
     //chưa xong
     public void chartData(){
         lineChart = findViewById(R.id.lineChart);

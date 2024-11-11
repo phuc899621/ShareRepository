@@ -1,4 +1,4 @@
-package com.example.potholeapplication;
+package com.example.potholeapplication.user_auth.signup;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -19,14 +19,13 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import com.example.potholeapplication.class_pothole.LoginRequest;
+import com.example.potholeapplication.R;
+import com.example.potholeapplication.class_pothole.RegisterRequest;
 import com.example.potholeapplication.class_pothole.RetrofitServices;
-import com.example.potholeapplication.class_pothole.User;
 import com.example.potholeapplication.class_pothole.UserApiResponse;
-import com.example.potholeapplication.databinding.ActivityForgotPasswordBinding;
-import com.example.potholeapplication.databinding.ActivityLoginScreenBinding;
+import com.example.potholeapplication.databinding.ActivitySignupBinding;
 import com.example.potholeapplication.interface_pothole.UserAPIInterface;
-import com.google.android.material.badge.BadgeUtils;
+import com.example.potholeapplication.user_auth.login.LoginScreenActivity;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -37,95 +36,104 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class LoginScreenActivity extends AppCompatActivity {
-    ActivityLoginScreenBinding binding;
+public class SignupActivity extends AppCompatActivity {
+    ActivitySignupBinding binding;
     Context context;
     Button btnConfirm;
-    Dialog dialogOke,dialogError;
-    TextView tvErrorTitle;
+    TextView tvErrorTitle,tvOkeTitle;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        binding=ActivityLoginScreenBinding.inflate(getLayoutInflater());
+        binding=ActivitySignupBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+        setClickEvent();
         context=this;
-        setClickEvent(); //cài su kien click
-
     }
     public void callAPI(){
-        // Khoi tai UerAPIInterface
         UserAPIInterface apiService = RetrofitServices.getApiService();
         //lay du lieu
         String username=binding.etUsername.getText().toString().trim();
         String password=binding.etPassword.getText().toString().trim();
-        if(username.isEmpty() || password.isEmpty()){
-            Toast.makeText(context,"Vui lòng nhập đầu đủ username và password"
+        String name=binding.etUsername.getText().toString().trim();
+        String email=binding.etEmail.getText().toString().trim();
+        String confirmPassword=binding.etConfirmPassword.getText().toString().trim();
+        if(username.isEmpty() || password.isEmpty()||name.isEmpty()||email.isEmpty()||confirmPassword.isEmpty()){
+            Toast.makeText(context,"Please enter your information"
                     ,Toast.LENGTH_LONG).show();
             return;
         }
-
-
-        LoginRequest loginRequest=new LoginRequest(username,password);
+        if(!password.equals(confirmPassword)){
+            Toast.makeText(context,"Password does not match"
+                    ,Toast.LENGTH_LONG).show();
+            return;
+        }
+        RegisterRequest registerRequest=new RegisterRequest(username,name,email,password);
         // Call API login
-        Call<UserApiResponse> call = apiService.callLoginAPI(loginRequest);
-
+        Call<UserApiResponse> call = apiService.callRegisterApi(registerRequest);
         // call API bất đồng bộ
         call.enqueue(new Callback<UserApiResponse>() {
             @Override
             public void onResponse(Call<UserApiResponse> call, Response<UserApiResponse> response) {
-                 if(response.isSuccessful()&&response.body()!=null){
-                     showDialogOke();
-                 }
-                 else{
-                     String errorString;
-                     JsonObject errorJson;
-                     UserApiResponse apiResponse;
-                     try {
-                         //lay chuoi json va chuyen thanh UserAPIResponse
-                         errorString=response.errorBody().string();
-                         errorJson= JsonParser.parseString(errorString).getAsJsonObject();
-                         Gson gson=new Gson();
-                         apiResponse=gson.fromJson(errorString,UserApiResponse.class);
-                         showDialogError(apiResponse);
 
-                     } catch (IOException e) {
-                         throw new RuntimeException(e);
-                     }
-                 }
-           }
+                if(response.isSuccessful()&&response.body()!=null){
+                    showDialogOke(registerRequest);
+                }
+                else{
+                    String errorString;
+                    JsonObject errorJson;
+                    UserApiResponse apiResponse;
+                    try {
+                        //lay chuoi json va chuyen thanh UserAPIResponse
+                        errorString=response.errorBody().string();
+                        errorJson= JsonParser.parseString(errorString).getAsJsonObject();
+                        Gson gson=new Gson();
+                        apiResponse=gson.fromJson(errorString,UserApiResponse.class);
+                        showDialogError(apiResponse);
 
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+            }
             @Override
             public void onFailure(Call<UserApiResponse> call, Throwable t) {
                 Log.e("API Error", "Failure: " + t.getMessage());
             }
         });
-
     }
-    public void showDialogOke(){
-        Dialog dialog=new Dialog(LoginScreenActivity.this);
+    public void showDialogOke(RegisterRequest registerRequest){
+        Dialog dialog=new Dialog(SignupActivity.this);
         dialog.setContentView(R.layout.custom_dialog_oke);
         dialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
         dialog.setCancelable(false);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        tvOkeTitle=dialog.findViewById(R.id.tvTitle);
+        tvOkeTitle.setText(R.string.str_sign_up_successful);
         dialog.show();
         Handler handler=new Handler();
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                Intent intent = new Intent(LoginScreenActivity.this, HomeScreenActivity.class);
+                Intent intent = new Intent(SignupActivity.this, VerificationActivity.class);
+                Bundle bundle=new Bundle();
+                bundle.putString("email",registerRequest.getEmail().trim());
+                bundle.putString("name",registerRequest.getName().trim());
+                bundle.putString("username",registerRequest.getUsername().trim());
+                bundle.putString("password",registerRequest.getPassword().trim());
+                intent.putExtra("sendEmail", bundle);
                 startActivity(intent);
-                finish();
+                dialog.dismiss();
             }
         },2000);
     }
     public void showDialogError(UserApiResponse apiResponse){
-        Dialog dialog=new Dialog(LoginScreenActivity.this);
+        Dialog dialog=new Dialog(SignupActivity.this);
         dialog.setContentView(R.layout.custom_dialog_error);
         dialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
         dialog.setCancelable(true);
@@ -141,28 +149,19 @@ public class LoginScreenActivity extends AppCompatActivity {
             }
         });
     }
-
-
-    //su kien click
     public void setClickEvent(){
-        binding.btnLogin.setOnClickListener(new View.OnClickListener() {
+        binding.btnSignin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 callAPI();
             }
         });
-        binding.tvCreateAccount.setOnClickListener(new View.OnClickListener() {
+        binding.tvHaveAccount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent=new Intent(LoginScreenActivity.this, SignupActivity.class);
+                Intent intent=new Intent(SignupActivity.this, LoginScreenActivity.class);
                 startActivity(intent);
-            }
-        });
-        binding.tvForgotPassword.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent=new Intent(LoginScreenActivity.this, ActivityForgotPasswordBinding.class);
-                startActivity(intent);
+                finish();
             }
         });
     }

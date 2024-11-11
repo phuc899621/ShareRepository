@@ -1,6 +1,7 @@
 package com.example.potholeapplication;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 
@@ -11,6 +12,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.potholeapplication.databinding.ActivitySettingBinding;
+import com.example.potholeapplication.edit_user.EditUserActivity;
 
 public class SettingActivity extends AppCompatActivity {
     ActivitySettingBinding binding;
@@ -38,14 +40,14 @@ public class SettingActivity extends AppCompatActivity {
         binding.cvYourPicture.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent=new Intent(SettingActivity.this,UserActivity.class);
+                Intent intent=new Intent(SettingActivity.this, EditUserActivity.class);
                 startActivity(intent);
             }
         });
         binding.tvUsername.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent=new Intent(SettingActivity.this,UserActivity.class);
+                Intent intent=new Intent(SettingActivity.this,EditUserActivity.class);
                 startActivity(intent);
             }
         });
@@ -53,6 +55,12 @@ public class SettingActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //cái này sẽ xoa cac activity khác, quay lại nhu cũ
+                SharedPreferences sharedPreferences=getSharedPreferences(
+                        "user_info",MODE_PRIVATE
+                );
+                SharedPreferences.Editor editor=sharedPreferences.edit();
+                editor.putBoolean("login",false);
+                editor.apply();
                 Intent intent = new Intent(SettingActivity.this, SplashScreenActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);

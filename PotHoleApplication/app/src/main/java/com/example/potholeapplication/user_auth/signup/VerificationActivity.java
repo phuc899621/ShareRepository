@@ -1,4 +1,4 @@
-package com.example.potholeapplication;
+package com.example.potholeapplication.user_auth.signup;
 
 import android.app.Dialog;
 import android.content.Intent;
@@ -18,6 +18,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.potholeapplication.R;
 import com.example.potholeapplication.class_pothole.RegisterRequest;
 import com.example.potholeapplication.class_pothole.RetrofitServices;
 import com.example.potholeapplication.class_pothole.User;
@@ -68,7 +69,7 @@ public class VerificationActivity extends AppCompatActivity {
         );
 
         // Call API login
-        Call<UserApiResponse> call = apiService.callSendEmail(registerRequest);
+        Call<UserApiResponse> call = apiService.callSendCodeRegisterAPI(registerRequest);
         // call API bất đồng bộ
         call.enqueue(new Callback<UserApiResponse>() {
             @Override
@@ -112,24 +113,14 @@ public class VerificationActivity extends AppCompatActivity {
                 bundle.getString("email"),bundle.getString("password")
         );
         // Call API login
-        Call<UserApiResponse> call = apiService.callAddUser(registerRequest);
+        Call<UserApiResponse> call = apiService.callAddUserAPI(registerRequest);
         // call API bất đồng bộ
         call.enqueue(new Callback<UserApiResponse>() {
             @Override
             public void onResponse(Call<UserApiResponse> call, Response<UserApiResponse> response) {
 
                 if(response.isSuccessful()&&response.body()!=null){
-                    UserApiResponse userApiResponse =response.body();
-                    User user=userApiResponse.getData().get(0);
-                    SharedPreferences sharedPreferences=getSharedPreferences(
-                      "user_info",MODE_PRIVATE
-                    );
-                    SharedPreferences.Editor editor=sharedPreferences.edit();
-                    editor.putString("username",user.getUsername());
-                    editor.putString("email",user.getEmail());
-                    editor.putString("name",user.getName());
-                    editor.commit();
-                    Intent intent=new Intent(VerificationActivity.this,VerificationSuccessActivity.class);
+                    Intent intent=new Intent(VerificationActivity.this, VerificationSuccessActivity.class);
                     startActivity(intent);
                     finish();
                 }
