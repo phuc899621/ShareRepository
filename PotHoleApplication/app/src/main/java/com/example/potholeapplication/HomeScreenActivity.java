@@ -38,6 +38,13 @@ public class HomeScreenActivity extends AppCompatActivity {
         setDisplay();
 
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        setDisplay();
+    }
+
     public void setClickEvent(){
         binding.cvMap.setOnClickListener(new View.OnClickListener() {
             @Override

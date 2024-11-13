@@ -11,9 +11,6 @@ public class RetrofitServices {
     private static Retrofit retrofit = null;
 
     public static UserAPIInterface getApiService() {
-        // Tạo một OkHttpClient với logging (tùy chọn)
-
-
         if (retrofit == null) {
             retrofit = new Retrofit.Builder()
                     .baseUrl(BASE_URL)

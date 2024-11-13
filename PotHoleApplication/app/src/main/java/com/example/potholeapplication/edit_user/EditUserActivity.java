@@ -20,25 +20,17 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import com.example.potholeapplication.HomeScreenActivity;
 import com.example.potholeapplication.R;
-import com.example.potholeapplication.class_pothole.EditInfoRequest;
-import com.example.potholeapplication.class_pothole.LoginRequest;
-import com.example.potholeapplication.class_pothole.RegisterRequest;
+import com.example.potholeapplication.class_pothole.request.EditInfoReq;
 import com.example.potholeapplication.class_pothole.RetrofitServices;
-import com.example.potholeapplication.class_pothole.User;
-import com.example.potholeapplication.class_pothole.UserApiResponse;
+import com.example.potholeapplication.class_pothole.ApiResponse;
 import com.example.potholeapplication.databinding.ActivityEditUserBinding;
 import com.example.potholeapplication.interface_pothole.UserAPIInterface;
-import com.example.potholeapplication.user_auth.login.LoginScreenActivity;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
-import org.w3c.dom.Text;
-
 import java.io.IOException;
-import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -58,9 +50,17 @@ public class EditUserActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+        context=this;
         setClickEvent();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        //cai dat thong tin user
         setUserInfo();
     }
+
     public void setClickEvent() {
         binding.btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -72,6 +72,20 @@ public class EditUserActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 callSaveInfoAPI();
+            }
+        });
+        binding.etEmail.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=new Intent(EditUserActivity.this,EditEmailActivity.class);
+                startActivity(intent);
+            }
+        });
+        binding.btnChangePassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=new Intent(EditUserActivity.this,EditPasswordActivity.class);
+                startActivity(intent);
             }
         });
     }
@@ -87,36 +101,35 @@ public class EditUserActivity extends AppCompatActivity {
 
 
         //lay du lieu
-        String username=binding.etUsername.getText().toString().trim();
-        String name=binding.etName.getText().toString().trim();
-        if(username.isEmpty() || name.isEmpty()){
+        String newUsername=binding.etUsername.getText().toString().trim();
+        String newName=binding.etName.getText().toString().trim();
+        if(newUsername.isEmpty() || newName.isEmpty()){
             Toast.makeText(context,"Please enter username and full name"
                     ,Toast.LENGTH_LONG).show();
             return;
         }
-        EditInfoRequest editInfoRequest=new EditInfoRequest(username,name);
+        EditInfoReq editInfoReq =new EditInfoReq(newUsername,newName);
         UserAPIInterface apiService = RetrofitServices.getApiService();
-        // Call API login
-        Call<UserApiResponse> call = apiService.callChangeInfoAPI(email,editInfoRequest);
-        // call API bất đồng bộ
-        call.enqueue(new Callback<UserApiResponse>() {
+
+        Call<ApiResponse> call = apiService.callEditInfo(email, editInfoReq);
+        call.enqueue(new Callback<ApiResponse>() {
             @Override
-            public void onResponse(Call<UserApiResponse> call, Response<UserApiResponse> response) {
+            public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
                 if(response.isSuccessful()&&response.body()!=null){
                     //luu thong tin vao dien thoai
-                    saveUserInfo(username,name);
+                    saveUserInfo(newUsername,newName);
                     showDialogOke();
                 }
                 else{
                     String errorString;
                     JsonObject errorJson;
-                    UserApiResponse apiResponse;
+                    ApiResponse apiResponse;
                     try {
                         //lay chuoi json va chuyen thanh UserAPIResponse
                         errorString=response.errorBody().string();
                         errorJson= JsonParser.parseString(errorString).getAsJsonObject();
                         Gson gson=new Gson();
-                        apiResponse=gson.fromJson(errorString,UserApiResponse.class);
+                        apiResponse=gson.fromJson(errorString, ApiResponse.class);
                         showDialogError(apiResponse);
 
                     } catch (IOException e) {
@@ -126,7 +139,7 @@ public class EditUserActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<UserApiResponse> call, Throwable t) {
+            public void onFailure(Call<ApiResponse> call, Throwable t) {
                 Log.e("API Error", "Failure: " + t.getMessage());
             }
         });
@@ -159,7 +172,7 @@ public class EditUserActivity extends AppCompatActivity {
         editor.putString("name",name);
         editor.apply();
     }
-    public void showDialogError(UserApiResponse apiResponse){
+    public void showDialogError(ApiResponse apiResponse){
         Dialog dialog=new Dialog(EditUserActivity.this);
         dialog.setContentView(R.layout.custom_dialog_error);
         dialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);

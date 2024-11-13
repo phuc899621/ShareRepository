@@ -11,7 +11,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -20,15 +19,14 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.potholeapplication.R;
-import com.example.potholeapplication.class_pothole.RegisterRequest;
+import com.example.potholeapplication.class_pothole.request.RegisterReq;
 import com.example.potholeapplication.class_pothole.RetrofitServices;
-import com.example.potholeapplication.class_pothole.UserApiResponse;
+import com.example.potholeapplication.class_pothole.ApiResponse;
+import com.example.potholeapplication.class_pothole.request.UserVerificationReq;
 import com.example.potholeapplication.databinding.ActivitySignupBinding;
 import com.example.potholeapplication.interface_pothole.UserAPIInterface;
 import com.example.potholeapplication.user_auth.login.LoginScreenActivity;
 import com.google.gson.Gson;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 
 import java.io.IOException;
 
@@ -40,6 +38,7 @@ public class SignupActivity extends AppCompatActivity {
     ActivitySignupBinding binding;
     Context context;
     Button btnConfirm;
+    Dialog dialogError,dialogOke;
     TextView tvErrorTitle,tvOkeTitle;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,100 +51,105 @@ public class SignupActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-        setClickEvent();
         context=this;
+        SetupDialog();
+        setClickEvent();
     }
-    public void callAPI(){
+    public void callUserVerificationAPI(){
         UserAPIInterface apiService = RetrofitServices.getApiService();
         //lay du lieu
         String username=binding.etUsername.getText().toString().trim();
         String password=binding.etPassword.getText().toString().trim();
-        String name=binding.etUsername.getText().toString().trim();
+        String name=binding.etName.getText().toString().trim();
         String email=binding.etEmail.getText().toString().trim();
         String confirmPassword=binding.etConfirmPassword.getText().toString().trim();
+
+        //kiem tra du lieu nhap vao
         if(username.isEmpty() || password.isEmpty()||name.isEmpty()||email.isEmpty()||confirmPassword.isEmpty()){
-            Toast.makeText(context,"Please enter your information"
-                    ,Toast.LENGTH_LONG).show();
+            showDialogErrorString(getString(R.string.str_please_enter_your_information));
             return;
         }
         if(!password.equals(confirmPassword)){
-            Toast.makeText(context,"Password does not match"
-                    ,Toast.LENGTH_LONG).show();
+            showDialogErrorString(getString(R.string.str_password_does_not_match));
             return;
         }
-        RegisterRequest registerRequest=new RegisterRequest(username,name,email,password);
-        // Call API login
-        Call<UserApiResponse> call = apiService.callRegisterApi(registerRequest);
-        // call API bất đồng bộ
-        call.enqueue(new Callback<UserApiResponse>() {
+        //tao doi tuong chua email va username de call api kiem tra
+        UserVerificationReq userVerificationReq=new UserVerificationReq(username,email);
+        //call api kiem tra username va email co ton tai chua
+        Call<ApiResponse> call = apiService.callVerifyBeforeRegister(userVerificationReq);
+        call.enqueue(new Callback<ApiResponse>() {
             @Override
-            public void onResponse(Call<UserApiResponse> call, Response<UserApiResponse> response) {
+            public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
 
                 if(response.isSuccessful()&&response.body()!=null){
-                    showDialogOke(registerRequest);
+                    RegisterReq registerReq=new RegisterReq(username,name,email,password);
+                    getToEmailVerification(registerReq);
                 }
                 else{
                     String errorString;
-                    JsonObject errorJson;
-                    UserApiResponse apiResponse;
+                    ApiResponse apiResponse;
                     try {
                         //lay chuoi json va chuyen thanh UserAPIResponse
                         errorString=response.errorBody().string();
-                        errorJson= JsonParser.parseString(errorString).getAsJsonObject();
                         Gson gson=new Gson();
-                        apiResponse=gson.fromJson(errorString,UserApiResponse.class);
+                        apiResponse=gson.fromJson(errorString, ApiResponse.class);
                         showDialogError(apiResponse);
-
                     } catch (IOException e) {
                         throw new RuntimeException(e);
                     }
                 }
             }
             @Override
-            public void onFailure(Call<UserApiResponse> call, Throwable t) {
+            public void onFailure(Call<ApiResponse> call, Throwable t) {
                 Log.e("API Error", "Failure: " + t.getMessage());
             }
         });
     }
-    public void showDialogOke(RegisterRequest registerRequest){
-        Dialog dialog=new Dialog(SignupActivity.this);
-        dialog.setContentView(R.layout.custom_dialog_oke);
-        dialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
-        dialog.setCancelable(false);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-        tvOkeTitle=dialog.findViewById(R.id.tvTitle);
-        tvOkeTitle.setText(R.string.str_sign_up_successful);
-        dialog.show();
-        Handler handler=new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                Intent intent = new Intent(SignupActivity.this, VerificationActivity.class);
-                Bundle bundle=new Bundle();
-                bundle.putString("email",registerRequest.getEmail().trim());
-                bundle.putString("name",registerRequest.getName().trim());
-                bundle.putString("username",registerRequest.getUsername().trim());
-                bundle.putString("password",registerRequest.getPassword().trim());
-                intent.putExtra("sendEmail", bundle);
-                startActivity(intent);
-                dialog.dismiss();
-            }
-        },2000);
+    public void SetupDialog(){
+        dialogOke=new Dialog(SignupActivity.this);
+        dialogOke.setContentView(R.layout.custom_dialog_oke);
+        dialogOke.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+        dialogOke.setCancelable(false);
+        dialogOke.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        tvOkeTitle=dialogOke.findViewById(R.id.tvTitle);
+
+        dialogError=new Dialog(SignupActivity.this);
+        dialogError.setContentView(R.layout.custom_dialog_error);
+        dialogError.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+        dialogError.setCancelable(true);
+        dialogError.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        btnConfirm=dialogError.findViewById(R.id.btnConfirm);
+        tvErrorTitle=dialogError.findViewById(R.id.tvTitle);
+
     }
-    public void showDialogError(UserApiResponse apiResponse){
-        Dialog dialog=new Dialog(SignupActivity.this);
-        dialog.setContentView(R.layout.custom_dialog_error);
-        dialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
-        dialog.setCancelable(true);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-        btnConfirm=dialog.findViewById(R.id.btnConfirm);
-        tvErrorTitle=dialog.findViewById(R.id.tvTitle);
+    public void getToEmailVerification(RegisterReq registerReq){
+
+        Intent intent = new Intent(SignupActivity.this, VerificationActivity.class);
+        Bundle bundle=new Bundle();
+        bundle.putString("email", registerReq.getEmail().trim());
+        bundle.putString("name", registerReq.getName().trim());
+        bundle.putString("username", registerReq.getUsername().trim());
+        bundle.putString("password", registerReq.getPassword().trim());
+        intent.putExtra("sendEmail", bundle);
+        startActivity(intent);
+    }
+    public void showDialogError(ApiResponse apiResponse){
         tvErrorTitle.setText(apiResponse.getMessage());
-        dialog.show();
+        dialogError.show();
         btnConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dialog.dismiss();
+                dialogError.dismiss();
+            }
+        });
+    }
+    public void showDialogErrorString(String error){
+        tvErrorTitle.setText(error);
+        dialogError.show();
+        btnConfirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialogError.dismiss();
             }
         });
     }
@@ -153,7 +157,7 @@ public class SignupActivity extends AppCompatActivity {
         binding.btnSignin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                callAPI();
+                callUserVerificationAPI();
             }
         });
         binding.tvHaveAccount.setOnClickListener(new View.OnClickListener() {

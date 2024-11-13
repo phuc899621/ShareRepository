@@ -5,6 +5,189 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/background"
     tools:context=".edit_user.EditEmailActivity">
+    <androidx.constraintlayout.widget.Guideline
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.25"
+        android:id="@+id/guideTop"/>
+    <androidx.constraintlayout.widget.Guideline
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.95"
+        android:id="@+id/guideBot"/>
+    <androidx.constraintlayout.widget.Guideline
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:id="@+id/guideLeft"
+        app:layout_constraintGuide_percent="0.1"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/str_pothole_map"
+        android:textColor="@color/dark_purple"
+        android:textSize="40sp"
+        android:textStyle="bold"
+        android:id="@+id/tvPotholeMap"
+        app:layout_constraintBottom_toTopOf="@+id/guideTop"
+        app:layout_constraintLeft_toRightOf="@id/guideLeft"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/str_support_your_life"
+        android:textColor="@color/dark_purple"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@+id/guideLeft"
+        app:layout_constraintTop_toBottomOf="@+id/tvPotholeMap" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/sheetLayout"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginHorizontal="@dimen/dim_sheet_margin_horizontal"
+        android:background="@drawable/corner_sheet"
+        android:elevation="30dp"
+        app:layout_constraintBottom_toTopOf="@+id/guideBot"
+        app:layout_constraintTop_toTopOf="@+id/guideTop"
+        app:layout_constraintVertical_bias="1.0"
+        tools:layout_editor_absoluteX="20dp">
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideLeftSheet12"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.12" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideRightSheet88"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.88" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideLeftSheet6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.06" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideRightSheet94"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.94" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideBottomSheet"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.67" />
+
+        <FrameLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:id="@+id/titleLayout"
+            app:layout_constraintLeft_toLeftOf="@id/sheetLayout"
+            app:layout_constraintRight_toRightOf="@id/sheetLayout"
+            app:layout_constraintTop_toTopOf="parent">
+            <TextView
+                android:id="@+id/tvTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:text="@string/str_change_email"
+                android:textColor="@color/dark_purple"
+                android:textSize="24sp"
+                android:textStyle="bold" />
+            <ImageButton
+                android:id="@+id/btnBack"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_marginStart="0dp"
+                android:background="@android:color/transparent"
+                android:src="@drawable/ic_back" />
+        </FrameLayout>
+
+
+        <ImageView
+            android:layout_width="220dp"
+            android:layout_height="220dp"
+            android:scaleType="fitCenter"
+            android:id="@+id/imaForgot"
+            android:src="@drawable/forgot"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/titleLayout" />
+
+
+        <TextView
+            android:id="@+id/tvCheckemail"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:clickable="true"
+            android:gravity="center"
+            android:text="@string/str_enter_new_email"
+            android:textSize="18sp"
+            android:textColor="@color/dark_purple"
+            app:layout_constraintLeft_toRightOf="@id/guideLeftSheet6"
+            app:layout_constraintRight_toLeftOf="@id/guideRightSheet94"
+            app:layout_constraintTop_toBottomOf="@id/imaForgot" />
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/etlEmail"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:elevation="10dp"
+            android:layout_marginTop="10dp"
+            android:hint="@string/str_email"
+            app:boxCornerRadiusBottomEnd="30dp"
+            app:boxCornerRadiusBottomStart="30dp"
+            app:boxCornerRadiusTopEnd="30dp"
+            app:boxCornerRadiusTopStart="30dp"
+            app:boxStrokeColor="@color/purple"
+            app:boxStrokeWidth="1dp"
+            app:hintTextColor="@color/dark_purple"
+            app:layout_constraintEnd_toStartOf="@id/guideRightSheet88"
+            app:layout_constraintStart_toEndOf="@id/guideLeftSheet12"
+            app:layout_constraintTop_toBottomOf="@id/tvCheckemail">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etEmail"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:textSize="14sp" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <Button
+            android:id="@+id/btnSendCode"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/dark_purple"
+            android:text="@string/send_verification_code"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toRightOf="@id/guideLeftSheet12"
+            app:layout_constraintRight_toLeftOf="@id/guideRightSheet88"
+            app:layout_constraintTop_toBottomOf="@id/etlEmail" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

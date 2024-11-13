@@ -22,15 +22,16 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.potholeapplication.HomeScreenActivity;
 import com.example.potholeapplication.R;
-import com.example.potholeapplication.class_pothole.LoginRequest;
+import com.example.potholeapplication.class_pothole.request.EmailReq;
+import com.example.potholeapplication.class_pothole.request.LoginReq;
 import com.example.potholeapplication.class_pothole.RetrofitServices;
 import com.example.potholeapplication.class_pothole.User;
-import com.example.potholeapplication.class_pothole.UserApiResponse;
-import com.example.potholeapplication.databinding.ActivityForgotPasswordBinding;
+import com.example.potholeapplication.class_pothole.ApiResponse;
 import com.example.potholeapplication.databinding.ActivityLoginScreenBinding;
 import com.example.potholeapplication.interface_pothole.UserAPIInterface;
 import com.example.potholeapplication.user_auth.forgot_password.ForgotPasswordActivity;
 import com.example.potholeapplication.user_auth.signup.SignupActivity;
+import com.example.potholeapplication.user_auth.signup.VerificationActivity;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -46,8 +47,8 @@ public class LoginScreenActivity extends AppCompatActivity {
     ActivityLoginScreenBinding binding;
     Context context;
     Button btnConfirm;
-    Dialog dialogOke,dialogError;
-    TextView tvErrorTitle;
+    Dialog dialogError,dialogOke;
+    TextView tvErrorTitle,tvOkeTitle;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,13 +61,12 @@ public class LoginScreenActivity extends AppCompatActivity {
             return insets;
         });
         context=this;
+        SetupDialog();
         setClickEvent(); //cài su kien click
 
     }
-    public void callAPI(){
-        // Khoi tai UerAPIInterface
+    public void callLoginAPI(){
         UserAPIInterface apiService = RetrofitServices.getApiService();
-        //lay du lieu
         String username=binding.etUsername.getText().toString().trim();
         String password=binding.etPassword.getText().toString().trim();
         if(username.isEmpty() || password.isEmpty()){
@@ -75,14 +75,11 @@ public class LoginScreenActivity extends AppCompatActivity {
             return;
         }
 
-
-        LoginRequest loginRequest=new LoginRequest(username,password);
-        // Call API login
-        Call<UserApiResponse> call = apiService.callLoginAPI(loginRequest);
-        // call API bất đồng bộ
-        call.enqueue(new Callback<UserApiResponse>() {
+        LoginReq loginReq =new LoginReq(username,password);
+        Call<ApiResponse> call = apiService.callLogin(loginReq);
+        call.enqueue(new Callback<ApiResponse>() {
             @Override
-            public void onResponse(Call<UserApiResponse> call, Response<UserApiResponse> response) {
+            public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
                  if(response.isSuccessful()&&response.body()!=null){
                      //luu thong tin vao dien thoai
                      saveUserInfo(response.body().getData());
@@ -91,13 +88,13 @@ public class LoginScreenActivity extends AppCompatActivity {
                  else{
                      String errorString;
                      JsonObject errorJson;
-                     UserApiResponse apiResponse;
+                     ApiResponse apiResponse;
                      try {
                          //lay chuoi json va chuyen thanh UserAPIResponse
                          errorString=response.errorBody().string();
                          errorJson= JsonParser.parseString(errorString).getAsJsonObject();
                          Gson gson=new Gson();
-                         apiResponse=gson.fromJson(errorString,UserApiResponse.class);
+                         apiResponse=gson.fromJson(errorString, ApiResponse.class);
                          showDialogError(apiResponse);
 
                      } catch (IOException e) {
@@ -107,12 +104,13 @@ public class LoginScreenActivity extends AppCompatActivity {
            }
 
             @Override
-            public void onFailure(Call<UserApiResponse> call, Throwable t) {
+            public void onFailure(Call<ApiResponse> call, Throwable t) {
                 Log.e("API Error", "Failure: " + t.getMessage());
             }
         });
 
     }
+
     public void saveUserInfo(List<User> userList){
         User user=userList.get(0);
         SharedPreferences sharedPreferences=getSharedPreferences(
@@ -125,13 +123,26 @@ public class LoginScreenActivity extends AppCompatActivity {
         editor.putBoolean("login",true);
         editor.apply();
     }
+    public void SetupDialog(){
+        dialogOke=new Dialog(LoginScreenActivity.this);
+        dialogOke.setContentView(R.layout.custom_dialog_oke);
+        dialogOke.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+        dialogOke.setCancelable(false);
+        dialogOke.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        tvOkeTitle=dialogOke.findViewById(R.id.tvTitle);
+
+        dialogError=new Dialog(LoginScreenActivity.this);
+        dialogError.setContentView(R.layout.custom_dialog_error);
+        dialogError.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+        dialogError.setCancelable(true);
+        dialogError.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        btnConfirm=dialogError.findViewById(R.id.btnConfirm);
+        tvErrorTitle=dialogError.findViewById(R.id.tvTitle);
+
+    }
     public void showDialogOke(){
-        Dialog dialog=new Dialog(LoginScreenActivity.this);
-        dialog.setContentView(R.layout.custom_dialog_oke);
-        dialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
-        dialog.setCancelable(false);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-        dialog.show();
+        tvOkeTitle.setText(R.string.str_login_successful);
+        dialogOke.show();
         Handler handler=new Handler();
         handler.postDelayed(new Runnable() {
             @Override
@@ -139,24 +150,18 @@ public class LoginScreenActivity extends AppCompatActivity {
                 //luu thong tin dang nhap vao file
                 Intent intent = new Intent(LoginScreenActivity.this, HomeScreenActivity.class);
                 startActivity(intent);
+                dialogOke.dismiss();
                 finish();
             }
         },2000);
     }
-    public void showDialogError(UserApiResponse apiResponse){
-        Dialog dialog=new Dialog(LoginScreenActivity.this);
-        dialog.setContentView(R.layout.custom_dialog_error);
-        dialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
-        dialog.setCancelable(true);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-        btnConfirm=dialog.findViewById(R.id.btnConfirm);
-        tvErrorTitle=dialog.findViewById(R.id.tvTitle);
+    public void showDialogError(ApiResponse apiResponse){
         tvErrorTitle.setText(apiResponse.getMessage());
-        dialog.show();
+        dialogError.show();
         btnConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dialog.dismiss();
+                dialogError.dismiss();
             }
         });
     }
@@ -167,7 +172,8 @@ public class LoginScreenActivity extends AppCompatActivity {
         binding.btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                callAPI();
+                callLoginAPI();
+
             }
         });
         binding.tvCreateAccount.setOnClickListener(new View.OnClickListener() {

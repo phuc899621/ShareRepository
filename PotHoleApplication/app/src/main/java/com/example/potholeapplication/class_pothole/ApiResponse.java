@@ -5,20 +5,20 @@ import com.google.gson.annotations.SerializedName;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UserApiResponse {
+public class ApiResponse {
     @SerializedName("success")
     private boolean success=false;
     @SerializedName("message")
     private String Message;
     @SerializedName("data")
     private List<User> data;
-    public UserApiResponse() {
+    public ApiResponse() {
         this.success = false;
         this.Message = "";
         this.data = new ArrayList<>();
     }
 
-    public UserApiResponse(boolean success, String message, List<User> data) {
+    public ApiResponse(boolean success, String message, List<User> data) {
         this.success = success;
         Message = message;
         this.data = data;

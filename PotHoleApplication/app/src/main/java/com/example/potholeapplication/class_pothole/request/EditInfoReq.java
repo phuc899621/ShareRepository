@@ -1,14 +1,14 @@
-package com.example.potholeapplication.class_pothole;
+package com.example.potholeapplication.class_pothole.request;
 
 import com.google.gson.annotations.SerializedName;
 
-public class EditInfoRequest {
+public class EditInfoReq {
     @SerializedName("username")
     private String username;
     @SerializedName("name")
     private String name;
 
-    public EditInfoRequest(String username, String name) {
+    public EditInfoReq(String username, String name) {
         this.username = username;
         this.name = name;
     }

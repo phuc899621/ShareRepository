@@ -1,9 +1,13 @@
 package com.example.potholeapplication.interface_pothole;
 
-import com.example.potholeapplication.class_pothole.EditInfoRequest;
-import com.example.potholeapplication.class_pothole.LoginRequest;
-import com.example.potholeapplication.class_pothole.RegisterRequest;
-import com.example.potholeapplication.class_pothole.UserApiResponse;
+import com.example.potholeapplication.class_pothole.request.EditInfoReq;
+import com.example.potholeapplication.class_pothole.request.EditPasswordReq;
+import com.example.potholeapplication.class_pothole.request.EmailReq;
+import com.example.potholeapplication.class_pothole.request.LoginReq;
+import com.example.potholeapplication.class_pothole.request.RegisterReq;
+import com.example.potholeapplication.class_pothole.ApiResponse;
+import com.example.potholeapplication.class_pothole.request.ResetPasswordReq;
+import com.example.potholeapplication.class_pothole.request.UserVerificationReq;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -12,23 +16,35 @@ import retrofit2.http.PUT;
 import retrofit2.http.Path;
 
 public interface UserAPIInterface {
-    @POST("api/user/auth/register")
-    Call<UserApiResponse> callRegisterApi(@Body RegisterRequest registerRequest);
-
-    @POST("api/user/auth/login")
-    Call<UserApiResponse> callLoginAPI(@Body LoginRequest loginRequest);
-    @POST("api/user/auth/register/email/code")
-    Call<UserApiResponse> callSendCodeRegisterAPI(@Body RegisterRequest registerRequest);
-    @POST("api/user/auth/register/add")
-    Call<UserApiResponse> callAddUserAPI(@Body RegisterRequest registerRequest);
-    @POST("api/user/edit/password/email")
-    Call<UserApiResponse> callEmailCheckAPI(@Body RegisterRequest registerRequest);
-    @POST("api/user/edit/password/email/code")
-    Call<UserApiResponse> callSendCodeResetPasswordAPI(@Body RegisterRequest registerRequest);
-    @PUT("api/user/edit/password")
-    Call<UserApiResponse> callResetPasswordAPI(@Body RegisterRequest registerRequest);
-    @PUT("api/user/edit/info/email/:email")
-    Call<UserApiResponse> callChangeInfoAPI(@Path ("email") String email,
-                                         EditInfoRequest editUsernameNameRequest);
+    //-----------------------API danh cho dang nhap-----------------------
+    @POST("api/auth/login")//dang nhap
+    Call<ApiResponse> callLogin(@Body LoginReq loginReq);
+    //-----------------------API danh cho dang ki-----------------------------
+    @POST("api/find/register/non")//kiem tra username va email co ton tai chua
+    Call<ApiResponse> callVerifyBeforeRegister(@Body UserVerificationReq userVerificationReq);
+    @POST("api/code/register")//gui code
+    Call<ApiResponse> callRegisterCode(@Body EmailReq emailReq);
+    @POST("api/auth/register")//dang ky
+    Call<ApiResponse> callRegister(@Body RegisterReq registerReq);
+    //----------------------API cho forgot password------------------------
+    @POST("api/find/email")//kiem tra email co trong csdl ko
+    Call<ApiResponse> callFindEmail(@Body EmailReq emailReq);
+    @POST("api/code/password")//gui code
+    Call<ApiResponse> callResetPassCode(@Body EmailReq emailReq);
+    @PUT("api/edit/password")//reset password
+    Call<ApiResponse> callResetPassword(@Body ResetPasswordReq resetPasswordReq);
+    //------------------------API cho edit email-------------
+    @POST("api/find/email/non")//kiem tra email da ton tai trong csdl
+    Call<ApiResponse> callFindEmailNonExists(@Body EmailReq emailReq);
+    @POST("api/code/email")//gui code email
+    Call<ApiResponse> callEmailCode(@Body EmailReq emailReq);
+    @PUT("api/edit/email/{email}")//edit email
+    Call<ApiResponse> callEditEmail(@Path("email") String email, @Body EmailReq emailReq);
+    //---------------------API cho edit username va name--------
+    @PUT("api/edit/info/{email}")//edit username va name
+    Call<ApiResponse> callEditInfo(@Path("email") String email, @Body EditInfoReq editInfoReq);
+    //---------------------API cho edit password---------------------
+    @PUT("api/edit/password/change")//edit password
+    Call<ApiResponse> callChangePassword(@Body EditPasswordReq editPasswordReq);
 
 }

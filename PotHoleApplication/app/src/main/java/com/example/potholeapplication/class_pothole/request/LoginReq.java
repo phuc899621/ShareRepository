@@ -1,14 +1,14 @@
-package com.example.potholeapplication.class_pothole;
+package com.example.potholeapplication.class_pothole.request;
 
 import com.google.gson.annotations.SerializedName;
 
-public class LoginRequest {
+public class LoginReq {
     @SerializedName("username")
     private String username;
     @SerializedName("password")
     private String password;
 
-    public LoginRequest(String username, String password) {
+    public LoginReq(String username, String password) {
         this.username = username;
         this.password = password;
     }

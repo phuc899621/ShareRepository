@@ -1,8 +1,8 @@
-package com.example.potholeapplication.class_pothole;
+package com.example.potholeapplication.class_pothole.request;
 
 import com.google.gson.annotations.SerializedName;
 
-public class RegisterRequest {
+public class RegisterReq {
     @SerializedName("username")
     private String username;
     @SerializedName("email")
@@ -44,7 +44,7 @@ public class RegisterRequest {
         this.password = password;
     }
 
-    public RegisterRequest(String username, String name, String email, String password) {
+    public RegisterReq(String username, String name, String email, String password) {
         this.username = username;
         this.name = name;
         this.email = email;

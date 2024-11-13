@@ -11,7 +11,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.25"
+        app:layout_constraintGuide_percent="0.2"
         android:id="@+id/guideTop"/>
     <androidx.constraintlayout.widget.Guideline
         android:layout_width="wrap_content"
@@ -101,7 +101,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/etlName"
+            android:id="@+id/etlEmail"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:elevation="10dp"
@@ -113,11 +113,10 @@
             app:boxStrokeColor="@color/purple"
             app:boxStrokeWidth="1dp"
             app:hintTextColor="@color/dark_purple"
-            app:layout_constraintBottom_toTopOf="@id/etlUsername"
+            android:layout_marginTop="10dp"
             app:layout_constraintEnd_toStartOf="@id/guideRightSheet"
             app:layout_constraintStart_toEndOf="@id/guideLeftSheet"
-            app:layout_constraintTop_toBottomOf="@id/guideTopSheet"
-            app:layout_constraintVertical_chainStyle="spread">
+            app:layout_constraintTop_toBottomOf="@id/guideTopSheet">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/etEmail"
@@ -141,11 +140,10 @@
             app:boxStrokeColor="@color/purple"
             app:boxStrokeWidth="1dp"
             app:hintTextColor="@color/dark_purple"
-            app:layout_constraintBottom_toTopOf="@id/etlEmail"
+            android:layout_marginTop="10dp"
             app:layout_constraintEnd_toStartOf="@id/guideRightSheet"
             app:layout_constraintStart_toEndOf="@id/guideLeftSheet"
-            app:layout_constraintTop_toBottomOf="@id/etlName"
-            app:layout_constraintVertical_chainStyle="spread">
+            app:layout_constraintTop_toBottomOf="@id/etlEmail">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/etUsername"
@@ -157,7 +155,35 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/etlEmail"
+            android:id="@+id/etlName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:elevation="10dp"
+            android:hint="@string/str_name"
+            app:boxCornerRadiusBottomEnd="30dp"
+            app:boxCornerRadiusBottomStart="30dp"
+            app:boxCornerRadiusTopEnd="30dp"
+            app:boxCornerRadiusTopStart="30dp"
+            app:boxStrokeColor="@color/purple"
+            app:boxStrokeWidth="1dp"
+            app:hintTextColor="@color/dark_purple"
+            android:layout_marginTop="10dp"
+            app:layout_constraintEnd_toStartOf="@id/guideRightSheet"
+            app:layout_constraintStart_toEndOf="@id/guideLeftSheet"
+            app:layout_constraintTop_toBottomOf="@id/etlUsername">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etName"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:textSize="14sp" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/etlPassword"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:elevation="10dp"
@@ -169,10 +195,11 @@
             app:boxStrokeColor="@color/purple"
             app:boxStrokeWidth="1dp"
             app:hintTextColor="@color/dark_purple"
+            android:layout_marginTop="10dp"
             app:layout_constraintBottom_toTopOf="@id/etlPassword"
             app:layout_constraintEnd_toStartOf="@id/guideRightSheet"
             app:layout_constraintStart_toEndOf="@id/guideLeftSheet"
-            app:layout_constraintTop_toBottomOf="@id/etlUsername"
+            app:layout_constraintTop_toBottomOf="@id/etlName"
             app:passwordToggleEnabled="true">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -186,9 +213,8 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/etlPassword"
+            android:id="@+id/etlConfirmPassword"
             android:layout_width="0dp"
-
             android:layout_height="wrap_content"
             android:elevation="10dp"
             android:hint="@string/str_confirm_password"
@@ -199,10 +225,10 @@
             app:boxStrokeColor="@color/purple"
             app:boxStrokeWidth="1dp"
             app:hintTextColor="@color/dark_purple"
-            app:layout_constraintBottom_toTopOf="@id/guideBottomSheet"
+            android:layout_marginTop="10dp"
             app:layout_constraintEnd_toStartOf="@id/guideRightSheet"
             app:layout_constraintStart_toEndOf="@id/guideLeftSheet"
-            app:layout_constraintTop_toBottomOf="@id/etlEmail"
+            app:layout_constraintTop_toBottomOf="@id/etlPassword"
             app:passwordToggleEnabled="true">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -261,6 +287,7 @@
             android:text="@string/str_already_have_account"
             android:textColor="@color/black"
             android:textSize="14sp"
+            android:layout_marginTop="5dp"
             app:layout_constraintLeft_toRightOf="@id/guideLeftSheet"
             app:layout_constraintRight_toLeftOf="@id/guideRightSheet"
             app:layout_constraintTop_toBottomOf="@+id/googleLayout" />

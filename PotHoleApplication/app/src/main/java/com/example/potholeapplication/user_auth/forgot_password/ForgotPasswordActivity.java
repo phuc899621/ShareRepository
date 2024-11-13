@@ -19,11 +19,13 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.potholeapplication.R;
-import com.example.potholeapplication.class_pothole.RegisterRequest;
+import com.example.potholeapplication.class_pothole.request.EmailReq;
+import com.example.potholeapplication.class_pothole.request.RegisterReq;
 import com.example.potholeapplication.class_pothole.RetrofitServices;
-import com.example.potholeapplication.class_pothole.UserApiResponse;
+import com.example.potholeapplication.class_pothole.ApiResponse;
 import com.example.potholeapplication.databinding.ActivityForgotPasswordBinding;
 import com.example.potholeapplication.interface_pothole.UserAPIInterface;
+import com.example.potholeapplication.user_auth.signup.SignupActivity;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -37,6 +39,9 @@ import retrofit2.Response;
 public class ForgotPasswordActivity extends AppCompatActivity {
     ActivityForgotPasswordBinding binding;
     Context context;
+    Button btnConfirm;
+    Dialog dialogError;
+    TextView tvErrorTitle;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,6 +54,7 @@ public class ForgotPasswordActivity extends AppCompatActivity {
             return insets;
         });
         context=this;
+        SetupDialog();
         setClickEvent();
     }
     public void setClickEvent(){
@@ -61,27 +67,25 @@ public class ForgotPasswordActivity extends AppCompatActivity {
         binding.btnSendCode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                callAPICheckEmail();
+                callFindEmailApi();
             }
         });
     }
-    public void callAPICheckEmail(){
-        UserAPIInterface apiService = RetrofitServices.getApiService();
-        //lay du lieu
+    public void callFindEmailApi(){
         String email=binding.etEmail.getText().toString().trim();
         if(email.isEmpty()){
-            Toast.makeText(context,"Please enter email"
-                    ,Toast.LENGTH_LONG).show();
+            showDialogErrorString(getString(R.string.str_please_enter_your_email));
             return;
         }
+
+        UserAPIInterface apiService = RetrofitServices.getApiService();
         //chi gui email len api server
-        RegisterRequest registerRequest=new RegisterRequest("","",email,"");
+        EmailReq emailReq=new EmailReq(email);
         // Call API kiem tra email
-        Call<UserApiResponse> call = apiService.callEmailCheckAPI(registerRequest);
-        // call API bất đồng bộ
-        call.enqueue(new Callback<UserApiResponse>() {
+        Call<ApiResponse> call = apiService.callFindEmail(emailReq);
+        call.enqueue(new Callback<ApiResponse>() {
             @Override
-            public void onResponse(Call<UserApiResponse> call, Response<UserApiResponse> response) {
+            public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
                 if(response.isSuccessful()&&response.body()!=null){
                     Intent intent=new Intent(ForgotPasswordActivity.this,
                             ForgotPasswordVerificationActivity.class);
@@ -90,14 +94,11 @@ public class ForgotPasswordActivity extends AppCompatActivity {
                 }
                 else{
                     String errorString;
-                    JsonObject errorJson;
-                    UserApiResponse apiResponse;
+                    ApiResponse apiResponse;
                     try {
-                        //lay chuoi json va chuyen thanh UserAPIResponse
                         errorString=response.errorBody().string();
-                        errorJson= JsonParser.parseString(errorString).getAsJsonObject();
                         Gson gson=new Gson();
-                        apiResponse=gson.fromJson(errorString,UserApiResponse.class);
+                        apiResponse=gson.fromJson(errorString, ApiResponse.class);
                         showDialogError(apiResponse);
 
                     } catch (IOException e) {
@@ -107,27 +108,39 @@ public class ForgotPasswordActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<UserApiResponse> call, Throwable t) {
+            public void onFailure(Call<ApiResponse> call, Throwable t) {
                 Log.e("API Error", "Failure: " + t.getMessage());
             }
         });
 
     }
-    public void showDialogError(UserApiResponse apiResponse){
-        Dialog dialog=new Dialog(ForgotPasswordActivity.this);
-        dialog.setContentView(R.layout.custom_dialog_error);
-        dialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
-        dialog.setCancelable(true);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-        Button btnConfirm=dialog.findViewById(R.id.btnConfirm);
-        TextView tvErrorTitle=dialog.findViewById(R.id.tvTitle);
-        tvErrorTitle.setText(apiResponse.getMessage());
-        dialog.show();
+    public void SetupDialog(){
+        dialogError=new Dialog(ForgotPasswordActivity.this);
+        dialogError.setContentView(R.layout.custom_dialog_error);
+        dialogError.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+        dialogError.setCancelable(true);
+        dialogError.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        btnConfirm=dialogError.findViewById(R.id.btnConfirm);
+        tvErrorTitle=dialogError.findViewById(R.id.tvTitle);
 
+    }
+    public void showDialogError(ApiResponse apiResponse){
+        tvErrorTitle.setText(apiResponse.getMessage());
+        dialogError.show();
         btnConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dialog.dismiss();
+                dialogError.dismiss();
+            }
+        });
+    }
+    public void showDialogErrorString(String error){
+        tvErrorTitle.setText(error);
+        dialogError.show();
+        btnConfirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialogError.dismiss();
             }
         });
     }
