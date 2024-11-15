@@ -4,9 +4,12 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,7 +24,10 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.potholeapplication.HomeScreenActivity;
+import com.example.potholeapplication.MainActivity;
 import com.example.potholeapplication.R;
+import com.example.potholeapplication.class_pothole.CustomDialog;
+import com.example.potholeapplication.class_pothole.DataEditor;
 import com.example.potholeapplication.class_pothole.request.EmailReq;
 import com.example.potholeapplication.class_pothole.request.LoginReq;
 import com.example.potholeapplication.class_pothole.RetrofitServices;
@@ -39,6 +45,9 @@ import com.google.gson.JsonParser;
 import java.io.IOException;
 import java.util.List;
 
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -81,18 +90,15 @@ public class LoginScreenActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
                  if(response.isSuccessful()&&response.body()!=null){
-                     //luu thong tin vao dien thoai
                      saveUserInfo(response.body().getData());
-                     showDialogOke();
+                     CallGetImageAPI();
                  }
                  else{
                      String errorString;
-                     JsonObject errorJson;
                      ApiResponse apiResponse;
                      try {
                          //lay chuoi json va chuyen thanh UserAPIResponse
                          errorString=response.errorBody().string();
-                         errorJson= JsonParser.parseString(errorString).getAsJsonObject();
                          Gson gson=new Gson();
                          apiResponse=gson.fromJson(errorString, ApiResponse.class);
                          showDialogError(apiResponse);
@@ -122,6 +128,98 @@ public class LoginScreenActivity extends AppCompatActivity {
         editor.putString("name",user.getName());
         editor.putBoolean("login",true);
         editor.apply();
+    }
+    public void CallGetImageAPI() {
+        String email= DataEditor.getEmail(context);
+        if(email.isEmpty()){
+            CustomDialog.showDialogErrorString(context,getString(R.string.str_email_not_found));
+            return;
+        }
+        EmailReq emailReq=new EmailReq(email);
+        UserAPIInterface apiServices= RetrofitServices.getApiService();
+        Call<ApiResponse> call = apiServices.callFindImage(emailReq);
+        // Gửi yêu cầu
+        call.enqueue(new Callback<ApiResponse>() {
+            @Override
+            public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
+                if(response.isSuccessful()&&response.body()!=null){
+                    // Kiểm tra nếu có hình ảnh
+                    List<User> data = response.body().getData();
+                    if (data != null && !data.isEmpty()) {
+                        String imageBase64 = data.get(0).getImage();
+                        if (!imageBase64.isEmpty()) {
+                            byte[] decodedBytes = Base64.decode(imageBase64, Base64.DEFAULT);
+                            DataEditor.saveImageBytesToSharedPreferences(context,decodedBytes);
+                            showDialogOke();
+                        } else {
+                            DataEditor.saveImageBytesToSharedPreferences(context,
+                                    DataEditor.drawableToByteArray(context,R.drawable.default_user)
+                            );
+                            CallSaveImageAPI(DataEditor.drawableToByteArray(context,R.drawable.default_user));
+                        }
+                    }
+                }
+                else{
+                    String errorString;
+                    ApiResponse apiResponse;
+                    try {
+                        errorString=response.errorBody().string();
+                        Gson gson=new Gson();
+                        apiResponse=gson.fromJson(errorString, ApiResponse.class);
+                        CustomDialog.showDialogError(context,apiResponse);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ApiResponse> call, Throwable t) {
+                Log.e("API Error", "Failure: " + t.getMessage());
+            }
+        });
+    }
+    public void CallSaveImageAPI(byte[] imageBytes) {
+        RequestBody requestBody = RequestBody.create(MediaType.parse("image/jpeg"), imageBytes);
+        MultipartBody.Part imagePart = MultipartBody.Part.createFormData("image", "image.jpg", requestBody);
+        String email=DataEditor.getEmail(context);
+        if(email.isEmpty()){
+            CustomDialog.showDialogErrorString(context,getString(R.string.str_email_not_found));
+            return;
+        }
+        // Tạo RequestBody cho email và task
+        RequestBody emailReq = RequestBody.create(MediaType.parse("text/plain"), email);
+        UserAPIInterface apiServices=RetrofitServices.getApiService();
+        Call<ApiResponse> call = apiServices.callSaveImage(emailReq,imagePart);
+
+        // Gửi yêu cầu
+        call.enqueue(new Callback<ApiResponse>() {
+            @Override
+            public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
+                if(response.isSuccessful()&&response.body()!=null){
+                    DataEditor.saveImageBytesToSharedPreferences(context,imageBytes);
+                    CustomDialog.showDialogOkeNavigation(context,getString(R.string.str_login_successful),
+                            HomeScreenActivity.class);
+                }
+                else{
+                    String errorString;
+                    ApiResponse apiResponse;
+                    try {
+                        errorString=response.errorBody().string();
+                        Gson gson=new Gson();
+                        apiResponse=gson.fromJson(errorString, ApiResponse.class);
+                        CustomDialog.showDialogError(context,apiResponse);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ApiResponse> call, Throwable t) {
+                Log.e("API Error", "Failure: " + t.getMessage());
+            }
+        });
     }
     public void SetupDialog(){
         dialogOke=new Dialog(LoginScreenActivity.this);

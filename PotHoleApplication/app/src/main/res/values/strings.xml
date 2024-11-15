@@ -69,4 +69,5 @@ Please click on Reset Password below to go to the new password setup screen!</st
     <string name="str_please_enter_your_new_email">Please enter your new email</string>
     <string name="str_old_password">Old password</string>
     <string name="str_email_not_found">Email not found</string>
+    <string name="str_secret_password">****************</string>
 </resources>

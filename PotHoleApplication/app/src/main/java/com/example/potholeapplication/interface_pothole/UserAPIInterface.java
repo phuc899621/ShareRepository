@@ -9,10 +9,14 @@ import com.example.potholeapplication.class_pothole.ApiResponse;
 import com.example.potholeapplication.class_pothole.request.ResetPasswordReq;
 import com.example.potholeapplication.class_pothole.request.UserVerificationReq;
 
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
+import retrofit2.http.Part;
 import retrofit2.http.Path;
 
 public interface UserAPIInterface {
@@ -46,5 +50,12 @@ public interface UserAPIInterface {
     //---------------------API cho edit password---------------------
     @PUT("api/edit/password/change")//edit password
     Call<ApiResponse> callChangePassword(@Body EditPasswordReq editPasswordReq);
+    //---------------------API lấy hinh anh-----------------------
+    @Multipart
+    @PUT("api/edit/image")//save image
+    Call<ApiResponse> callSaveImage(@Part("email")RequestBody email, @Part MultipartBody.Part image);
+    @POST("api/find/Image")//kiem tra email co trong csdl ko
+    Call<ApiResponse> callFindImage(@Body EmailReq emailReq);
+
 
 }

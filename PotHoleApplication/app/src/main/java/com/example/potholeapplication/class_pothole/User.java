@@ -11,6 +11,8 @@ public class User {
     private String email;
     @SerializedName("name")
     private String name;
+    @SerializedName("image")
+    private String image;
 
     public String getId() {
         return id;
@@ -44,10 +46,19 @@ public class User {
         this.email = email;
     }
 
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
     public User() {
         id="";
         username="";
         email="";
         name="";
+        image="";
     }
 }

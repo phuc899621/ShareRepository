@@ -40,6 +40,7 @@ public class SplashScreenActivity extends AppCompatActivity {
                 boolean isLogin=sharedPreferences.getBoolean("login",false);
                 if(isLogin){
                     Intent intent=new Intent(SplashScreenActivity.this, HomeScreenActivity.class);
+
                     startActivity(intent);
                     finish();
                     return;

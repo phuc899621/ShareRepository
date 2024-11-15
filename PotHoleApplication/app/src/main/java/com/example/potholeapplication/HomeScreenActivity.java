@@ -1,9 +1,15 @@
 package com.example.potholeapplication;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.util.Base64;
+import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -11,17 +17,32 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.potholeapplication.class_pothole.ApiResponse;
+import com.example.potholeapplication.class_pothole.CustomDialog;
+import com.example.potholeapplication.class_pothole.DataEditor;
+import com.example.potholeapplication.class_pothole.RetrofitServices;
+import com.example.potholeapplication.class_pothole.User;
+import com.example.potholeapplication.class_pothole.request.EmailReq;
 import com.example.potholeapplication.databinding.ActivityHomeScreenBinding;
 import com.example.potholeapplication.edit_user.EditUserActivity;
+import com.example.potholeapplication.interface_pothole.UserAPIInterface;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineDataSet;
+import com.google.gson.Gson;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class HomeScreenActivity extends AppCompatActivity {
     LineChart lineChart;//chua dung den
+    Context context;
     ActivityHomeScreenBinding binding;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,16 +55,19 @@ public class HomeScreenActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+        context=this;
         setClickEvent();// chỗ này cài su kien click
         setDisplay();
 
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
+    protected void onStart() {
+        super.onStart();
         setDisplay();
     }
+
+
 
     public void setClickEvent(){
         binding.cvMap.setOnClickListener(new View.OnClickListener() {
@@ -74,6 +98,7 @@ public class HomeScreenActivity extends AppCompatActivity {
         );
         String name= sharedPreferences.getString("name","not found");
         binding.tvName.setText(name);
+        binding.btnUserIcon.setImageBitmap(DataEditor.getImageBitmapFromSharePreferences(context));
     }
     //chưa xong
     public void chartData(){

@@ -13,6 +13,7 @@ retrofit = "2.11.0"
 gson = "2.11.0"
 converterGson = "2.11.0"
 lottie = "6.6.0"
+circleimageview = "3.1.0"
 
 [libraries]
 junit = { group = "junit", name = "junit", version.ref = "junit" }
@@ -28,6 +29,7 @@ retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = 
 gson = { group = "com.google.code.gson", name = "gson", version.ref = "gson" }
 converter-gson = { group = "com.squareup.retrofit2", name = "converter-gson", version.ref = "converterGson" }
 lottie = { group = "com.airbnb.android", name = "lottie", version.ref = "lottie" }
+circleimageview = { group = "de.hdodenhof", name = "circleimageview", version.ref = "circleimageview" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

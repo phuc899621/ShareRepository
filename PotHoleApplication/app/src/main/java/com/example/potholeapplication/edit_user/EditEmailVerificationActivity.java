@@ -22,20 +22,12 @@ import androidx.core.view.WindowInsetsCompat;
 import com.example.potholeapplication.R;
 import com.example.potholeapplication.class_pothole.ApiResponse;
 import com.example.potholeapplication.class_pothole.RetrofitServices;
-import com.example.potholeapplication.class_pothole.User;
-import com.example.potholeapplication.class_pothole.request.EditEmailRequest;
 import com.example.potholeapplication.class_pothole.request.EmailReq;
-import com.example.potholeapplication.class_pothole.request.RegisterReq;
-import com.example.potholeapplication.class_pothole.request.UserVerificationReq;
 import com.example.potholeapplication.databinding.ActivityEditEmailVerificationBinding;
 import com.example.potholeapplication.interface_pothole.UserAPIInterface;
-import com.example.potholeapplication.user_auth.login.LoginScreenActivity;
-import com.example.potholeapplication.user_auth.signup.SignupActivity;
-import com.example.potholeapplication.user_auth.signup.VerificationActivity;
 import com.google.gson.Gson;
 
 import java.io.IOException;
-import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;

@@ -79,23 +79,20 @@
             android:layout_gravity="center"
             android:gravity="center"
             android:text="@string/str_unknown" />
-
-        <com.google.android.material.card.MaterialCardView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:cardCornerRadius="30dp"
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            app:civ_border_width="2dp"
+            android:id="@+id/btnUserIcon"
+            android:clickable="true"
+            android:src="@drawable/actress"
+            app:civ_border_color="@color/white"
             android:layout_marginHorizontal="5dp"
-            android:layout_marginVertical="2dp"
-            app:strokeWidth="0dp">
+            android:layout_marginVertical="2dp">
 
-            <ImageButton
-                android:id="@+id/btnUserIcon"
-                android:layout_width="50dp"
-                android:layout_height="50sp"
-                android:background="@android:color/transparent"
-                android:scaleType="fitCenter"
-                android:src="@drawable/ic_actress" />
-        </com.google.android.material.card.MaterialCardView>
+        </de.hdodenhof.circleimageview.CircleImageView>
+
+
 
         <com.google.android.material.card.MaterialCardView
             android:layout_width="wrap_content"
