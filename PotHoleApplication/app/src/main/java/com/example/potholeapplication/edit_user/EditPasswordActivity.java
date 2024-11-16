@@ -21,6 +21,8 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.potholeapplication.R;
 import com.example.potholeapplication.class_pothole.ApiResponse;
+import com.example.potholeapplication.class_pothole.CustomDialog;
+import com.example.potholeapplication.class_pothole.DataEditor;
 import com.example.potholeapplication.class_pothole.RetrofitServices;
 import com.example.potholeapplication.class_pothole.request.EditPasswordReq;
 import com.example.potholeapplication.class_pothole.request.RegisterReq;
@@ -40,9 +42,6 @@ import retrofit2.Response;
 public class EditPasswordActivity extends AppCompatActivity {
     ActivityEditPasswordBinding binding;
     Context context;
-    Button btnConfirm;
-    Dialog dialogError,dialogOke;
-    TextView tvErrorTitle,tvOkeTitle;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,25 +54,20 @@ public class EditPasswordActivity extends AppCompatActivity {
             return insets;
         });
         context=this;
-        SetupDialog();
         setClickEvent();
     }
-    public String getEmail(){
-        SharedPreferences sharedPreferences=getSharedPreferences("user_info",MODE_PRIVATE);
-        return sharedPreferences.getString("email","");
-    }
     public void callEditPasswordApi(){
-        String email=getEmail();
+        String email= DataEditor.getEmail(context);
         String oldPassword=binding.etOldPassword.getText().toString().trim();
         String newPassword=binding.etNewPassword.getText().toString().trim();
         String confirmPassword=binding.etConfirmPassword.getText().toString().trim();
 
         if(email.isEmpty()){
-            showDialogErrorString(getString(R.string.str_email_not_found));
+            CustomDialog.showDialogErrorString(context,getString(R.string.str_email_not_found));
             return;
         }
         if(!newPassword.equals(confirmPassword)){
-            showDialogErrorString(getString(R.string.str_password_does_not_match));
+            CustomDialog.showDialogErrorString(context,getString(R.string.str_password_does_not_match));
             return;
         }
 
@@ -85,7 +79,7 @@ public class EditPasswordActivity extends AppCompatActivity {
             public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
 
                 if(response.isSuccessful()&&response.body()!=null){
-                    showDialogOke();
+                    CustomDialog.showDialogOkeThenFinish(context,getString(R.string.str_change_password_successful));
                 }
                 else{
                     String errorString;
@@ -94,7 +88,7 @@ public class EditPasswordActivity extends AppCompatActivity {
                         errorString=response.errorBody().string();
                         Gson gson=new Gson();
                         apiResponse=gson.fromJson(errorString, ApiResponse.class);
-                        showDialogError(apiResponse);
+                        CustomDialog.showDialogError(context,apiResponse);
                     } catch (IOException e) {
                         throw new RuntimeException(e);
                     }
@@ -103,56 +97,6 @@ public class EditPasswordActivity extends AppCompatActivity {
             @Override
             public void onFailure(Call<ApiResponse> call, Throwable t) {
                 Log.e("API Error", "Failure: " + t.getMessage());
-            }
-        });
-    }
-    public void SetupDialog(){
-        dialogOke=new Dialog(EditPasswordActivity.this);
-        dialogOke.setContentView(R.layout.custom_dialog_oke);
-        dialogOke.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
-        dialogOke.setCancelable(false);
-        dialogOke.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-        tvOkeTitle=dialogOke.findViewById(R.id.tvTitle);
-
-        dialogError=new Dialog(EditPasswordActivity.this);
-        dialogError.setContentView(R.layout.custom_dialog_error);
-        dialogError.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
-        dialogError.setCancelable(true);
-        dialogError.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-        btnConfirm=dialogError.findViewById(R.id.btnConfirm);
-        tvErrorTitle=dialogError.findViewById(R.id.tvTitle);
-
-    }
-    public void showDialogOke(){
-        tvOkeTitle.setText(R.string.str_change_password_successful);
-        dialogOke.show();
-
-        Handler handler=new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                finish();
-                dialogOke.dismiss();
-            }
-        },2000);
-    }
-    public void showDialogError(ApiResponse apiResponse){
-        tvErrorTitle.setText(apiResponse.getMessage());
-        dialogError.show();
-        btnConfirm.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialogError.dismiss();
-            }
-        });
-    }
-    public void showDialogErrorString(String error){
-        tvErrorTitle.setText(error);
-        dialogError.show();
-        btnConfirm.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialogError.dismiss();
             }
         });
     }

@@ -55,9 +55,6 @@ import retrofit2.Response;
 public class LoginScreenActivity extends AppCompatActivity {
     ActivityLoginScreenBinding binding;
     Context context;
-    Button btnConfirm;
-    Dialog dialogError,dialogOke;
-    TextView tvErrorTitle,tvOkeTitle;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,8 +67,7 @@ public class LoginScreenActivity extends AppCompatActivity {
             return insets;
         });
         context=this;
-        SetupDialog();
-        setClickEvent(); //cài su kien click
+        setClickEvent();
 
     }
     public void callLoginAPI(){
@@ -79,8 +75,7 @@ public class LoginScreenActivity extends AppCompatActivity {
         String username=binding.etUsername.getText().toString().trim();
         String password=binding.etPassword.getText().toString().trim();
         if(username.isEmpty() || password.isEmpty()){
-            Toast.makeText(context,"Vui lòng nhập đầu đủ username và password"
-                    ,Toast.LENGTH_LONG).show();
+            CustomDialog.showDialogErrorString(context,getString(R.string.str_please_enter_username_and_password));
             return;
         }
 
@@ -90,25 +85,22 @@ public class LoginScreenActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
                  if(response.isSuccessful()&&response.body()!=null){
-                     saveUserInfo(response.body().getData());
+                     DataEditor.saveUserToSharePreferences(context,response.body().getData());
                      CallGetImageAPI();
                  }
                  else{
                      String errorString;
                      ApiResponse apiResponse;
                      try {
-                         //lay chuoi json va chuyen thanh UserAPIResponse
                          errorString=response.errorBody().string();
                          Gson gson=new Gson();
                          apiResponse=gson.fromJson(errorString, ApiResponse.class);
-                         showDialogError(apiResponse);
-
+                         CustomDialog.showDialogError(context,apiResponse);
                      } catch (IOException e) {
                          throw new RuntimeException(e);
                      }
                  }
            }
-
             @Override
             public void onFailure(Call<ApiResponse> call, Throwable t) {
                 Log.e("API Error", "Failure: " + t.getMessage());
@@ -117,18 +109,8 @@ public class LoginScreenActivity extends AppCompatActivity {
 
     }
 
-    public void saveUserInfo(List<User> userList){
-        User user=userList.get(0);
-        SharedPreferences sharedPreferences=getSharedPreferences(
-                "user_info",MODE_PRIVATE
-        );
-        SharedPreferences.Editor editor=sharedPreferences.edit();
-        editor.putString("username",user.getUsername());
-        editor.putString("email",user.getEmail());
-        editor.putString("name",user.getName());
-        editor.putBoolean("login",true);
-        editor.apply();
-    }
+
+    //lay hinh anh tu server
     public void CallGetImageAPI() {
         String email= DataEditor.getEmail(context);
         if(email.isEmpty()){
@@ -138,20 +120,21 @@ public class LoginScreenActivity extends AppCompatActivity {
         EmailReq emailReq=new EmailReq(email);
         UserAPIInterface apiServices= RetrofitServices.getApiService();
         Call<ApiResponse> call = apiServices.callFindImage(emailReq);
-        // Gửi yêu cầu
         call.enqueue(new Callback<ApiResponse>() {
             @Override
             public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
                 if(response.isSuccessful()&&response.body()!=null){
-                    // Kiểm tra nếu có hình ảnh
                     List<User> data = response.body().getData();
                     if (data != null && !data.isEmpty()) {
                         String imageBase64 = data.get(0).getImage();
                         if (!imageBase64.isEmpty()) {
+                            //neu co thi luu va den homescreen
                             byte[] decodedBytes = Base64.decode(imageBase64, Base64.DEFAULT);
                             DataEditor.saveImageBytesToSharedPreferences(context,decodedBytes);
-                            showDialogOke();
+                            CustomDialog.showDialogOkeNavigation(context,getString(R.string.str_login_successful),
+                                    HomeScreenActivity.class);
                         } else {
+                            //neu chua co thi lay anh mac dinh
                             DataEditor.saveImageBytesToSharedPreferences(context,
                                     DataEditor.drawableToByteArray(context,R.drawable.default_user)
                             );
@@ -179,6 +162,8 @@ public class LoginScreenActivity extends AppCompatActivity {
             }
         });
     }
+
+    //Luu anh mac dinh len server neu chua co
     public void CallSaveImageAPI(byte[] imageBytes) {
         RequestBody requestBody = RequestBody.create(MediaType.parse("image/jpeg"), imageBytes);
         MultipartBody.Part imagePart = MultipartBody.Part.createFormData("image", "image.jpg", requestBody);
@@ -214,64 +199,18 @@ public class LoginScreenActivity extends AppCompatActivity {
                     }
                 }
             }
-
             @Override
             public void onFailure(Call<ApiResponse> call, Throwable t) {
                 Log.e("API Error", "Failure: " + t.getMessage());
             }
         });
     }
-    public void SetupDialog(){
-        dialogOke=new Dialog(LoginScreenActivity.this);
-        dialogOke.setContentView(R.layout.custom_dialog_oke);
-        dialogOke.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
-        dialogOke.setCancelable(false);
-        dialogOke.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-        tvOkeTitle=dialogOke.findViewById(R.id.tvTitle);
-
-        dialogError=new Dialog(LoginScreenActivity.this);
-        dialogError.setContentView(R.layout.custom_dialog_error);
-        dialogError.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
-        dialogError.setCancelable(true);
-        dialogError.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-        btnConfirm=dialogError.findViewById(R.id.btnConfirm);
-        tvErrorTitle=dialogError.findViewById(R.id.tvTitle);
-
-    }
-    public void showDialogOke(){
-        tvOkeTitle.setText(R.string.str_login_successful);
-        dialogOke.show();
-        Handler handler=new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                //luu thong tin dang nhap vao file
-                Intent intent = new Intent(LoginScreenActivity.this, HomeScreenActivity.class);
-                startActivity(intent);
-                dialogOke.dismiss();
-                finish();
-            }
-        },2000);
-    }
-    public void showDialogError(ApiResponse apiResponse){
-        tvErrorTitle.setText(apiResponse.getMessage());
-        dialogError.show();
-        btnConfirm.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialogError.dismiss();
-            }
-        });
-    }
-
-
     //su kien click
     public void setClickEvent(){
         binding.btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 callLoginAPI();
-
             }
         });
         binding.tvCreateAccount.setOnClickListener(new View.OnClickListener() {

@@ -10,6 +10,7 @@ import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -41,7 +42,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class HomeScreenActivity extends AppCompatActivity {
-    LineChart lineChart;//chua dung den
+    LineChart lineChart;
     Context context;
     ActivityHomeScreenBinding binding;
     @Override
@@ -56,11 +57,9 @@ public class HomeScreenActivity extends AppCompatActivity {
             return insets;
         });
         context=this;
-        setClickEvent();// chỗ này cài su kien click
+        setClickEvent();
         setDisplay();
-
     }
-
     @Override
     protected void onStart() {
         super.onStart();
@@ -70,11 +69,17 @@ public class HomeScreenActivity extends AppCompatActivity {
 
 
     public void setClickEvent(){
-        binding.cvMap.setOnClickListener(new View.OnClickListener() {
+        binding.maplayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent=new Intent(HomeScreenActivity.this,MapViewActivity.class);
                 startActivity(intent);
+            }
+        });
+        binding.analyticslayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(context,"HI",Toast.LENGTH_LONG).show();
             }
         });
         binding.btnSetting.setOnClickListener(new View.OnClickListener() {
@@ -84,56 +89,46 @@ public class HomeScreenActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-        binding.btnUserIcon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent=new Intent(HomeScreenActivity.this, EditUserActivity.class);
-                startActivity(intent);
-            }
-        });
     }
     public void setDisplay(){
         SharedPreferences sharedPreferences=getSharedPreferences(
                 "user_info",MODE_PRIVATE
         );
-        String name= sharedPreferences.getString("name","not found");
+        String name= sharedPreferences.getString("name","");
         binding.tvName.setText(name);
-        binding.btnUserIcon.setImageBitmap(DataEditor.getImageBitmapFromSharePreferences(context));
+        binding.imaUserIcon.setImageBitmap(DataEditor.getImageBitmapFromSharePreferences(context));
     }
-    //chưa xong
-    public void chartData(){
-        lineChart = findViewById(R.id.lineChart);
-
-
-        ArrayList<Entry> entries = new ArrayList<>();
-        entries.add(new Entry(0, 5));
-        entries.add(new Entry(1, 10));
-        entries.add(new Entry(2, 7));
-        entries.add(new Entry(3, 12));
-        entries.add(new Entry(4, 6));
-        entries.add(new Entry(5, 6));
-        entries.add(new Entry(6, 6));
-
-        LineDataSet lineDataSet = new LineDataSet(entries, "Performance");
-        lineDataSet.setMode(LineDataSet.Mode.CUBIC_BEZIER);
-        lineDataSet.setCubicIntensity(0.2f);
-        lineDataSet.setLineWidth(2f);
-        lineDataSet.setColor(getResources().getColor(R.color.purple));
-        lineDataSet.setDrawFilled(true);
-        lineDataSet.setFillColor(R.color.purple);
-        lineDataSet.setFillAlpha(80);
-
-
-        lineChart.getXAxis().setDrawGridLines(false);
-        lineChart.animateX(1000);
-        final String[] daysOfWeek = new String[]{"Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"};
-
-
-        lineChart.getDescription().setEnabled(false);
-        lineChart.getXAxis().setPosition(XAxis.XAxisPosition.BOTTOM);
-        lineChart.getAxisRight().setEnabled(false);
-        lineChart.invalidate(); // Refresh biểu đồ
-    }
+//    public void chartData(){
+//        lineChart = findViewById(R.id.lineChart);
+//        ArrayList<Entry> entries = new ArrayList<>();
+//        entries.add(new Entry(0, 5));
+//        entries.add(new Entry(1, 10));
+//        entries.add(new Entry(2, 7));
+//        entries.add(new Entry(3, 12));
+//        entries.add(new Entry(4, 6));
+//        entries.add(new Entry(5, 6));
+//        entries.add(new Entry(6, 6));
+//
+//        LineDataSet lineDataSet = new LineDataSet(entries, "Performance");
+//        lineDataSet.setMode(LineDataSet.Mode.CUBIC_BEZIER);
+//        lineDataSet.setCubicIntensity(0.2f);
+//        lineDataSet.setLineWidth(2f);
+//        lineDataSet.setColor(getResources().getColor(R.color.purple));
+//        lineDataSet.setDrawFilled(true);
+//        lineDataSet.setFillColor(R.color.purple);
+//        lineDataSet.setFillAlpha(80);
+//
+//
+//        lineChart.getXAxis().setDrawGridLines(false);
+//        lineChart.animateX(1000);
+//        final String[] daysOfWeek = new String[]{"Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"};
+//
+//
+//        lineChart.getDescription().setEnabled(false);
+//        lineChart.getXAxis().setPosition(XAxis.XAxisPosition.BOTTOM);
+//        lineChart.getAxisRight().setEnabled(false);
+//        lineChart.invalidate(); // Refresh biểu đồ
+//    }
 
 
 }

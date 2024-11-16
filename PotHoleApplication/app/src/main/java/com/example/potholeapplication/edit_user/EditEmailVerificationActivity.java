@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
+import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +22,8 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.potholeapplication.R;
 import com.example.potholeapplication.class_pothole.ApiResponse;
+import com.example.potholeapplication.class_pothole.CustomDialog;
+import com.example.potholeapplication.class_pothole.DataEditor;
 import com.example.potholeapplication.class_pothole.RetrofitServices;
 import com.example.potholeapplication.class_pothole.request.EmailReq;
 import com.example.potholeapplication.databinding.ActivityEditEmailVerificationBinding;
@@ -37,9 +40,6 @@ public class EditEmailVerificationActivity extends AppCompatActivity {
 
     ActivityEditEmailVerificationBinding binding;
     Context context;
-    Button btnConfirm;
-    Dialog dialogError,dialogOke;
-    TextView tvErrorTitle,tvOkeTitle;
     String oldEmail,newEmail,code;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,27 +53,13 @@ public class EditEmailVerificationActivity extends AppCompatActivity {
             return insets;
         });
         context=this;
-        getOldEmail();
-        getNewEmail();
-        SetupDialog();
+        getOldAndNewEmail();
         setClickEvent();
         callSendCodeApi();
     }
-    public void saveEmail(String email){
-        SharedPreferences sharedPreferences=getSharedPreferences(
-                "user_info",MODE_PRIVATE
-        );
-        SharedPreferences.Editor editor=sharedPreferences.edit();
-        editor.putString("email",email);
-        editor.apply();
-    }
-    public void getOldEmail(){
-        SharedPreferences sharedPreferences=getSharedPreferences(
-                "user_info",MODE_PRIVATE
-        );
-        oldEmail=sharedPreferences.getString("email","");
-    }
-    public void getNewEmail(){
+    public void getOldAndNewEmail(){
+        oldEmail= DataEditor.getEmail(context);
+
         Intent intent=getIntent();
         newEmail= intent.getStringExtra("email");
     }
@@ -92,11 +78,10 @@ public class EditEmailVerificationActivity extends AppCompatActivity {
                     String errorString;
                     ApiResponse apiResponse;
                     try {
-                        //lay chuoi json va chuyen thanh UserAPIResponse
                         errorString=response.errorBody().string();
                         Gson gson=new Gson();
                         apiResponse=gson.fromJson(errorString, ApiResponse.class);
-                        showDialogError(apiResponse);
+                        CustomDialog.showDialogError(context,apiResponse);
                     } catch (IOException e) {
                         throw new RuntimeException(e);
                     }
@@ -117,8 +102,9 @@ public class EditEmailVerificationActivity extends AppCompatActivity {
             public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
 
                 if(response.isSuccessful()&&response.body()!=null){
-                    saveEmail(newEmail);
-                    showDialogOke();
+                    DataEditor.saveEmail(context,newEmail);
+                    CustomDialog.showDialogOkeNavigation(context,
+                            getString(R.string.str_change_email_successfully), EditUserActivity.class);
                 }
                 else{
                     String errorString;
@@ -127,7 +113,7 @@ public class EditEmailVerificationActivity extends AppCompatActivity {
                         errorString=response.errorBody().string();
                         Gson gson=new Gson();
                         apiResponse=gson.fromJson(errorString, ApiResponse.class);
-                        showDialogError(apiResponse);
+                        CustomDialog.showDialogError(context,apiResponse);
                     } catch (IOException e) {
                         throw new RuntimeException(e);
                     }
@@ -139,48 +125,7 @@ public class EditEmailVerificationActivity extends AppCompatActivity {
             }
         });
     }
-    public void SetupDialog(){
-        dialogOke=new Dialog(EditEmailVerificationActivity.this);
-        dialogOke.setContentView(R.layout.custom_dialog_oke);
-        dialogOke.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
-        dialogOke.setCancelable(false);
-        dialogOke.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-        tvOkeTitle=dialogOke.findViewById(R.id.tvTitle);
 
-        dialogError=new Dialog(EditEmailVerificationActivity.this);
-        dialogError.setContentView(R.layout.custom_dialog_error);
-        dialogError.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
-        dialogError.setCancelable(true);
-        dialogError.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-        btnConfirm=dialogError.findViewById(R.id.btnConfirm);
-        tvErrorTitle=dialogError.findViewById(R.id.tvTitle);
-
-    }
-    public void showDialogOke(){
-        tvOkeTitle.setText(R.string.str_sign_up_successful);
-        dialogOke.show();
-
-        Handler handler=new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                Intent intent = new Intent(EditEmailVerificationActivity.this,
-                        EditUserActivity.class);
-                startActivity(intent);
-                dialogOke.dismiss();
-            }
-        },2000);
-    }
-    public void showDialogError(ApiResponse apiResponse){
-        tvErrorTitle.setText(apiResponse.getMessage());
-        dialogError.show();
-        btnConfirm.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialogError.dismiss();
-            }
-        });
-    }
     public void setClickEvent(){
         binding.btnVerification.setOnClickListener(new View.OnClickListener() {
             @Override

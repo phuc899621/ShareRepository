@@ -80,11 +80,18 @@
             app:layout_constraintGuide_percent="0.10" />
 
         <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideMiddleSheet"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.2" />
+
+        <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideBottomSheet"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.65" />
+            app:layout_constraintGuide_percent="0.6" />
         <TextView
             android:id="@+id/tvTitle"
             android:layout_width="wrap_content"
@@ -111,10 +118,9 @@
             app:boxStrokeColor="@color/purple"
             app:boxStrokeWidth="1dp"
             app:hintTextColor="@color/dark_purple"
-            app:layout_constraintBottom_toTopOf="@id/etlEmail"
             app:layout_constraintEnd_toStartOf="@id/guideRightSheet"
             app:layout_constraintStart_toEndOf="@id/guideLeftSheet"
-            app:layout_constraintTop_toBottomOf="@id/guideTopSheet">
+            app:layout_constraintTop_toTopOf="@+id/guideMiddleSheet">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/etUsername"
@@ -139,8 +145,7 @@
             app:boxStrokeWidth="1dp"
             app:passwordToggleEnabled="true"
             app:hintTextColor="@color/dark_purple"
-
-            app:layout_constraintBottom_toTopOf="@+id/guideBottomSheet"
+            android:layout_marginTop="20dp"
             app:layout_constraintEnd_toStartOf="@id/guideRightSheet"
             app:layout_constraintStart_toEndOf="@id/guideLeftSheet"
             app:layout_constraintTop_toBottomOf="@id/etlUsername">
@@ -161,6 +166,7 @@
             android:textSize="14sp"
             android:clickable="true"
             android:textColor="@color/dark_purple"
+            android:layout_marginTop="10dp"
             app:layout_constraintEnd_toStartOf="@+id/guideRightSheet"
             app:layout_constraintStart_toStartOf="@+id/guideLeftSheet"
             app:layout_constraintTop_toBottomOf="@+id/etlEmail"
@@ -183,6 +189,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
+            android:layout_marginTop="10dp"
             app:layout_constraintLeft_toRightOf="@id/guideLeftSheet"
             app:layout_constraintRight_toLeftOf="@id/guideRightSheet"
             app:layout_constraintTop_toBottomOf="@id/btnLogin">
@@ -207,7 +214,7 @@
             android:id="@+id/tvCreateAccount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="10dp"
             android:clickable="true"
             android:text="@string/str_create_an_account"
             android:textColor="@color/dark_purple"

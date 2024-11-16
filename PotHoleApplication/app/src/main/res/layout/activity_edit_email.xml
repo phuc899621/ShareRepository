@@ -119,7 +119,8 @@
                 android:layout_height="48dp"
                 android:layout_marginStart="0dp"
                 android:background="@android:color/transparent"
-                android:src="@drawable/ic_back" />
+                android:src="@drawable/ic_back"
+                app:tint="@color/dark_purple"/>
         </FrameLayout>
 
 

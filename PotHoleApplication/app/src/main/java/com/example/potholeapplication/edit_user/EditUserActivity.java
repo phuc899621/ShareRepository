@@ -124,23 +124,6 @@ public class EditUserActivity extends AppCompatActivity {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            //byte[] imageBytes = getImageBytes(selectedImageUri);
-            //CallSaveImageAPI(imageBytes);
-            //CallGetImageAPI();
-        }
-    }
-    private byte[] getImageBytes(Uri imageUri) {
-        try {
-            // Mở InputStream từ URI
-            InputStream inputStream = getContentResolver().openInputStream(imageUri);
-            Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
-            // Chuyển đổi Bitmap thành mảng byte[]
-            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
-            return byteArrayOutputStream.toByteArray();
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
         }
     }
     private byte[] getImageBytesFromImageView() {
@@ -153,7 +136,8 @@ public class EditUserActivity extends AppCompatActivity {
         SharedPreferences sharedPreferences=getSharedPreferences("user_info",MODE_PRIVATE);
         binding.etName.setText(sharedPreferences.getString("name",""));
         binding.etEmail.setText(sharedPreferences.getString("email",""));
-        binding.etUsername.setText(sharedPreferences.getString("username",""));}
+        binding.etUsername.setText(sharedPreferences.getString("username",""));
+    }
     public void callSaveInfoAPI(){
         SharedPreferences sharedPreferences=getSharedPreferences("user_info",MODE_PRIVATE);
         String email=sharedPreferences.getString("email","");
@@ -162,8 +146,7 @@ public class EditUserActivity extends AppCompatActivity {
         String newUsername=binding.etUsername.getText().toString().trim();
         String newName=binding.etName.getText().toString().trim();
         if(newUsername.isEmpty() || newName.isEmpty()){
-            Toast.makeText(context,"Please enter username and full name"
-                    ,Toast.LENGTH_LONG).show();
+            CustomDialog.showDialogErrorString(context,getString(R.string.str_enter_name_and_username));
             return;
         }
         EditInfoReq editInfoReq =new EditInfoReq(newUsername,newName);

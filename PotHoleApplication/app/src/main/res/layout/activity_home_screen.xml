@@ -8,6 +8,36 @@
     android:layout_height="match_parent"
     tools:context=".HomeScreenActivity">
 
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/imaUserIcon"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginHorizontal="10dp"
+        android:layout_marginVertical="10dp"
+        android:clickable="true"
+        android:src="@drawable/actress"
+        app:civ_border_color="@color/white"
+        app:civ_border_width="2dp"
+        app:layout_constraintBottom_toBottomOf="@+id/imaRank"
+        app:layout_constraintEnd_toStartOf="@+id/imaRank"
+        app:layout_constraintTop_toTopOf="@+id/imaRank" />
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/imaRank"
+        android:layout_width="50dp"
+        android:layout_height="50sp"
+        android:layout_marginHorizontal="10dp"
+        android:layout_marginVertical="10dp"
+        android:src="@drawable/ic_cup"
+        app:civ_border_color="@color/white"
+        app:civ_border_width="2dp"
+        app:civ_circle_background_color="@color/white"
+        app:layout_constraintBottom_toTopOf="@+id/guideTop1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+
     <androidx.constraintlayout.widget.Guideline
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -17,7 +47,7 @@
     <androidx.constraintlayout.widget.Guideline
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@id/guideMiddle"
+        android:id="@+id/guideMiddleHorizon"
         android:orientation="horizontal"
         app:layout_constraintGuide_percent="0.35"/>
     <androidx.constraintlayout.widget.Guideline
@@ -26,25 +56,8 @@
         android:id="@+id/guideLeft"
         android:orientation="vertical"
         app:layout_constraintGuide_percent="0.05"/>
-    <androidx.constraintlayout.widget.Guideline
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/guideMiddle"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.5"/>
-    <androidx.constraintlayout.widget.Guideline
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/guideRight"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.95"/>
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideBottom"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.6" />
+
 
     <ImageButton
         android:id="@+id/btnSetting"
@@ -58,228 +71,350 @@
         app:layout_constraintTop_toTopOf="parent"
         app:tint="@color/dark_purple" />
 
-    <LinearLayout
-        android:id="@+id/userLayout"
+    <TextView
+        android:id="@+id/tvName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/user_info_corner"
-        android:orientation="horizontal"
-        android:elevation="10dp"
-        android:clickable="true"
-        app:layout_constraintBottom_toTopOf="@+id/guideTop1"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginEnd="10dp">
-        <TextView
-            android:id="@+id/tvName"
-            android:layout_marginEnd="5dp"
-            android:layout_marginStart="15dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:gravity="center"
-            android:text="@string/str_unknown" />
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            app:civ_border_width="2dp"
-            android:id="@+id/btnUserIcon"
-            android:clickable="true"
-            android:src="@drawable/actress"
-            app:civ_border_color="@color/white"
-            android:layout_marginHorizontal="5dp"
-            android:layout_marginVertical="2dp">
-
-        </de.hdodenhof.circleimageview.CircleImageView>
-
-
-
-        <com.google.android.material.card.MaterialCardView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:cardCornerRadius="40dp"
-            android:elevation="10dp"
-            android:layout_marginHorizontal="5dp"
-            android:layout_marginVertical="2dp"
-            android:background="@android:color/transparent"
-            app:strokeWidth="0dp">
-
-            <ImageButton
-                android:id="@+id/btnRank"
-                android:layout_width="50dp"
-                android:layout_height="50sp"
-                android:background="@android:color/transparent"
-                android:scaleType="fitCenter"
-                android:src="@drawable/ic_cup" />
-        </com.google.android.material.card.MaterialCardView>
-    </LinearLayout>
-
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:layout_marginHorizontal="10dp"
+        android:layout_marginVertical="10dp"
+        android:text="@string/str_unknown"
+        android:textColor="@color/dark_purple"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/imaUserIcon"
+        app:layout_constraintEnd_toStartOf="@+id/imaUserIcon"
+        app:layout_constraintTop_toTopOf="@+id/imaUserIcon" />
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:orientation="vertical"
-        app:layout_constraintBottom_toBottomOf="@id/guideBottom"
-        app:layout_constraintEnd_toStartOf="@+id/guideRight"
-        app:layout_constraintStart_toStartOf="@+id/guideLeft"
-        app:layout_constraintTop_toBottomOf="@id/guideTop1">
-
+        android:id="@+id/statusLayout"
+        app:layout_constraintTop_toBottomOf="@id/guideTop1"
+        app:layout_constraintBottom_toTopOf="@id/guideMiddleHorizon"
+        app:layout_constraintStart_toStartOf="parent"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent">
         <com.google.android.material.card.MaterialCardView
-            android:id="@+id/cvChart"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="4"
-            android:elevation="10dp"
-            app:cardCornerRadius="20dp">
+            android:layout_marginVertical="20dp"
+            android:layout_marginHorizontal="10dp"
+            android:layout_weight="1"
+            android:id="@+id/cvTotalReportsLayout"
+            app:cardCornerRadius="30dp">
 
-            <com.github.mikephil.charting.charts.LineChart
-                android:id="@+id/lineChart"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" />
-        </com.google.android.material.card.MaterialCardView>
-
-        <TextView
-            android:id="@+id/tvMap"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="6"
-            android:gravity="bottom|start"
-            android:text="@string/str_map_downcase"
-            android:textColor="@color/dark_purple"
-            android:textSize="20sp"
-            android:textStyle="bold" />
-
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/cvMap"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="4"
-            android:elevation="50dp"
-            app:cardCornerRadius="20dp">
-
-            <ImageView
+            <com.google.android.material.imageview.ShapeableImageView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:scaleType="center"
-                android:src="@drawable/map" />
+                android:scaleType="centerCrop"
+                android:src="@drawable/custom_data_pothole_report" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginHorizontal="10dp"
+                android:layout_marginVertical="30dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center|bottom"
+                    android:text="0"
+                    android:textColor="@color/white"
+                    android:textSize="20sp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center|top"
+                    android:text="@string/str_total_reports"
+                    android:textColor="@color/white"
+                    android:textSize="14sp" />
+            </LinearLayout>
+
         </com.google.android.material.card.MaterialCardView>
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginVertical="20dp"
+            android:layout_marginHorizontal="10dp"
+            app:cardCornerRadius="30dp"
+            android:layout_weight="1">
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:src="@drawable/custom_distance_travel" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginHorizontal="10dp"
+                android:layout_marginVertical="30dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center|bottom"
+                    android:text="0 km"
+                    android:textColor="@color/white"
+                    android:textSize="20sp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center|top"
+                    android:text="@string/str_distance_traveled"
+                    android:textColor="@color/white"
+                    android:textSize="14sp" />
+            </LinearLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginVertical="20dp"
+            android:layout_marginHorizontal="10dp"
+            app:cardCornerRadius="30dp"
+            android:layout_weight="1"
+            app:layout_constraintBottom_toTopOf="@id/guideMiddleHorizon"
+            app:layout_constraintEnd_toStartOf="@id/cvTotalReportsLayout"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/guideTop1">
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:src="@drawable/custom_fixed_potholes" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginHorizontal="10dp"
+                android:layout_marginVertical="30dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center|bottom"
+                    android:text="0"
+                    android:textColor="@color/white"
+                    android:textSize="20sp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center|top"
+                    android:text="@string/str_fixed_npotholes"
+                    android:textColor="@color/white"
+                    android:textSize="14sp" />
+            </LinearLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
     </LinearLayout>
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/tvReport"
-        android:text="@string/str_report"
-        android:textStyle="bold"
-        android:textSize="20sp"
-        android:textColor="@color/dark_purple"
-        app:layout_constraintBottom_toTopOf="@id/cvReport"
-        app:layout_constraintLeft_toRightOf="@id/guideLeft"
-        app:layout_constraintRight_toLeftOf="@id/guideMiddle"/>
 
-    <com.google.android.material.card.MaterialCardView
-        android:layout_width="0dp"
-        android:layout_height="100dp"
-        android:id="@+id/cvReport"
-        android:layout_marginBottom="10dp"
-        android:layout_marginHorizontal="5dp"
-        android:elevation="10dp"
-        app:cardCornerRadius="20dp"
-        app:layout_constraintLeft_toRightOf="@id/guideLeft"
-        app:layout_constraintRight_toLeftOf="@id/guideMiddle"
-        app:layout_constraintBottom_toBottomOf="parent">
-        <ImageView
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toBottomOf="@id/guideMiddleHorizon"
+        android:background="@drawable/corner_sheet"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:orientation="horizontal">
+        <androidx.constraintlayout.widget.Guideline
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:src="@drawable/report"
-            android:scaleType="fitCenter"/>
-    </com.google.android.material.card.MaterialCardView>
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/tvRanking"
-        android:text="@string/str_ranking"
-        android:textStyle="bold"
-        android:textSize="20sp"
-        android:textColor="@color/dark_purple"
-        app:layout_constraintBottom_toTopOf="@id/cvRanking"
-        app:layout_constraintLeft_toRightOf="@id/guideMiddle"
-        app:layout_constraintRight_toLeftOf="@id/guideRight"/>
-
-    <com.google.android.material.card.MaterialCardView
-        android:layout_width="0dp"
-        android:layout_height="100dp"
-        android:id="@+id/cvRanking"
-        android:layout_marginBottom="10dp"
-        android:layout_marginHorizontal="5dp"
-        app:cardCornerRadius="20dp"
-        android:elevation="10dp"
-        app:layout_constraintLeft_toRightOf="@id/guideMiddle"
-        app:layout_constraintRight_toLeftOf="@id/guideRight"
-        app:layout_constraintBottom_toBottomOf="parent">
-        <ImageView
-            android:layout_width="match_parent"
+            android:id="@+id/guideMiddleSheet"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.5"/>
+        <LinearLayout
+            android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:src="@drawable/ranking"
-            android:scaleType="fitCenter"/>
-    </com.google.android.material.card.MaterialCardView>
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/tvAnalytics"
-        android:text="@string/str_analytics"
-        android:textStyle="bold"
-        android:textSize="20sp"
-        android:textColor="@color/dark_purple"
-        app:layout_constraintBottom_toTopOf="@id/cvAnlytics"
-        app:layout_constraintLeft_toRightOf="@id/guideLeft"
-        app:layout_constraintRight_toLeftOf="@id/guideMiddle"/>
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/guideMiddleSheet"
+            android:orientation="vertical">
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginVertical="30dp"
+                android:layout_marginHorizontal="20dp"
+                android:elevation="30dp"
+                android:id="@+id/analyticslayout"
+                app:cardCornerRadius="20dp"
+                app:strokeWidth="5dp"
+                app:strokeColor="@color/blue"
+                android:layout_weight="1"
+                >
+                <com.google.android.material.imageview.ShapeableImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@color/blue"/>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+                    <com.google.android.material.imageview.ShapeableImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:src="@drawable/analystics"
+                        android:scaleType="centerCrop"
+                        android:layout_weight="1"
+                        android:layout_gravity="center"/>
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="3"
+                        android:gravity="center"
+                        android:text="@string/str_analytics"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/white"/>
+                </LinearLayout>
 
-    <com.google.android.material.card.MaterialCardView
-        android:layout_width="0dp"
-        android:layout_height="100dp"
-        android:id="@+id/cvAnlytics"
-        android:layout_marginBottom="10dp"
-        android:layout_marginHorizontal="5dp"
-        app:cardCornerRadius="20dp"
-        android:elevation="10dp"
-        app:layout_constraintLeft_toRightOf="@id/guideLeft"
-        app:layout_constraintRight_toLeftOf="@id/guideMiddle"
-        app:layout_constraintBottom_toTopOf="@id/tvReport">
-        <ImageView
-            android:layout_width="match_parent"
+
+            </com.google.android.material.card.MaterialCardView>
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginVertical="30dp"
+                android:layout_marginHorizontal="20dp"
+                android:elevation="30dp"
+                android:id="@+id/maplayout"
+                app:cardCornerRadius="20dp"
+                app:strokeWidth="5dp"
+                app:strokeColor="@color/blue"
+                android:layout_weight="1"
+                >
+                <com.google.android.material.imageview.ShapeableImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@color/blue"/>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+                    <com.google.android.material.imageview.ShapeableImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:src="@drawable/map"
+                        android:scaleType="centerCrop"
+                        android:layout_weight="1"
+                        android:layout_gravity="center"/>
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="2"
+                        android:gravity="center"
+                        android:text="@string/str_map_downcase"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/white"/>
+                </LinearLayout>
+
+
+            </com.google.android.material.card.MaterialCardView>
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:src="@drawable/analytics"
-            android:scaleType="fitCenter"/>
-    </com.google.android.material.card.MaterialCardView>
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/tvCommunity"
-        android:text="@string/str_community"
-        android:textStyle="bold"
-        android:textSize="20sp"
-        android:textColor="@color/dark_purple"
-        app:layout_constraintBottom_toTopOf="@id/cvCommunity"
-        app:layout_constraintLeft_toRightOf="@id/guideMiddle"
-        app:layout_constraintRight_toLeftOf="@id/guideRight"/>
+            app:layout_constraintStart_toEndOf="@id/guideMiddleSheet"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:orientation="vertical">
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginVertical="30dp"
+                android:layout_marginHorizontal="20dp"
+                android:elevation="30dp"
+                android:id="@+id/communitylayout"
+                app:cardCornerRadius="20dp"
+                app:strokeWidth="5dp"
+                app:strokeColor="@color/blue"
+                android:layout_weight="1"
+                >
+                <com.google.android.material.imageview.ShapeableImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@color/blue"/>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+                    <com.google.android.material.imageview.ShapeableImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:src="@drawable/community"
+                        android:scaleType="centerCrop"
+                        android:layout_weight="1"
+                        android:layout_gravity="center"/>
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="3"
+                        android:gravity="center"
+                        android:text="@string/str_community"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/white"/>
+                </LinearLayout>
 
-    <com.google.android.material.card.MaterialCardView
-        android:layout_width="0dp"
-        android:layout_height="100dp"
-        android:id="@+id/cvCommunity"
-        android:layout_marginBottom="10dp"
-        android:layout_marginHorizontal="5dp"
-        app:cardCornerRadius="20dp"
-        android:elevation="10dp"
-        app:layout_constraintLeft_toRightOf="@id/guideMiddle"
-        app:layout_constraintRight_toLeftOf="@id/guideRight"
-        app:layout_constraintBottom_toTopOf="@id/tvRanking">
 
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scaleType="fitCenter"
-            android:src="@drawable/community" />
-    </com.google.android.material.card.MaterialCardView>
+            </com.google.android.material.card.MaterialCardView>
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginVertical="30dp"
+                android:layout_marginHorizontal="20dp"
+                android:elevation="30dp"
+                android:id="@+id/rankinglayout"
+                app:cardCornerRadius="20dp"
+                app:strokeWidth="5dp"
+                app:strokeColor="@color/blue"
+                android:layout_weight="1"
+                >
+                <com.google.android.material.imageview.ShapeableImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@color/blue"/>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+                    <com.google.android.material.imageview.ShapeableImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:src="@drawable/ranking"
+                        android:scaleType="centerCrop"
+                        android:layout_weight="1"
+                        android:layout_gravity="center"/>
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="2"
+                        android:gravity="center"
+                        android:text="@string/str_ranking"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/white"/>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+        </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 
 

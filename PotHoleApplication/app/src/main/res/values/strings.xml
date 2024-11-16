@@ -70,4 +70,15 @@ Please click on Reset Password below to go to the new password setup screen!</st
     <string name="str_old_password">Old password</string>
     <string name="str_email_not_found">Email not found</string>
     <string name="str_secret_password">****************</string>
+    <string name="str_please_enter_username_and_password">Please enter username and password</string>
+    <string name="str_null_bundle">Null bundle</string>
+    <string name="str_enter_name_and_username">Please enter full name and username</string>
+    <string name="str_change_email_successfully">Change email successfully</string>
+    <string name="str_total_reports">Total \nreports</string>
+    <string name="str_distance_traveled">Distance \ntraveled</string>
+    <string name="str_fixed_npotholes">Fixed \npotholes</string>
+    <string name="str_golden_nmember">Golden \nMember</string>
+    <string name="str_report_nyou_have_nmade">Report \nyou have \nmade</string>
+    <string name="str_edit_user_infomation">Edit user infomation</string>
+    <string name="str_edit_user">Edit user</string>
 </resources>

@@ -11,6 +11,7 @@ import android.graphics.drawable.Drawable;
 import android.util.Base64;
 
 import java.io.ByteArrayOutputStream;
+import java.util.List;
 
 public class DataEditor {
     public static byte[] getImageBytesFromSharedPreferences(Context context) {
@@ -41,22 +42,41 @@ public class DataEditor {
         byte[] imageBytes=getImageBytesFromSharedPreferences(context);
         return BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length);
     }
+
     public static String getEmail(Context context){
         SharedPreferences sharedPreferences=context.getSharedPreferences(
                 "user_info",MODE_PRIVATE
         );
         return sharedPreferences.getString("email","");
     }
+    public  static void saveEmail(Context context,String email){
+        SharedPreferences sharedPreferences=context.getSharedPreferences(
+                "user_info",MODE_PRIVATE
+        );
+        SharedPreferences.Editor editor=sharedPreferences.edit();
+        editor.putString("email",email);
+        editor.apply();
+    }
     public static byte[] drawableToByteArray(Context context, int drawableId) {
-        // Lấy Drawable từ thư mục drawable bằng ID
+        // Get drawable bang ID sau do chuyen thanh bitmap
         Drawable drawable = context.getResources().getDrawable(drawableId, null);
-
-        // Chuyển Drawable thành Bitmap
         Bitmap bitmap = ((BitmapDrawable) drawable).getBitmap();
 
-        // Chuyển Bitmap thành byte[]
+        // Chuyen thanh byte
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
         return byteArrayOutputStream.toByteArray();
+    }
+    public static void saveUserToSharePreferences(Context context, List<User> userList){
+        User user=userList.get(0);
+        SharedPreferences sharedPreferences=context.getSharedPreferences(
+                "user_info",MODE_PRIVATE
+        );
+        SharedPreferences.Editor editor=sharedPreferences.edit();
+        editor.putString("username",user.getUsername());
+        editor.putString("email",user.getEmail());
+        editor.putString("name",user.getName());
+        editor.putBoolean("login",true);
+        editor.apply();
     }
 }

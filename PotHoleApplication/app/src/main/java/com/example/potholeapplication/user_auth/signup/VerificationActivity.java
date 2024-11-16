@@ -1,6 +1,7 @@
 package com.example.potholeapplication.user_auth.signup;
 
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -18,6 +19,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.potholeapplication.R;
+import com.example.potholeapplication.class_pothole.CustomDialog;
 import com.example.potholeapplication.class_pothole.request.EmailReq;
 import com.example.potholeapplication.class_pothole.request.RegisterReq;
 import com.example.potholeapplication.class_pothole.RetrofitServices;
@@ -40,10 +42,8 @@ import retrofit2.Response;
 public class VerificationActivity extends AppCompatActivity {
     ActivityVerificationBinding binding;
     String code;
-    Dialog dialogError;
     Bundle bundle;
-    Button btnConfirm;
-    TextView tvErrorTitle;
+    Context context;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,25 +55,27 @@ public class VerificationActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-        setupDialog();
+        context=this;
         setClickEvent();
         callAPISendEmail();
     }
+
+    //goi api gui mail ngay khi vao activity
     public void callAPISendEmail(){
         //lay cac thong tin dang ky tu activity signup
         Intent intent=getIntent();
         bundle=intent.getBundleExtra("sendEmail");
         if (bundle == null) {
-            Toast.makeText(VerificationActivity.this,
-                    "Null Bundle",Toast.LENGTH_LONG).show();
+            CustomDialog.showDialogErrorString(context,getString(R.string.str_null_bundle));
             return;
         }
-        UserAPIInterface apiService = RetrofitServices.getApiService();
+
         EmailReq emailReq =new EmailReq(
           bundle.getString("email")
         );
 
         //call api gui mail, kem theo thong tin email can gui
+        UserAPIInterface apiService = RetrofitServices.getApiService();
         Call<ApiResponse> call = apiService.callRegisterCode(emailReq);
         call.enqueue(new Callback<ApiResponse>() {
             @Override
@@ -89,7 +91,7 @@ public class VerificationActivity extends AppCompatActivity {
                         errorString=response.errorBody().string();
                         Gson gson=new Gson();
                         apiResponse=gson.fromJson(errorString, ApiResponse.class);
-                        showDialogError(apiResponse);
+                        CustomDialog.showDialogError(context,apiResponse);
                     } catch (IOException e) {
                         throw new RuntimeException(e);
                     }
@@ -103,8 +105,7 @@ public class VerificationActivity extends AppCompatActivity {
     }
     public void callAPIAddUser(){
         if (bundle == null) {
-            Toast.makeText(VerificationActivity.this,
-                    "Null Bundle",Toast.LENGTH_LONG).show();
+            CustomDialog.showDialogErrorString(context,getString(R.string.str_null_bundle));
             return;
         }
         UserAPIInterface apiService = RetrofitServices.getApiService();
@@ -114,7 +115,6 @@ public class VerificationActivity extends AppCompatActivity {
         );
         // Call API login
         Call<ApiResponse> call = apiService.callRegister(registerReq);
-        // call API bất đồng bộ
         call.enqueue(new Callback<ApiResponse>() {
             @Override
             public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
@@ -126,15 +126,12 @@ public class VerificationActivity extends AppCompatActivity {
                 }
                 else{
                     String errorString;
-                    JsonObject errorJson;
                     ApiResponse apiResponse;
                     try {
-                        //lay chuoi json va chuyen thanh UserAPIResponse
                         errorString=response.errorBody().string();
-                        errorJson= JsonParser.parseString(errorString).getAsJsonObject();
                         Gson gson=new Gson();
                         apiResponse=gson.fromJson(errorString, ApiResponse.class);
-                        showDialogError(apiResponse);
+                        CustomDialog.showDialogError(context,apiResponse);
                     } catch (IOException e) {
                         throw new RuntimeException(e);
                     }
@@ -143,35 +140,6 @@ public class VerificationActivity extends AppCompatActivity {
             @Override
             public void onFailure(Call<ApiResponse> call, Throwable t) {
                 Log.e("API Error", "Failure: " + t.getMessage());
-            }
-        });
-    }
-    public void setupDialog(){
-        dialogError=new Dialog(VerificationActivity.this);
-        dialogError.setContentView(R.layout.custom_dialog_error);
-        dialogError.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
-        dialogError.setCancelable(true);
-        dialogError.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-        btnConfirm=dialogError.findViewById(R.id.btnConfirm);
-        tvErrorTitle=dialogError.findViewById(R.id.tvTitle);
-    }
-    public void showDialogError(ApiResponse apiResponse){
-        tvErrorTitle.setText(apiResponse.getMessage());
-        dialogError.show();
-        btnConfirm.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialogError.dismiss();
-            }
-        });
-    }
-    public void showDialogErrorString(String error){
-        tvErrorTitle.setText(error);
-        dialogError.show();
-        btnConfirm.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialogError.dismiss();
             }
         });
     }
@@ -188,7 +156,7 @@ public class VerificationActivity extends AppCompatActivity {
                 //kiem tra code hop le
                 String codeEntered=binding.etCodeInput.getText().toString().trim();
                 if(!codeEntered.equals(code)) {
-                    showDialogErrorString(getString(R.string.str_wrong_code));
+                    CustomDialog.showDialogErrorString(context,getString(R.string.str_wrong_code));
                     return;
                 }
                 callAPIAddUser();

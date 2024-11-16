@@ -20,6 +20,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.potholeapplication.R;
+import com.example.potholeapplication.class_pothole.CustomDialog;
 import com.example.potholeapplication.class_pothole.request.EmailReq;
 import com.example.potholeapplication.class_pothole.request.RegisterReq;
 import com.example.potholeapplication.class_pothole.RetrofitServices;
@@ -42,9 +43,6 @@ import retrofit2.Response;
 public class ForgotPasswordVerificationActivity extends AppCompatActivity {
     ActivityForgotPasswordVerificationBinding binding;
     String emailForResetPassword,code;
-    Button btnConfirm;
-    Dialog dialogError,dialogOke;
-    TextView tvErrorTitle,tvOkeTitle;
     Context context;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,7 +56,6 @@ public class ForgotPasswordVerificationActivity extends AppCompatActivity {
             return insets;
         });
         context=this;
-        SetupDialog();
         getStringEmail();
         setClickEvent();
         callAPiSendCode();
@@ -68,8 +65,9 @@ public class ForgotPasswordVerificationActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if(!binding.etCodeInput.getText().toString().trim().equals(code)){
-                    showDialogErrorString(getString(R.string.str_wrong_code));
+                    CustomDialog.showDialogErrorString(context,getString(R.string.str_wrong_code));
                 }
+
                 Intent intent=new Intent(ForgotPasswordVerificationActivity.this,
                         ResetPasswordActivity.class);
                 intent.putExtra("email",emailForResetPassword);
@@ -101,11 +99,10 @@ public class ForgotPasswordVerificationActivity extends AppCompatActivity {
                     String errorString;
                     ApiResponse apiResponse;
                     try {
-                        //lay chuoi json va chuyen thanh UserAPIResponse
                         errorString=response.errorBody().string();
                         Gson gson=new Gson();
                         apiResponse=gson.fromJson(errorString, ApiResponse.class);
-                        showDialogError(apiResponse);
+                        CustomDialog.showDialogError(context,apiResponse);
 
                     } catch (IOException e) {
                         throw new RuntimeException(e);
@@ -119,36 +116,6 @@ public class ForgotPasswordVerificationActivity extends AppCompatActivity {
             }
         });
 
-    }
-
-    public void SetupDialog(){
-        dialogError=new Dialog(ForgotPasswordVerificationActivity.this);
-        dialogError.setContentView(R.layout.custom_dialog_error);
-        dialogError.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
-        dialogError.setCancelable(true);
-        dialogError.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-        btnConfirm=dialogError.findViewById(R.id.btnConfirm);
-        tvErrorTitle=dialogError.findViewById(R.id.tvTitle);
-    }
-    public void showDialogError(ApiResponse apiResponse){
-        tvErrorTitle.setText(apiResponse.getMessage());
-        dialogError.show();
-        btnConfirm.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialogError.dismiss();
-            }
-        });
-    }
-    public void showDialogErrorString(String error){
-        tvErrorTitle.setText(error);
-        dialogError.show();
-        btnConfirm.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialogError.dismiss();
-            }
-        });
     }
 
 

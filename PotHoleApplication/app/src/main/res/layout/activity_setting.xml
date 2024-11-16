@@ -12,264 +12,318 @@
         android:layout_height="wrap_content"
         android:id="@+id/guideTop"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.15"/>
+        app:layout_constraintGuide_percent="0.25"/>
+
+    <FrameLayout
+        android:id="@+id/titleLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageButton
+            android:id="@+id/btnBack"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical|start"
+            android:layout_margin="10dp"
+            android:background="@android:color/transparent"
+            android:src="@drawable/ic_back"
+            app:tint="@color/dark_purple" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/str_setting"
+            android:textColor="@color/dark_purple"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+    </FrameLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:background="@drawable/corner_sheet"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/guideTop">
+        app:layout_constraintBottom_toTopOf="@id/guideTop"
+        app:layout_constraintTop_toBottomOf="@id/titleLayout"
+        app:layout_constraintVertical_bias="0.0"
+        tools:layout_editor_absoluteX="-16dp">
 
         <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guideMiddle"
+            android:id="@+id/guideMiddlePicture"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.55"/>
-        <androidx.constraintlayout.widget.Guideline
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/guideLeft"
             android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.1"/>
-        <androidx.constraintlayout.widget.Guideline
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/guideRight"
-            android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.9"/>
+            app:layout_constraintGuide_percent="0.4" />
 
-        <FrameLayout
-            android:id="@+id/titleLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <ImageButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical|start"
-                android:layout_margin="10dp"
-                android:id="@+id/btnBack"
-                android:background="@android:color/transparent"
-                android:src="@drawable/ic_back"
-                app:tint="@color/dark_purple" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="@string/str_setting"
-                android:textColor="@color/dark_purple"
-                android:textSize="24sp"
-                android:textStyle="bold" />
-
-        </FrameLayout>
-
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/cvYourPicture"
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/imaPicture"
             android:layout_width="100dp"
             android:layout_height="100dp"
-            android:layout_marginTop="10dp"
-            app:cardCornerRadius="50dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/titleLayout">
-
-            <ImageView
-                android:id="@+id/imaYourPicture"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:scaleType="fitCenter"
-                android:src="@drawable/actress" />
-        </com.google.android.material.card.MaterialCardView>
+            android:src="@drawable/actress"
+            app:civ_border_color="@color/white"
+            app:civ_border_width="2dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/guideMiddlePicture"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/tvUsername"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:clickable="true"
             android:text="@string/str_your_username"
             android:textColor="@color/purple"
-            android:clickable="true"
+            android:layout_marginStart="10dp"
             android:textSize="20sp"
             android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="@id/cvYourPicture"
-            app:layout_constraintStart_toStartOf="@id/cvYourPicture"
-            app:layout_constraintTop_toBottomOf="@id/cvYourPicture" />
-        <FrameLayout
-            android:id="@+id/showPointLayout"
-            android:layout_width="90dp"
-            android:layout_height="90dp"
-            android:layout_marginTop="10dp"
-            app:layout_constraintBottom_toTopOf="@+id/guideMiddle"
-            app:layout_constraintEnd_toEndOf="@id/cvYourPicture"
-            app:layout_constraintStart_toStartOf="@id/cvYourPicture"
-            app:layout_constraintTop_toBottomOf="@id/tvUsername">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:scaleType="center"
-                android:src="@drawable/star" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="@string/str_300"
-                android:textColor="@color/dark_purple"
-                android:textSize="18sp"
-                android:textStyle="bold" />
-        </FrameLayout>
-
-        <TextView
-            android:id="@+id/tvNumberReport"
-            android:layout_width="90dp"
-            android:layout_height="90dp"
-            android:background="@drawable/custom_textview_number_report"
-            android:gravity="center"
-            android:text="@string/str_6"
-            android:textColor="@color/white"
-            android:textSize="24sp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="@id/showPointLayout"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toLeftOf="@+id/showPointLayout"
-            app:layout_constraintTop_toTopOf="@id/showPointLayout" />
-
-        <ImageView
-            android:id="@+id/imaMemberType"
-            android:layout_width="90dp"
-            android:layout_height="90dp"
-            android:src="@drawable/golden"
-            app:layout_constraintBottom_toBottomOf="@id/showPointLayout"
-            app:layout_constraintLeft_toRightOf="@id/showPointLayout"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="@id/showPointLayout" />
-
-        <TextView
-            android:id="@+id/tvTextNumberReport"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:text="@string/str_your_reports"
-            android:textColor="@color/dark_purple"
-            android:textSize="16sp"
-            android:textStyle="normal"
-            app:layout_constraintEnd_toEndOf="@id/tvNumberReport"
-            app:layout_constraintStart_toStartOf="@id/tvNumberReport"
-            app:layout_constraintTop_toBottomOf="@id/tvNumberReport" />
-
-        <TextView
-            android:id="@+id/tvTextShowPoint"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:text="@string/str_points"
-            android:textColor="@color/yellow"
-            android:textSize="16sp"
-            android:textStyle="normal"
-            app:layout_constraintEnd_toEndOf="@id/showPointLayout"
-            app:layout_constraintStart_toStartOf="@id/showPointLayout"
-            app:layout_constraintTop_toBottomOf="@id/showPointLayout" />
-        <TextView
-            android:id="@+id/tvTextTypeMember"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:text="@string/str_member_type"
-            android:textColor="@color/yellow"
-            android:textSize="16sp"
-            android:textStyle="normal"
-            app:layout_constraintEnd_toEndOf="@id/imaMemberType"
-            app:layout_constraintStart_toStartOf="@id/imaMemberType"
-            app:layout_constraintTop_toBottomOf="@id/imaMemberType" />
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:drawableStartCompat="@drawable/ic_notification_off"
-            android:id="@+id/tvNotification"
-            android:layout_marginTop="30dp"
-            android:text="@string/str_notification"
-            android:textColor="@color/dark_purple"
-            android:textStyle="normal"
-            android:textSize="18sp"
-            app:drawableTint="@color/dark_purple"
-            android:drawablePadding="10dp"
-            app:layout_constraintLeft_toRightOf="@id/guideLeft"
-            app:layout_constraintTop_toBottomOf="@id/guideMiddle"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:drawableStartCompat="@drawable/ic_real_time"
-            android:id="@+id/tvRealTime"
-            android:layout_marginTop="20dp"
-            android:text="@string/str_real_time_detection"
-            android:textColor="@color/dark_purple"
-            android:textStyle="normal"
-            android:textSize="18sp"
-            app:drawableTint="@color/dark_purple"
-            android:drawablePadding="10dp"
-            app:layout_constraintStart_toStartOf="@id/tvNotification"
-            app:layout_constraintTop_toBottomOf="@id/tvNotification"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:drawableStartCompat="@drawable/ic_language"
-            android:id="@+id/tvLanguage"
-            android:clickable="true"
-            android:layout_marginTop="20dp"
-            android:text="@string/str_select_language"
-            android:textColor="@color/dark_purple"
-            android:textStyle="normal"
-            android:textSize="18sp"
-            app:drawableTint="@color/dark_purple"
-            android:drawablePadding="10dp"
-            app:layout_constraintStart_toStartOf="@id/tvRealTime"
-            app:layout_constraintTop_toBottomOf="@id/tvRealTime"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:drawableStartCompat="@drawable/ic_logout"
-            android:id="@+id/tvLogout"
-            android:clickable="true"
-            android:layout_marginTop="20dp"
-            android:text="@string/str_logout"
-            android:textColor="@color/dark_purple"
-            android:textStyle="normal"
-            android:textSize="18sp"
-            app:drawableTint="@color/dark_purple"
-            android:drawablePadding="10dp"
-            app:layout_constraintStart_toStartOf="@id/tvLanguage"
-            app:layout_constraintTop_toBottomOf="@id/tvLanguage"/>
-        <androidx.appcompat.widget.SwitchCompat
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:thumb="@drawable/thumb"
-            android:track="@drawable/track"
-            android:id="@+id/switchNotification"
-            app:layout_constraintRight_toLeftOf="@id/guideRight"
-            app:layout_constraintTop_toTopOf="@id/tvNotification"
-            app:layout_constraintBottom_toBottomOf="@id/tvNotification"
-            />
-        <androidx.appcompat.widget.SwitchCompat
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:track="@drawable/track"
-            android:thumb="@drawable/thumb"
-            android:id="@+id/switchRealtime"
-            app:layout_constraintRight_toLeftOf="@id/guideRight"
-            app:layout_constraintTop_toTopOf="@id/tvRealTime"
-            app:layout_constraintBottom_toBottomOf="@id/tvRealTime"
-            />
-
-
+            app:layout_constraintBottom_toBottomOf="@+id/imaPicture"
+            app:layout_constraintStart_toStartOf="@+id/guideMiddlePicture"
+            app:layout_constraintTop_toTopOf="@+id/imaPicture" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="@drawable/corner_sheet"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/guideTop">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:layout_weight="2">
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginVertical="20dp"
+                android:layout_marginHorizontal="10dp"
+                android:layout_weight="1"
+                android:id="@+id/cvYourReports"
+                app:cardCornerRadius="30dp">
+
+                <com.google.android.material.imageview.ShapeableImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/custom_data_pothole_report" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center|bottom"
+                        android:text="0"
+                        android:textColor="@color/white"
+                        android:textSize="25sp" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:text="@string/str_report_nyou_have_nmade"
+                        android:textColor="@color/white"
+                        android:textSize="14sp" />
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginVertical="20dp"
+                android:layout_marginHorizontal="10dp"
+                android:layout_weight="1"
+                android:id="@+id/cvYourPoints"
+                app:cardCornerRadius="30dp">
+
+                <com.google.android.material.imageview.ShapeableImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/custom_points" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center|bottom"
+                        android:text="0"
+                        android:textColor="@color/dark_purple"
+                        android:textSize="25sp" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:text="@string/str_points"
+                        android:textColor="@color/dark_purple"
+                        android:textSize="14sp" />
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginVertical="20dp"
+                android:layout_marginHorizontal="10dp"
+                android:layout_weight="1"
+                android:id="@+id/cvMemberTypes"
+                app:cardCornerRadius="30dp">
+
+                <com.google.android.material.imageview.ShapeableImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop"
+                    android:src="@color/white" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <com.google.android.material.imageview.ShapeableImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="2"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/gold"/>
+
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="3"
+                        android:gravity="center"
+                        android:text="@string/str_golden_nmember"
+                        android:textColor="@color/dark_purple"
+                        android:textSize="14sp" />
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+
+        </LinearLayout>
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+            <TextView
+                android:id="@+id/tvNotification"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawablePadding="10dp"
+                android:gravity="center|start"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="30dp"
+                android:text="@string/str_notification"
+                android:textColor="@color/dark_purple"
+                android:textSize="18sp"
+                app:drawableStartCompat="@drawable/ic_notification_off"
+                app:drawableTint="@color/dark_purple"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"/>
+            <TextView
+                android:id="@+id/tvRealTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawablePadding="10dp"
+                android:gravity="center|start"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="30dp"
+                android:text="@string/str_real_time_detection"
+                android:textColor="@color/dark_purple"
+                android:textSize="18sp"
+                app:drawableStartCompat="@drawable/ic_real_time"
+                app:drawableTint="@color/dark_purple"
+                app:layout_constraintTop_toBottomOf="@id/tvNotification"
+                app:layout_constraintStart_toStartOf="parent"
+                />
+            <TextView
+                android:id="@+id/tvEditUser"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center|start"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="30dp"
+                android:textColor="@color/dark_purple"
+                android:textSize="18sp"
+                android:drawablePadding="10dp"
+                android:clickable="true"
+                android:text="@string/str_edit_user"
+                app:drawableStartCompat="@drawable/ic_user"
+                app:drawableTint="@color/dark_purple"
+                app:layout_constraintTop_toBottomOf="@id/tvRealTime"
+                app:layout_constraintStart_toStartOf="parent"/>
+            <TextView
+                android:id="@+id/tvLanguage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:gravity="center|start"
+                android:layout_marginStart="10dp"
+                android:drawablePadding="10dp"
+                android:layout_marginTop="30dp"
+                android:text="@string/str_select_language"
+                android:textColor="@color/dark_purple"
+                android:textSize="18sp"
+                app:drawableStartCompat="@drawable/ic_language"
+                app:drawableTint="@color/dark_purple"
+                app:layout_constraintTop_toBottomOf="@id/tvEditUser"
+                app:layout_constraintStart_toStartOf="parent"/>
+            <TextView
+                android:id="@+id/tvLogout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:layout_marginTop="30dp"
+                android:drawablePadding="10dp"
+                android:gravity="center|start"
+                android:layout_marginStart="10dp"
+                android:text="@string/str_logout"
+                android:textColor="@color/dark_purple"
+                android:textSize="18sp"
+                app:drawableStartCompat="@drawable/ic_logout"
+                app:drawableTint="@color/dark_purple"
+                app:layout_constraintTop_toBottomOf="@id/tvLanguage"
+                app:layout_constraintStart_toStartOf="parent"/>
+            <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/switchNotification"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:thumb="@drawable/thumb"
+                android:layout_marginEnd="10dp"
+                android:track="@drawable/track"
+                app:layout_constraintTop_toTopOf="@id/tvNotification"
+                app:layout_constraintBottom_toBottomOf="@id/tvNotification"
+                app:layout_constraintEnd_toEndOf="parent"/>
+            <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/switchRealtime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="10dp"
+                android:thumb="@drawable/thumb"
+                android:track="@drawable/track"
+                app:layout_constraintTop_toTopOf="@id/tvRealTime"
+                app:layout_constraintBottom_toBottomOf="@id/tvRealTime"
+                app:layout_constraintEnd_toEndOf="parent"
+                />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </LinearLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -19,6 +19,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.potholeapplication.R;
+import com.example.potholeapplication.class_pothole.CustomDialog;
 import com.example.potholeapplication.class_pothole.request.EmailReq;
 import com.example.potholeapplication.class_pothole.request.RegisterReq;
 import com.example.potholeapplication.class_pothole.RetrofitServices;
@@ -39,9 +40,6 @@ import retrofit2.Response;
 public class ForgotPasswordActivity extends AppCompatActivity {
     ActivityForgotPasswordBinding binding;
     Context context;
-    Button btnConfirm;
-    Dialog dialogError;
-    TextView tvErrorTitle;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,7 +52,6 @@ public class ForgotPasswordActivity extends AppCompatActivity {
             return insets;
         });
         context=this;
-        SetupDialog();
         setClickEvent();
     }
     public void setClickEvent(){
@@ -71,17 +68,19 @@ public class ForgotPasswordActivity extends AppCompatActivity {
             }
         });
     }
+
+    //Goi api kiem tra email co ton tai ko
     public void callFindEmailApi(){
         String email=binding.etEmail.getText().toString().trim();
         if(email.isEmpty()){
-            showDialogErrorString(getString(R.string.str_please_enter_your_email));
+            CustomDialog.showDialogErrorString(context,
+                    getString(R.string.str_please_enter_your_email));
             return;
         }
 
-        UserAPIInterface apiService = RetrofitServices.getApiService();
-        //chi gui email len api server
-        EmailReq emailReq=new EmailReq(email);
         // Call API kiem tra email
+        UserAPIInterface apiService = RetrofitServices.getApiService();
+        EmailReq emailReq=new EmailReq(email);
         Call<ApiResponse> call = apiService.callFindEmail(emailReq);
         call.enqueue(new Callback<ApiResponse>() {
             @Override
@@ -99,14 +98,13 @@ public class ForgotPasswordActivity extends AppCompatActivity {
                         errorString=response.errorBody().string();
                         Gson gson=new Gson();
                         apiResponse=gson.fromJson(errorString, ApiResponse.class);
-                        showDialogError(apiResponse);
+                        CustomDialog.showDialogError(context,apiResponse);
 
                     } catch (IOException e) {
                         throw new RuntimeException(e);
                     }
                 }
             }
-
             @Override
             public void onFailure(Call<ApiResponse> call, Throwable t) {
                 Log.e("API Error", "Failure: " + t.getMessage());
@@ -114,34 +112,5 @@ public class ForgotPasswordActivity extends AppCompatActivity {
         });
 
     }
-    public void SetupDialog(){
-        dialogError=new Dialog(ForgotPasswordActivity.this);
-        dialogError.setContentView(R.layout.custom_dialog_error);
-        dialogError.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
-        dialogError.setCancelable(true);
-        dialogError.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-        btnConfirm=dialogError.findViewById(R.id.btnConfirm);
-        tvErrorTitle=dialogError.findViewById(R.id.tvTitle);
 
-    }
-    public void showDialogError(ApiResponse apiResponse){
-        tvErrorTitle.setText(apiResponse.getMessage());
-        dialogError.show();
-        btnConfirm.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialogError.dismiss();
-            }
-        });
-    }
-    public void showDialogErrorString(String error){
-        tvErrorTitle.setText(error);
-        dialogError.show();
-        btnConfirm.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialogError.dismiss();
-            }
-        });
-    }
 }

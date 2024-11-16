@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
@@ -8,249 +8,265 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".edit_user.EditUserActivity">
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <androidx.constraintlayout.widget.Guideline
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/guideTop"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.4"/>
+    <androidx.constraintlayout.widget.Guideline
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/guideLeft"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.05"/>
+    <androidx.constraintlayout.widget.Guideline
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/guideRight"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.95"/>
+
+    <FrameLayout
+        android:id="@+id/titleLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="5">
-        <FrameLayout
-            android:id="@+id/titleLayout"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+        <ImageButton
+            android:id="@+id/btnBack"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical|start"
+            android:layout_margin="10dp"
+            android:background="@android:color/transparent"
+            android:src="@drawable/ic_back"
+            app:tint="@color/dark_purple" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/str_edit_user_profile"
+            android:textColor="@color/dark_purple"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+
+    </FrameLayout>
+
+    <FrameLayout
+        android:layout_width="170dp"
+        android:layout_height="170dp"
+        android:layout_below="@id/titleLayout"
+        app:layout_constraintBottom_toTopOf="@id/guideTop"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/titleLayout">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/imaUser"
+            android:scaleType="centerCrop"
+            android:src="@drawable/actress"
+            app:civ_border_color="@color/white"
+            app:civ_border_width="2dp"/>
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:layout_width="55dp"
+            android:layout_height="55dp"
+            android:id="@+id/btnChangePicture"
+            android:layout_gravity="end|bottom"
+            android:scaleType="centerCrop"
+            android:clickable="true"
+            android:src="@drawable/ic_change_picture"
+            app:civ_border_color="@color/red"
+            app:civ_border_width="3dp" />
+    </FrameLayout>
+    <!--        <com.google.android.material.card.MaterialCardView-->
+    <!--            android:id="@+id/cvYourPicture"-->
+    <!--            android:layout_width="150dp"-->
+    <!--            android:layout_height="150dp"-->
+    <!--            android:layout_marginTop="10dp"-->
+    <!--            app:cardCornerRadius="100dp"-->
+    <!--            android:layout_below="@id/titleLayout"-->
+    <!--            android:layout_centerHorizontal="true">-->
+
+    <!--            <ImageView-->
+    <!--                android:id="@+id/imaYourPicture"-->
+    <!--                android:layout_width="match_parent"-->
+    <!--                android:layout_height="match_parent"-->
+    <!--                android:scaleType="centerCrop"-->
+    <!--                android:src="@drawable/actress" />-->
+    <!--        </com.google.android.material.card.MaterialCardView>-->
+    <RelativeLayout
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@android:color/transparent"
+        app:layout_constraintLeft_toRightOf="@id/guideLeft"
+        app:layout_constraintRight_toLeftOf="@id/guideRight"
+        app:layout_constraintTop_toBottomOf="@id/guideTop"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-            <ImageButton
-                android:id="@+id/btnBack"
+            android:layout_alignParentTop="true"
+            android:background="@drawable/corner_sheet">
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideLeftSheet"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical|start"
-                android:layout_margin="10dp"
-                android:background="@android:color/transparent"
-                android:src="@drawable/ic_back"
-                app:tint="@color/dark_purple" />
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.1" />
 
-            <TextView
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideRightSheet"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="@string/str_edit_user_profile"
-                android:textColor="@color/dark_purple"
-                android:textSize="24sp"
-                android:textStyle="bold" />
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.9" />
 
-        </FrameLayout>
-
-        <FrameLayout
-            android:layout_width="170dp"
-            android:layout_height="170dp"
-            android:layout_below="@id/titleLayout"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/titleLayout">
-
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:id="@+id/imaUser"
-                android:scaleType="centerCrop"
-                android:src="@drawable/actress"
-                app:civ_border_color="@color/white"
-                app:civ_border_width="2dp"/>
-
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:layout_width="55dp"
-                android:layout_height="55dp"
-                android:id="@+id/btnChangePicture"
-                android:layout_gravity="end|bottom"
-                android:scaleType="centerCrop"
-                android:clickable="true"
-                android:src="@drawable/ic_change_picture"
-                app:civ_border_color="@color/red"
-                app:civ_border_width="3dp" />
-        </FrameLayout>
-<!--        <com.google.android.material.card.MaterialCardView-->
-<!--            android:id="@+id/cvYourPicture"-->
-<!--            android:layout_width="150dp"-->
-<!--            android:layout_height="150dp"-->
-<!--            android:layout_marginTop="10dp"-->
-<!--            app:cardCornerRadius="100dp"-->
-<!--            android:layout_below="@id/titleLayout"-->
-<!--            android:layout_centerHorizontal="true">-->
-
-<!--            <ImageView-->
-<!--                android:id="@+id/imaYourPicture"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="match_parent"-->
-<!--                android:scaleType="centerCrop"-->
-<!--                android:src="@drawable/actress" />-->
-<!--        </com.google.android.material.card.MaterialCardView>-->
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="3"
-        android:background="@drawable/corner_sheet"
-        app:layout_constraintBottom_toBottomOf="parent">
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guideLeftSheet"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.12" />
-
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guideRightSheet"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.88" />
-        <androidx.constraintlayout.widget.Guideline
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/guideTopSheet"
-            android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.05"/>
-
-
-
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guideBottomSheet"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.95" />
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/etlName"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:elevation="10dp"
-            android:hint="@string/str_name"
-            app:boxCornerRadiusBottomEnd="30dp"
-            app:boxCornerRadiusBottomStart="30dp"
-            app:boxCornerRadiusTopEnd="30dp"
-            app:boxCornerRadiusTopStart="30dp"
-            app:boxStrokeColor="@color/purple"
-            app:boxStrokeWidth="1dp"
-            android:layout_marginTop="20dp"
-            app:hintTextColor="@color/dark_purple"
-            app:layout_constraintEnd_toStartOf="@id/guideRightSheet"
-            app:layout_constraintStart_toEndOf="@id/guideLeftSheet"
-            app:layout_constraintTop_toTopOf="@+id/guideTopSheet">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/etName"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
-                android:layout_width="match_parent"
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideTopSheet"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/black"
-                android:textSize="14sp" />
-        </com.google.android.material.textfield.TextInputLayout>
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="0.05" />
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/etlUsername"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:elevation="10dp"
-
-            android:hint="@string/str_username"
-            android:layout_marginTop="20dp"
-            app:boxCornerRadiusBottomEnd="30dp"
-            app:boxCornerRadiusBottomStart="30dp"
-            app:boxCornerRadiusTopEnd="30dp"
-            app:boxCornerRadiusTopStart="30dp"
-            app:boxStrokeColor="@color/purple"
-            app:boxStrokeWidth="1dp"
-            app:hintTextColor="@color/dark_purple"
-            app:layout_constraintEnd_toStartOf="@id/guideRightSheet"
-            app:layout_constraintStart_toEndOf="@id/guideLeftSheet"
-            app:layout_constraintTop_toBottomOf="@id/etlName"
-            app:layout_constraintVertical_chainStyle="spread">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/etUsername"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
-                android:layout_width="match_parent"
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/etlName"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:textColor="@color/black"
-                android:textSize="14sp" />
-        </com.google.android.material.textfield.TextInputLayout>
+                android:layout_marginTop="20dp"
+                android:elevation="10dp"
+                android:hint="@string/str_name"
+                app:boxCornerRadiusBottomEnd="30dp"
+                app:boxCornerRadiusBottomStart="30dp"
+                app:boxCornerRadiusTopEnd="30dp"
+                app:boxCornerRadiusTopStart="30dp"
+                app:boxStrokeColor="@color/purple"
+                app:boxStrokeWidth="1dp"
+                app:hintTextColor="@color/dark_purple"
+                app:layout_constraintEnd_toStartOf="@id/guideRightSheet"
+                app:layout_constraintStart_toEndOf="@id/guideLeftSheet"
+                app:layout_constraintTop_toTopOf="@+id/guideTopSheet">
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/etlEmail"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:elevation="10dp"
-            android:hint="@string/str_email"
-            android:layout_marginTop="20dp"
-            app:boxCornerRadiusBottomEnd="30dp"
-            app:boxCornerRadiusBottomStart="30dp"
-            app:boxCornerRadiusTopEnd="30dp"
-            app:boxCornerRadiusTopStart="30dp"
-            app:boxStrokeColor="@color/purple"
-            app:boxStrokeWidth="1dp"
-            app:hintTextColor="@color/dark_purple"
-            app:layout_constraintEnd_toStartOf="@id/guideRightSheet"
-            app:layout_constraintStart_toEndOf="@id/guideLeftSheet"
-            app:layout_constraintTop_toBottomOf="@id/etlUsername">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etName"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:textSize="14sp" />
+            </com.google.android.material.textfield.TextInputLayout>
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/etEmail"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
-                android:layout_width="match_parent"
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/etlUsername"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:textColor="@color/black"
-                android:focusableInTouchMode="false"
-                android:textSize="14sp" />
-        </com.google.android.material.textfield.TextInputLayout>
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/etlPassword"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:elevation="10dp"
-            android:hint="@string/str_secret_password"
-            android:layout_marginTop="20dp"
-            app:boxCornerRadiusBottomEnd="30dp"
-            app:boxCornerRadiusBottomStart="30dp"
-            app:boxCornerRadiusTopEnd="30dp"
-            app:boxCornerRadiusTopStart="30dp"
-            app:boxStrokeColor="@color/purple"
-            app:boxStrokeWidth="1dp"
-            app:hintTextColor="@color/dark_purple"
-            app:layout_constraintEnd_toStartOf="@id/guideRightSheet"
-            app:layout_constraintStart_toEndOf="@id/guideLeftSheet"
-            app:layout_constraintTop_toBottomOf="@id/etlEmail">
+                android:layout_marginTop="20dp"
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/etPassword"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
-                android:layout_width="match_parent"
+                android:elevation="10dp"
+                android:hint="@string/str_username"
+                app:boxCornerRadiusBottomEnd="30dp"
+                app:boxCornerRadiusBottomStart="30dp"
+                app:boxCornerRadiusTopEnd="30dp"
+                app:boxCornerRadiusTopStart="30dp"
+                app:boxStrokeColor="@color/purple"
+                app:boxStrokeWidth="1dp"
+                app:hintTextColor="@color/dark_purple"
+                app:layout_constraintEnd_toStartOf="@id/guideRightSheet"
+                app:layout_constraintStart_toEndOf="@id/guideLeftSheet"
+                app:layout_constraintTop_toBottomOf="@id/etlName"
+                app:layout_constraintVertical_chainStyle="spread">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etUsername"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:textSize="14sp" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/etlEmail"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:textColor="@color/black"
-                android:focusableInTouchMode="false"
-                android:inputType="textPassword"
-                android:textSize="14sp" />
-        </com.google.android.material.textfield.TextInputLayout>
-        <Button
-            android:id="@+id/btnSave"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:backgroundTint="@color/dark_purple"
-            android:text="@string/str_save"
-            android:textColor="@color/white"
-            android:textSize="20sp"
-            app:layout_constraintLeft_toRightOf="@id/guideLeftSheet"
-            app:layout_constraintRight_toLeftOf="@id/guideRightSheet"
-            app:layout_constraintBottom_toTopOf="@id/guideBottomSheet" />
+                android:layout_marginTop="20dp"
+                android:elevation="10dp"
+                android:hint="@string/str_email"
+                app:boxCornerRadiusBottomEnd="30dp"
+                app:boxCornerRadiusBottomStart="30dp"
+                app:boxCornerRadiusTopEnd="30dp"
+                app:boxCornerRadiusTopStart="30dp"
+                app:boxStrokeColor="@color/purple"
+                app:boxStrokeWidth="1dp"
+                app:hintTextColor="@color/dark_purple"
+                app:layout_constraintEnd_toStartOf="@id/guideRightSheet"
+                app:layout_constraintStart_toEndOf="@id/guideLeftSheet"
+                app:layout_constraintTop_toBottomOf="@id/etlUsername">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etEmail"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:focusableInTouchMode="false"
+                    android:textColor="@color/black"
+                    android:textSize="14sp" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/etlPassword"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:elevation="10dp"
+                android:hint="@string/str_secret_password"
+                app:boxCornerRadiusBottomEnd="30dp"
+                app:boxCornerRadiusBottomStart="30dp"
+                app:boxCornerRadiusTopEnd="30dp"
+                app:boxCornerRadiusTopStart="30dp"
+                app:boxStrokeColor="@color/purple"
+                app:boxStrokeWidth="1dp"
+                app:hintTextColor="@color/dark_purple"
+                app:layout_constraintEnd_toStartOf="@id/guideRightSheet"
+                app:layout_constraintStart_toEndOf="@id/guideLeftSheet"
+                app:layout_constraintTop_toBottomOf="@id/etlEmail">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etPassword"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:focusableInTouchMode="false"
+                    android:inputType="textPassword"
+                    android:textColor="@color/black"
+                    android:textSize="14sp" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <Button
+                android:id="@+id/btnSave"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="30dp"
+                android:backgroundTint="@color/dark_purple"
+                android:text="@string/str_save"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toRightOf="@id/guideLeftSheet"
+                app:layout_constraintRight_toLeftOf="@id/guideRightSheet"
+                app:layout_constraintTop_toBottomOf="@+id/etlPassword" />
 
 
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </RelativeLayout>
 
 
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

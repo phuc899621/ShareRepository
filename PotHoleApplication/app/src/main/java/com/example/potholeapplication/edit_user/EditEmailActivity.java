@@ -19,6 +19,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.potholeapplication.R;
+import com.example.potholeapplication.class_pothole.CustomDialog;
 import com.example.potholeapplication.class_pothole.RetrofitServices;
 import com.example.potholeapplication.class_pothole.ApiResponse;
 import com.example.potholeapplication.class_pothole.request.EmailReq;
@@ -38,9 +39,6 @@ import retrofit2.Response;
 public class EditEmailActivity extends AppCompatActivity {
     ActivityEditEmailBinding binding;
     Context context;
-    Button btnConfirm;
-    Dialog dialogError;
-    TextView tvErrorTitle;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,7 +51,6 @@ public class EditEmailActivity extends AppCompatActivity {
             return insets;
         });
         context=this;
-        SetupDialog();
         setClickEvent();
     }
     public void setClickEvent(){
@@ -73,7 +70,7 @@ public class EditEmailActivity extends AppCompatActivity {
     public void callCheckEmailAPI(){
         String newEmail=binding.etEmail.getText().toString().trim();
         if(newEmail.isEmpty()) {
-            showDialogErrorString(getString(R.string.str_please_enter_your_new_email));
+            CustomDialog.showDialogErrorString(context,getString(R.string.str_please_enter_your_new_email));
             return;
         }
         EmailReq emailReq=new EmailReq(newEmail);
@@ -94,7 +91,7 @@ public class EditEmailActivity extends AppCompatActivity {
                         errorString=response.errorBody().string();
                         Gson gson=new Gson();
                         apiResponse=gson.fromJson(errorString, ApiResponse.class);
-                        showDialogError(apiResponse);
+                        CustomDialog.showDialogError(context,apiResponse);
                     } catch (IOException e) {
                         throw new RuntimeException(e);
                     }
@@ -104,35 +101,6 @@ public class EditEmailActivity extends AppCompatActivity {
             @Override
             public void onFailure(Call<ApiResponse> call, Throwable t) {
                 Log.e("API Error", "Failure: " + t.getMessage());
-            }
-        });
-    }
-    public void SetupDialog(){
-        dialogError=new Dialog(EditEmailActivity.this);
-        dialogError.setContentView(R.layout.custom_dialog_error);
-        dialogError.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
-        dialogError.setCancelable(true);
-        dialogError.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-        btnConfirm=dialogError.findViewById(R.id.btnConfirm);
-        tvErrorTitle=dialogError.findViewById(R.id.tvTitle);
-    }
-    public void showDialogError(ApiResponse apiResponse){
-        tvErrorTitle.setText(apiResponse.getMessage());
-        dialogError.show();
-        btnConfirm.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialogError.dismiss();
-            }
-        });
-    }
-    public void showDialogErrorString(String error){
-        tvErrorTitle.setText(error);
-        dialogError.show();
-        btnConfirm.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialogError.dismiss();
             }
         });
     }

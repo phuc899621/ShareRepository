@@ -37,7 +37,7 @@ public class SettingActivity extends AppCompatActivity {
                 finish();
             }
         });
-        binding.cvYourPicture.setOnClickListener(new View.OnClickListener() {
+        binding.tvEditUser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent=new Intent(SettingActivity.this, EditUserActivity.class);
@@ -54,7 +54,7 @@ public class SettingActivity extends AppCompatActivity {
         binding.tvLogout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //cái này sẽ xoa cac activity khác, quay lại nhu cũ
+                //xoa cac activity khác, quay lại nhu cũ
                 SharedPreferences sharedPreferences=getSharedPreferences(
                         "user_info",MODE_PRIVATE
                 );
