@@ -103,7 +103,7 @@ public class LoginScreenActivity extends AppCompatActivity {
            }
             @Override
             public void onFailure(Call<ApiResponse> call, Throwable t) {
-                Log.e("API Error", "Failure: " + t.getMessage());
+                Log.e("API Error", "Failure2: " + t.getMessage());
             }
         });
 
@@ -158,7 +158,7 @@ public class LoginScreenActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<ApiResponse> call, Throwable t) {
-                Log.e("API Error", "Failure: " + t.getMessage());
+                Log.e("API Error", "Failure1: " + t.getMessage());
             }
         });
     }
@@ -201,7 +201,7 @@ public class LoginScreenActivity extends AppCompatActivity {
             }
             @Override
             public void onFailure(Call<ApiResponse> call, Throwable t) {
-                Log.e("API Error", "Failure: " + t.getMessage());
+                Log.e("API Error", "Failure3: " + t.getMessage());
             }
         });
     }

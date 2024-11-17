@@ -22,6 +22,10 @@ public class DataEditor {
         }
         return null;
     }
+    public static String getNameFromSharePreferences(Context context){
+        SharedPreferences sharedPreferences=context.getSharedPreferences("user_info", MODE_PRIVATE);
+        return sharedPreferences.getString("name","");
+    }
     public static void saveImageBytesToSharedPreferences(Context context,byte[] imageBytes) {
         SharedPreferences sharedPreferences=context.getSharedPreferences("user_info",MODE_PRIVATE);
         String base64Image = Base64.encodeToString(imageBytes, Base64.DEFAULT);

@@ -103,7 +103,7 @@ public class EditEmailVerificationActivity extends AppCompatActivity {
 
                 if(response.isSuccessful()&&response.body()!=null){
                     DataEditor.saveEmail(context,newEmail);
-                    CustomDialog.showDialogOkeNavigation(context,
+                    CustomDialog.showDialogOkeNavigationClear(context,
                             getString(R.string.str_change_email_successfully), EditUserActivity.class);
                 }
                 else{

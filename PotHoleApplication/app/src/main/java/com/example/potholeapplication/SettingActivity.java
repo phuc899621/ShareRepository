@@ -1,8 +1,10 @@
 package com.example.potholeapplication;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.view.View;
 
 import androidx.activity.EdgeToEdge;
@@ -11,11 +13,13 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.potholeapplication.class_pothole.DataEditor;
 import com.example.potholeapplication.databinding.ActivitySettingBinding;
 import com.example.potholeapplication.edit_user.EditUserActivity;
 
 public class SettingActivity extends AppCompatActivity {
     ActivitySettingBinding binding;
+    Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,8 +32,20 @@ public class SettingActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+        context=this;
         setClickEvent();
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        setData();
+    }
+    public void setData(){
+        binding.tvUsername.setText(DataEditor.getNameFromSharePreferences(context));
+        binding.imaPicture.setImageBitmap(DataEditor.getImageBitmapFromSharePreferences(context));
+    }
+
     public void setClickEvent(){
         binding.btnBack.setOnClickListener(new View.OnClickListener() {
             @Override

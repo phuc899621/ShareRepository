@@ -35,6 +35,7 @@ public class VerificationSuccessActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent=new Intent(VerificationSuccessActivity.this,
                         LoginScreenActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
                 finish();
             }

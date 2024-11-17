@@ -58,7 +58,6 @@
         app:layout_constraintGuide_percent="0.05"/>
 
 
-
     <ImageButton
         android:id="@+id/btnSetting"
         android:layout_width="wrap_content"
@@ -73,18 +72,19 @@
 
     <TextView
         android:id="@+id/tvName"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:gravity="center"
         android:layout_marginHorizontal="10dp"
         android:layout_marginVertical="10dp"
+        android:gravity="center|end"
         android:text="@string/str_unknown"
         android:textColor="@color/dark_purple"
-        android:textSize="20sp"
+        android:textSize="14sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@+id/imaUserIcon"
         app:layout_constraintEnd_toStartOf="@+id/imaUserIcon"
+        app:layout_constraintStart_toEndOf="@+id/btnSetting"
         app:layout_constraintTop_toTopOf="@+id/imaUserIcon" />
     <LinearLayout
         android:layout_width="0dp"

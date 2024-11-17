@@ -7,76 +7,72 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MapViewActivity">
-    <fragment
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:name="com.google.android.gms.maps.SupportMapFragment"/>
-    <LinearLayout
+    <androidx.constraintlayout.widget.Guideline
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:id="@+id/guideTop"
+        app:layout_constraintGuide_percent="0.15"/>
+
+    <FrameLayout
+        android:id="@+id/titleLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/searchview"
-        android:id="@+id/topAppBarLayout"
-        android:layout_marginTop="18dp"
-        android:layout_marginHorizontal="5dp"
-        android:orientation="horizontal"
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageButton
             android:id="@+id/btnBack"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginHorizontal="10dp"
+            android:layout_gravity="center|start"
+            android:layout_margin="10dp"
             android:background="@android:color/transparent"
             android:src="@drawable/ic_back"
             app:tint="@color/dark_purple" />
 
-        <SearchView
-            android:layout_width="match_parent"
+        <TextView
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/searchview"
-            android:clickable="true"
-            android:queryHint="@string/str_search_your_location"
-            />
-    </LinearLayout>
-    <LinearLayout
-        android:layout_width="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/str_map_downcase"
+            android:textColor="@color/dark_purple"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+
+
+    </FrameLayout>
+
+    <SearchView
+        android:id="@+id/searchview"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginVertical="10dp"
         android:background="@drawable/searchview"
-        android:orientation="vertical"
-        app:layout_constraintTop_toBottomOf="@id/topAppBarLayout"
-        app:layout_constraintRight_toRightOf="parent"
-        android:layout_marginEnd="10dp"
-        android:layout_marginTop="10dp">
+        android:clickable="true"
+        android:queryHint="@string/str_search_your_location"
+        app:layout_constraintBottom_toTopOf="@+id/guideTop"
+        app:layout_constraintTop_toBottomOf="@id/titleLayout"
+        tools:layout_editor_absoluteX="20dp" />
 
-        <ImageButton
-            android:id="@+id/btnZoomIn"
-            android:layout_width="46dp"
-            android:layout_height="46dp"
-            android:layout_marginTop="20dp"
-            android:background="@android:color/transparent"
-            android:src="@drawable/ic_zoomin"
-            app:tint="@color/dark_purple" />
+    <org.osmdroid.views.MapView
+        android:id="@+id/mapView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toBottomOf="@id/guideTop"
+        app:layout_constraintBottom_toBottomOf="parent"/>
 
-        <ImageButton
-            android:layout_width="46dp"
-            android:layout_height="46dp"
-            android:src="@drawable/ic_zoomout"
-            android:layout_marginBottom="20dp"
-            android:background="@android:color/transparent"
-            android:id="@+id/btnZoomOut"
-            app:tint="@color/dark_purple" />
-    </LinearLayout>
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:contentDescription="TODO"
         app:fabSize="auto"
         android:id="@+id/fabReport"
         app:rippleColor="@color/purple"
         android:src="@drawable/ic_report"
         android:tint="@color/dark_purple"
-        app:backgroundTint="@color/white"
-        style="@style/Widget.Material3.FloatingActionButton.Large.Primary"
+        app:backgroundTint="@color/pink"
+        style="@style/Widget.Material3.FloatingActionButton.Primary"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         android:layout_margin="20dp"

@@ -89,4 +89,26 @@ public class CustomDialog {
             }
         },1500);
     }
+    public static void showDialogOkeNavigationClear(Context context, String title,
+                                               Class<?> next){
+        Dialog dialog=new Dialog(context);
+        dialog.setContentView(R.layout.custom_dialog_oke);
+        dialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+        dialog.setCancelable(false);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        dialog.show();
+        TextView tvTitle=dialog.findViewById(R.id.tvTitle);
+        tvTitle.setText(title);
+        Handler handler=new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                Intent intent = new Intent(context, next);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                context.startActivity(intent);
+                dialog.dismiss();
+                ((Activity) context).finish();
+            }
+        },1500);
+    }
 }

@@ -1,16 +1,10 @@
 package com.example.potholeapplication.user_auth.signup;
 
-import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -82,7 +76,7 @@ public class SignupActivity extends AppCompatActivity {
                 if(response.isSuccessful()&&response.body()!=null){
                     //Verify email
                     RegisterReq registerReq=new RegisterReq(username,name,email,password);
-                    getToEmailVerification(registerReq);
+                    NavigateToEmailVerification(registerReq);
                 }
                 else{
                     String errorString;
@@ -103,8 +97,7 @@ public class SignupActivity extends AppCompatActivity {
             }
         });
     }
-    public void getToEmailVerification(RegisterReq registerReq){
-
+    public void NavigateToEmailVerification(RegisterReq registerReq){
         Intent intent = new Intent(SignupActivity.this, VerificationActivity.class);
         Bundle bundle=new Bundle();
         bundle.putString("email", registerReq.getEmail().trim());
