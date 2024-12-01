@@ -84,7 +84,6 @@ public class CustomDialog {
             public void run() {
                 Intent intent = new Intent(context, next);
                 context.startActivity(intent);
-                dialog.dismiss();
                 ((Activity) context).finish();
             }
         },1500);

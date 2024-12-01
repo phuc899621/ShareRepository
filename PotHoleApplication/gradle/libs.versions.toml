@@ -16,6 +16,20 @@ lottie = "6.6.0"
 circleimageview = "3.1.0"
 osmdroidAndroid = "6.1.20"
 playServicesLocation = "21.3.0"
+android = "11.8.0"
+mapboxSearchAndroidUi = "2.5.0"
+androidVersion = "2.15.2"
+mapboxSearchAndroid = "2.5.0"
+autofill = "2.5.0"
+discover = "2.5.0"
+placeAutocomplete = "2.5.0"
+offline = "2.5.0"
+mapboxSearchAndroidUiVersion = "2.5.0"
+navigation = "3.5.2"
+mapboxSearchAndroidVersion = "0.8.0"
+mapboxMapboxSearchAndroidUi = "2.5.0"
+uiMaps = "3.5.2"
+mapboxAndroid = "3.5.2"
 
 [libraries]
 junit = { group = "junit", name = "junit", version.ref = "junit" }
@@ -34,6 +48,20 @@ lottie = { group = "com.airbnb.android", name = "lottie", version.ref = "lottie"
 circleimageview = { group = "de.hdodenhof", name = "circleimageview", version.ref = "circleimageview" }
 osmdroid-android = { group = "org.osmdroid", name = "osmdroid-android", version.ref = "osmdroidAndroid" }
 play-services-location = { group = "com.google.android.gms", name = "play-services-location", version.ref = "playServicesLocation" }
+android = { group = "com.mapbox.maps", name = "android", version.ref = "android" }
+mapbox-search-android-ui = { group = "com.mapbox.search", name = "mapbox-search-android-ui", version.ref = "mapboxSearchAndroidUi" }
+navigation-android = { group = "com.mapbox.navigation", name = "android", version.ref = "androidVersion" }
+mapbox-search-android = { group = "com.mapbox.search", name = "mapbox-search-android", version.ref = "mapboxSearchAndroid" }
+autofill = { group = "com.mapbox.search", name = "autofill", version.ref = "autofill" }
+discover = { group = "com.mapbox.search", name = "discover", version.ref = "discover" }
+place-autocomplete = { group = "com.mapbox.search", name = "place-autocomplete", version.ref = "placeAutocomplete" }
+offline = { group = "com.mapbox.search", name = "offline", version.ref = "offline" }
+search-mapbox-search-android-ui = { group = "com.mapbox.search", name = "mapbox-search-android-ui", version.ref = "mapboxSearchAndroidUiVersion" }
+navigation = { group = "com.mapbox.navigationcore", name = "navigation", version.ref = "navigation" }
+search-mapbox-search-android = { group = "com.mapbox.search", name = "mapbox-search-android", version = "2.6.2" }
+mapbox-mapbox-search-android-ui = { group = "com.mapbox.search", name = "mapbox-search-android-ui", version.ref = "mapboxMapboxSearchAndroidUi" }
+ui-maps = { group = "com.mapbox.navigationcore", name = "ui-maps", version.ref = "uiMaps" }
+navigationcore-android = { group = "com.mapbox.navigationcore", name = "android", version.ref = "mapboxAndroid" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

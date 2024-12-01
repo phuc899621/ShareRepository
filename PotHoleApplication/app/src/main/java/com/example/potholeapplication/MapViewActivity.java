@@ -1,71 +1,88 @@
 package com.example.potholeapplication;
+import static com.mapbox.maps.plugin.annotation.AnnotationsUtils.getAnnotations;
+import static com.mapbox.maps.plugin.gestures.GesturesUtils.getGestures;
+import static com.mapbox.maps.plugin.locationcomponent.LocationComponentUtils.getLocationComponent;
 
-import static android.content.ContentValues.TAG;
-
-import android.Manifest;
-import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Context;
-import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.location.Address;
 import android.location.Geocoder;
-import android.location.Location;
 import android.os.Bundle;
-import android.os.Looper;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
-import android.widget.TextView;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
+import android.widget.SearchView;
 import android.widget.Toast;
+
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
+
 import androidx.core.content.ContextCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.potholeapplication.databinding.ActivityMapViewBinding;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GoogleApiAvailability;
-import com.google.android.gms.common.api.ApiException;
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationCallback;
-import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.LocationResult;
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.location.LocationSettingsRequest;
-import com.google.android.gms.location.SettingsClient;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
-
-import org.osmdroid.config.Configuration;
-import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
-import org.osmdroid.util.GeoPoint;
-import org.osmdroid.views.overlay.Marker;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.gson.JsonObject;
+import com.mapbox.android.core.permissions.PermissionsListener;
+import com.mapbox.android.core.permissions.PermissionsManager;
+import com.mapbox.android.gestures.MoveGestureDetector;
+import com.mapbox.bindgen.Expected;
+import com.mapbox.geojson.Point;
+import com.mapbox.maps.CameraOptions;
+import com.mapbox.maps.MapView;
+import com.mapbox.maps.extension.style.layers.properties.generated.TextAnchor;
+import com.mapbox.maps.plugin.animation.CameraAnimationsUtils;
+import com.mapbox.maps.plugin.animation.MapAnimationOptions;
+import com.mapbox.maps.plugin.annotation.AnnotationPlugin;
+import com.mapbox.maps.plugin.annotation.AnnotationType;
+import com.mapbox.maps.plugin.annotation.generated.OnPointAnnotationClickListener;
+import com.mapbox.maps.plugin.annotation.generated.PointAnnotation;
+import com.mapbox.maps.plugin.annotation.generated.PointAnnotationManager;
+import com.mapbox.maps.plugin.annotation.generated.PointAnnotationManagerKt;
+import com.mapbox.maps.plugin.annotation.generated.PointAnnotationOptions;
+import com.mapbox.maps.plugin.gestures.OnMoveListener;
+import com.mapbox.maps.plugin.locationcomponent.LocationComponentUtils;
+import com.mapbox.maps.plugin.locationcomponent.OnIndicatorBearingChangedListener;
+import com.mapbox.maps.plugin.locationcomponent.OnIndicatorPositionChangedListener;
+import com.mapbox.search.SearchEngine;
+import com.mapbox.search.autocomplete.PlaceAutocomplete;
+import com.mapbox.search.autocomplete.PlaceAutocompleteResult;
+import com.mapbox.search.autocomplete.PlaceAutocompleteSuggestion;
+import com.mapbox.search.ui.adapter.autocomplete.PlaceAutocompleteUiAdapter;
+import com.mapbox.search.ui.view.CommonSearchViewConfiguration;
+import com.mapbox.search.ui.view.SearchResultsView;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
+
+import kotlin.Unit;
+import kotlin.coroutines.Continuation;
+import kotlin.coroutines.CoroutineContext;
+import kotlin.coroutines.EmptyCoroutineContext;
 
 public class MapViewActivity extends AppCompatActivity {
     ActivityMapViewBinding binding;
-    List<GeoPoint> markersList=new ArrayList<>();
-    FusedLocationProviderClient fusedLocationClient;
-    LocationCallback locationCallback;
-    SettingsClient settingsClient;
-    LocationResult locationResult;
-    LocationSettingsRequest locationSettingsRequest;
-    LocationRequest locationRequest;
-    Location lastLocation;
-    double d_long,d_lat;
-    String address;
+    Point currentPoint;//luu tru vi tri hien tai
+    boolean firstTime=true;//lan dau mo ung dung map
+    PermissionsManager permissionsManager;//xin quyen
+    //Bien xu ly lay danh sach dia chi
+    PlaceAutocomplete autocomplete;
+    boolean ignoreNextQueryUpdate=false;
+    PlaceAutocompleteUiAdapter placeAutocompleteUiAdapter;
+    //Marker;
+    PointAnnotationManager pointAnnotationManager;
+    Bitmap iconImage;
 
-    Context context;
-    int time;
-    Marker userMarker;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -77,118 +94,15 @@ public class MapViewActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-        context=this;
-        time=0;
-        setClickEvent();
-
-        Configuration.getInstance().load(this, getApplicationContext().getSharedPreferences("osmdroid", MODE_PRIVATE));
-
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
-
-        binding.mapView.setTileSource(TileSourceFactory.MAPNIK);
-        binding.mapView.setZoomLevel(15);
-        binding.mapView.setMultiTouchControls(true);
-        binding.mapView.getController().setZoom(15.0);
-        binding.mapView.getController().setCenter(new GeoPoint(10.762622, 106.660172));
-
-        checkLocationPermisson();
-        userMarker = new Marker(binding.mapView);
-        binding.mapView.getOverlays().add(userMarker);
         init();
-    }
-    public void checkLocationPermisson(){
-        Log.d(TAG,"Inside");
-        if(ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION)!=PackageManager.PERMISSION_GRANTED){
-            if(ActivityCompat.shouldShowRequestPermissionRationale(MapViewActivity.this,Manifest.permission.ACCESS_FINE_LOCATION)){
-                ActivityCompat.requestPermissions(MapViewActivity.this,new String[]{Manifest.permission.ACCESS_FINE_LOCATION},1);
-            }
-            else {
-                ActivityCompat.requestPermissions(MapViewActivity.this,new String[]{Manifest.permission.ACCESS_FINE_LOCATION},1);
-            }
+        //xin quyen
+        permissionChecking();
+        Log.d("hi",binding.searchView+"");
 
-        }
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        switch (requestCode){
-            case 1:
-                if(grantResults.length>0 && grantResults[0]==PackageManager.PERMISSION_GRANTED){
-                    if(ContextCompat.checkSelfPermission(context,Manifest.permission.ACCESS_FINE_LOCATION)==PackageManager.PERMISSION_GRANTED){
-                        Toast.makeText(context,"Permission granted..",Toast.LENGTH_LONG).show();
-                        init();
-                    }
-                }
-                return;
-        }
-    }
-    @SuppressLint("MissingPermission")
-    public void startLocationUpdate(){
-        settingsClient.checkLocationSettings(locationSettingsRequest)
-                .addOnSuccessListener(locationSettingsResponse -> {
-                    Log.d(TAG,"Location setting are oke");
-                    fusedLocationClient.requestLocationUpdates(locationRequest,locationCallback,Looper.myLooper());
-                }).addOnFailureListener(e->{
-                    int statusCode=((ApiException) e).getStatusCode();
-                    Log.d(TAG,"inside error-->"+statusCode);
-                });
-    }
-    public void stopLocationUpdate(){
-        fusedLocationClient.removeLocationUpdates(locationCallback)
-                .addOnCompleteListener(task->{
-                    Log.d(TAG, "Stop location updates");
-                });
-    }
-    private void receiveLocation(LocationResult locationResult){
-        lastLocation=locationResult.getLastLocation();
-        Log.d(TAG, "Latitude: "+lastLocation.getLatitude());
-        Log.d(TAG, "Longitude: "+lastLocation.getLongitude());
-        Log.d(TAG, "Altitude: "+lastLocation.getAltitude());
-
-
-        d_lat=lastLocation.getLatitude();
-        d_long=lastLocation.getLongitude();
-        // Cập nhật vị trí Marker
-        GeoPoint userGeoPoint = new GeoPoint(d_lat, d_long);
-        userMarker.setPosition(userGeoPoint); // Di chuyển Marker tới vị trí mới
-        userMarker.setTitle("MARKER");
-        binding.mapView.getController().setCenter(userGeoPoint);
-        binding.mapView.invalidate();
-
-        // Cập nhật trung tâm bản đồ và làm mới bản đồ
-        binding.mapView.getController().setCenter(userGeoPoint);
-        binding.mapView.invalidate();
-        try{
-            Geocoder geocoder=new Geocoder(context,Locale.getDefault());
-            List<Address> addresses=geocoder.getFromLocation(d_lat,d_long,1);
-            address=addresses.get(0).getAddressLine(0);
-            Log.d(TAG,"  "+address);
-
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
     }
     public void init(){
-        fusedLocationClient=LocationServices.getFusedLocationProviderClient(context);
-        settingsClient=LocationServices.getSettingsClient(context);
-        locationCallback=new LocationCallback() {
-            @Override
-            public void onLocationResult(@NonNull LocationResult locationResult) {
-                super.onLocationResult(locationResult);
-                receiveLocation(locationResult);
-            }
-        };
-        locationRequest= LocationRequest.create()
-                .setInterval(1000).setFastestInterval(500)
-                .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
-                .setMaxWaitTime(100);
-        LocationSettingsRequest.Builder builder=new LocationSettingsRequest.Builder();
-        builder.addLocationRequest(locationRequest);
-        locationSettingsRequest=builder.build();
-        startLocationUpdate();
-    }
-    public void setClickEvent(){
+        //cai dat icon cho Marker
+        iconImage = BitmapFactory.decodeResource(getResources(),R.drawable.ic_puck);
         binding.btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -196,16 +110,254 @@ public class MapViewActivity extends AppCompatActivity {
             }
         });
     }
+    public void settingSearch(){
+        //cai dat
+        autocomplete= PlaceAutocomplete.create();
+        binding.searchResultView.initialize(new SearchResultsView.Configuration(new CommonSearchViewConfiguration()));
+        placeAutocompleteUiAdapter=new PlaceAutocompleteUiAdapter(
+                binding.searchResultView,autocomplete
+        );
+        //Lay toa do khi nguoi dung chon dia chi
+        placeAutocompleteUiAdapter.addSearchListener(new PlaceAutocompleteUiAdapter.SearchListener() {
+            @Override
+            public void onSuggestionsShown(@NonNull List<PlaceAutocompleteSuggestion> list) {
 
-    @Override
-    protected void onStart() {
-        super.onStart();
+            }
+
+            @Override
+            public void onSuggestionSelected(@NonNull PlaceAutocompleteSuggestion placeAutocompleteSuggestion) {
+                autocomplete.select(placeAutocompleteSuggestion, new Continuation<Expected<Exception, PlaceAutocompleteResult>>() {
+                    @NonNull
+                    @Override
+                    public CoroutineContext getContext() {
+                        return EmptyCoroutineContext.INSTANCE;
+                    }
+
+                    @Override
+                    public void resumeWith(@NonNull Object o) {
+                        //lay toa do va dia chi
+                        Expected<Exception, PlaceAutocompleteResult> result=
+                                (Expected<Exception, PlaceAutocompleteResult>) o;
+                        result.onValue(new Expected.Action<PlaceAutocompleteResult>() {
+                            @Override
+                            public void run(@NonNull PlaceAutocompleteResult input) {
+                                ignoreNextQueryUpdate=true;
+
+                                //gan marker ngay vi tri do
+                                AnnotationPlugin annotationPlugin= getAnnotations(binding.mapView);
+                                pointAnnotationManager= (PointAnnotationManager) annotationPlugin.createAnnotationManager(
+                                        AnnotationType.PointAnnotation,null
+                                );
+                                binding.searchView.setText(placeAutocompleteSuggestion.getFormattedAddress());
+                                binding.searchResultView.setVisibility(View.GONE);
+                                pointAnnotationManager.deleteAll();
+                                PointAnnotationOptions pointAnnotationOptions = new PointAnnotationOptions()
+                                        .withTextAnchor(TextAnchor.CENTER)
+                                        .withIconImage(iconImage)
+                                        .withPoint(input.getCoordinate());
+                                pointAnnotationManager.create(pointAnnotationOptions);
+                                //update camera lai vi tri do
+                                updateCamera(input.getCoordinate(), binding.mapView.getMapboxMap().getCameraState().getBearing());
+                            }
+                        }).onError(new Expected.Action<Exception>() {
+                            @Override
+                            public void run(@NonNull Exception input) {
+                                Log.e("Error",input.toString()+"");
+                            }
+                        });
+                    }
+                });
+            }
+
+            @Override
+            public void onPopulateQueryClick(@NonNull PlaceAutocompleteSuggestion placeAutocompleteSuggestion) {
+
+            }
+
+            @Override
+            public void onError(@NonNull Exception e) {
+
+            }
+        });
+        binding.searchView.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if(ignoreNextQueryUpdate) ignoreNextQueryUpdate=false;
+                else {
+                    Log.d("name",s.toString());
+                    placeAutocompleteUiAdapter.search(s.toString(),
+                            new Continuation<Unit>() {
+                                @NonNull
+                                @Override
+                                public CoroutineContext getContext() {
+                                    return EmptyCoroutineContext.INSTANCE;
+                                }
+
+                                @Override
+                                public void resumeWith(@NonNull Object o) {
+                                    runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            binding.searchResultView.setVisibility(View.VISIBLE);
+                                        }
+                                    });
+                                }
+                            }
+                    );
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
 
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        stopLocationUpdate();
+    public void permissionChecking(){
+        if (PermissionsManager.areLocationPermissionsGranted(this)) {
+            //Nếu đã cấp quyền thì gọi đến hàm xử lý
+            enableLocationComponent();
+            settingSearch();
+        } else {
+            // Yêu cầu quyền nếu chưa được cấp
+            permissionsManager = new PermissionsManager(new PermissionsListener() {
+                @Override
+                public void onExplanationNeeded(List<String> permissionsToExplain) {
+                    // Giải thích lý do cần quyền (tùy chọn)
+                    Toast.makeText(MapViewActivity.this, "Ứng dụng cần quyền vị trí để hoạt động", Toast.LENGTH_LONG).show();
+                }
+                @Override
+                public void onPermissionResult(boolean granted) {
+                    if (granted) {
+                        // Người dùng đãđược cấp quyền, gọi ham xử lý
+                        enableLocationComponent();
+                        settingSearch();
+                    } else {
+                        // Người dùng bị từ chối quyền
+                        Toast.makeText(MapViewActivity.this, "Quyền vị trí bị từ chối", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+            permissionsManager.requestLocationPermissions(this);
+        }
     }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if(permissionsManager!=null){
+            permissionsManager.onRequestPermissionsResult(
+                    requestCode,permissions,grantResults
+            );
+        }
+    }
+
+    private void enableLocationComponent() {
+        // Kích hoạt logic để hiển thị vị trí trên bản đồ
+        Toast.makeText(this, "Kích hoạt hiển thị vị trí người dùng", Toast.LENGTH_SHORT).show();
+
+        //cho phep hien thi huong di chuyen
+        getLocationComponent(binding.mapView).setPulsingEnabled(true);
+        //cho phep hien thi vi tri nguoi dung
+        getLocationComponent(binding.mapView).setEnabled(true);
+
+        getLocationComponent(binding.mapView).
+                addOnIndicatorBearingChangedListener(indicatorBearingChangedListener);
+        getLocationComponent(binding.mapView).
+                addOnIndicatorPositionChangedListener(indicatorPositionChangedListener);
+        getGestures(binding.mapView).addOnMoveListener(onMoveListener);
+        binding.fabUserTracking.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                removeMapboxListener();
+                getLocationComponent(binding.mapView).
+                        addOnIndicatorBearingChangedListener(indicatorBearingChangedListener);
+                getLocationComponent(binding.mapView).
+                        addOnIndicatorPositionChangedListener(indicatorPositionChangedListener);
+                getGestures(binding.mapView).addOnMoveListener(onMoveListener);
+            }
+        });
+    }
+    //Nếu huoướng người dùng thayđổi thì thay đổi camera theo
+    OnIndicatorBearingChangedListener indicatorBearingChangedListener=new OnIndicatorBearingChangedListener() {
+        @Override
+        public void onIndicatorBearingChanged(double v) {
+            binding.mapView.getMapboxMap().setCamera(new CameraOptions.Builder().bearing(v).build());
+        }
+    };
+
+
+    //nêu vị tr thay đổi
+    OnIndicatorPositionChangedListener indicatorPositionChangedListener=new OnIndicatorPositionChangedListener() {
+        @Override
+        public void onIndicatorPositionChanged(@NonNull Point point) {
+            if(firstTime){
+                CameraOptions cameraOptions = new CameraOptions.Builder()
+                        .center(point) // Đặt vị trí trung tâm là vị trí người dùng
+                        .zoom(17.0) // Đặt mức zoom của bản đồ hện tại
+                        .build();
+                binding.mapView.getMapboxMap().setCamera(cameraOptions);
+                firstTime=false;
+            }
+
+            CameraOptions cameraOptions = new CameraOptions.Builder()
+                    .center(point) // Đặt vị trí trung tâm là vị trí người dùng
+                    .zoom(binding.mapView.getMapboxMap().getCameraState().getZoom()) // Đặt mức zoom của bản đồ hện tại
+                    .build();
+            CameraAnimationsUtils.flyTo(binding.mapView.getMapboxMap(),
+                    cameraOptions,
+                    new MapAnimationOptions.Builder().duration(1000).build());
+
+            //giu nguoi dung o vi tri hien tai khi zoom
+            getGestures(binding.mapView).setFocalPoint(binding.mapView.getMapboxMap().pixelForCoordinate(point));
+            currentPoint=point;//luu vi tri hien tai
+        }
+    };
+    //lang nghe viec nguoi dung move trong man hinh
+    OnMoveListener onMoveListener=new OnMoveListener() {
+        @Override
+        public void onMoveBegin(@NonNull MoveGestureDetector moveGestureDetector) {
+            removeMapboxListener();
+        }
+
+        @Override
+        public boolean onMove(@NonNull MoveGestureDetector moveGestureDetector) {
+            return false;
+        }
+
+        @Override
+        public void onMoveEnd(@NonNull MoveGestureDetector moveGestureDetector) {
+
+        }
+    };
+    //ham xoa cac su kien lang nghe tu mapbox
+    public void removeMapboxListener(){
+        getLocationComponent(binding.mapView)
+                .removeOnIndicatorBearingChangedListener(indicatorBearingChangedListener);
+        getLocationComponent(binding.mapView)
+                .removeOnIndicatorPositionChangedListener(indicatorPositionChangedListener);
+        getGestures(binding.mapView).removeOnMoveListener(onMoveListener);
+    }
+    public void updateCamera(Point point,double bearing){
+        removeMapboxListener();
+        CameraOptions cameraOptions = new CameraOptions.Builder()
+                .center(point) // Đặt vị trí trung tâm là vị trí người dùng
+                .zoom(binding.mapView.getMapboxMap().getCameraState().getZoom()) // Đặt mức zoom của bản đồ hện tại
+                .bearing(bearing)
+                .build();
+        //cai animation
+        CameraAnimationsUtils.flyTo(binding.mapView.getMapboxMap(),
+                cameraOptions,
+                new MapAnimationOptions.Builder().duration(2000).build());
+        binding.mapView.getMapboxMap().setCamera(cameraOptions);
+    }
+
+
 }
