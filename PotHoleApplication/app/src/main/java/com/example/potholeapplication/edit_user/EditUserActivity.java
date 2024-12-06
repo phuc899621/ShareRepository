@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -12,7 +11,6 @@ import android.provider.MediaStore;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
-import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.Nullable;
@@ -24,10 +22,10 @@ import androidx.core.view.WindowInsetsCompat;
 import com.example.potholeapplication.R;
 import com.example.potholeapplication.class_pothole.CustomDialog;
 import com.example.potholeapplication.class_pothole.DataEditor;
-import com.example.potholeapplication.class_pothole.User;
+import com.example.potholeapplication.class_pothole.response.User;
 import com.example.potholeapplication.class_pothole.request.EditInfoReq;
 import com.example.potholeapplication.class_pothole.RetrofitServices;
-import com.example.potholeapplication.class_pothole.ApiResponse;
+import com.example.potholeapplication.class_pothole.response.ApiResponse;
 import com.example.potholeapplication.class_pothole.request.EmailReq;
 import com.example.potholeapplication.databinding.ActivityEditUserBinding;
 import com.example.potholeapplication.interface_pothole.UserAPIInterface;
@@ -35,7 +33,6 @@ import com.google.gson.Gson;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.List;
 
 import okhttp3.MediaType;

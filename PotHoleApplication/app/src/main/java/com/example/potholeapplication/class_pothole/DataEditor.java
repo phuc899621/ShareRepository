@@ -10,6 +10,8 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.util.Base64;
 
+import com.example.potholeapplication.class_pothole.response.User;
+
 import java.io.ByteArrayOutputStream;
 import java.util.List;
 

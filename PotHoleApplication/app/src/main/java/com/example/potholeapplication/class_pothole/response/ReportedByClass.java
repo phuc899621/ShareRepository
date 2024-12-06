@@ -1,10 +1,8 @@
-package com.example.potholeapplication.class_pothole;
+package com.example.potholeapplication.class_pothole.response;
 
 import com.google.gson.annotations.SerializedName;
 
-public class User {
-    @SerializedName("id")
-    private String id;
+public class ReportedByClass {
     @SerializedName("username")
     private String username;
     @SerializedName("email")
@@ -14,12 +12,11 @@ public class User {
     @SerializedName("image")
     private String image;
 
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
+    public ReportedByClass(String username, String email, String name, String image) {
+        this.username = username;
+        this.email = email;
+        this.name = name;
+        this.image = image;
     }
 
     public String getUsername() {
@@ -30,14 +27,6 @@ public class User {
         this.username = username;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public String getEmail() {
         return email;
     }
@@ -46,19 +35,19 @@ public class User {
         this.email = email;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public String getImage() {
         return image;
     }
 
     public void setImage(String image) {
         this.image = image;
-    }
-
-    public User() {
-        id="";
-        username="";
-        email="";
-        name="";
-        image="";
     }
 }

@@ -10,77 +10,155 @@
     <com.mapbox.maps.MapView
         android:id="@+id/mapView"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/titleLayout"
-        app:layout_constraintVertical_bias="0.0"
+        android:layout_height="match_parent"
         app:mapbox_locationComponentEnabled="true"
-        tools:layout_editor_absoluteX="0dp" />
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="0dp" />
 
-    <FrameLayout
-        android:id="@+id/titleLayout"
-        android:layout_width="match_parent"
+    <ImageButton
+        android:id="@+id/btnBack"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent"
-        android:background="@color/pink">
-
-        <ImageButton
-            android:id="@+id/btnBack"
-            android:clickable="true"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center|start"
-            android:layout_margin="10dp"
-            android:background="@android:color/transparent"
-            android:focusable="true"
-            android:src="@drawable/ic_back"
-            app:tint="@color/dark_purple" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="@string/str_map_downcase"
-            android:textColor="@color/dark_purple"
-            android:textSize="24sp"
-            android:textStyle="bold" />
-
-    </FrameLayout>
-    <com.google.android.material.textfield.TextInputLayout
-        android:layout_width="match_parent"
+        android:layout_gravity="center|start"
+        android:layout_margin="10dp"
+        android:background="@drawable/corner_sheet"
+        android:clickable="true"
+        android:focusable="true"
+        android:src="@drawable/ic_back"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/mapView"
+        app:tint="@color/dark_purple" />
+    <LinearLayout
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="10dp"
         android:layout_marginVertical="5dp"
-        android:id="@+id/SearchViewLayout"
-        app:boxCornerRadiusBottomEnd="20dp"
-        app:boxCornerRadiusBottomStart="20dp"
-        app:boxCornerRadiusTopEnd="20dp"
-        app:boxCornerRadiusTopStart="20dp"
-        android:elevation="20dp"
-        app:boxStrokeWidth="2dp"
-        app:boxStrokeColor="@color/dark_purple"
-        app:boxBackgroundColor="@color/white"
-        app:layout_constraintTop_toBottomOf="@id/titleLayout"
-        app:startIconDrawable="@drawable/ic_search"
-        app:endIconMode="clear_text"
-        >
-        <com.google.android.material.textfield.TextInputEditText
+        android:orientation="vertical"
+        android:id="@+id/searchLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/btnBack"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/SearchViewLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/searchView"
-            android:maxLines="1"
             android:layout_marginBottom="5dp"
-            />
+            android:layout_weight="1"
+            android:elevation="20dp"
+            app:boxBackgroundColor="@color/white"
+            app:boxCornerRadiusBottomEnd="20dp"
+            app:boxCornerRadiusBottomStart="20dp"
+            app:boxCornerRadiusTopEnd="20dp"
+            app:boxCornerRadiusTopStart="20dp"
+            app:boxStrokeColor="@color/dark_purple"
+            app:boxStrokeWidth="2dp"
+            app:endIconMode="clear_text"
+            app:startIconDrawable="@drawable/ic_search">
 
-    </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/searchView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="14sp" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/fromViewLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:layout_weight="1"
+            android:visibility="gone"
+            android:elevation="20dp"
+            app:boxBackgroundColor="@color/white"
+            app:boxCornerRadiusBottomEnd="20dp"
+            app:boxCornerRadiusBottomStart="20dp"
+            app:boxCornerRadiusTopEnd="20dp"
+            app:boxCornerRadiusTopStart="20dp"
+            app:boxStrokeColor="@color/dark_purple"
+            app:boxStrokeWidth="2dp"
+            app:endIconMode="clear_text"
+            app:startIconDrawable="@drawable/ic_search">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/fromView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+        <com.google.android.material.button.MaterialButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:backgroundTint="@color/pink"
+            android:visibility="gone"
+            android:id="@+id/btnCurrentLocation"
+            android:textColor="@color/dark_purple"
+            android:textSize="18sp"
+            android:text="@string/str_use_current_location">
+
+        </com.google.android.material.button.MaterialButton>
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/toViewLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:layout_weight="1"
+            android:visibility="gone"
+            android:elevation="20dp"
+            app:boxBackgroundColor="@color/white"
+            app:boxCornerRadiusBottomEnd="20dp"
+            app:boxCornerRadiusBottomStart="20dp"
+            app:boxCornerRadiusTopEnd="20dp"
+            app:boxCornerRadiusTopStart="20dp"
+            app:boxStrokeColor="@color/dark_purple"
+            app:boxStrokeWidth="2dp"
+            app:endIconMode="clear_text"
+            app:startIconDrawable="@drawable/ic_search">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/toView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+    </LinearLayout>
+
+
+
     <com.mapbox.search.ui.view.SearchResultsView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/searchResultView"
         android:visibility="gone"
+        android:background="@color/white"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/SearchViewLayout"
+        app:layout_constraintTop_toBottomOf="@id/searchLayout"
+        android:layout_marginHorizontal="10dp"
+        />
+    <com.mapbox.search.ui.view.SearchResultsView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/searchFromResultView"
+        android:visibility="gone"
+        android:background="@color/white"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/searchLayout"
+        android:layout_marginHorizontal="10dp"
+        />
+    <com.mapbox.search.ui.view.SearchResultsView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/searchToResultView"
+        android:visibility="gone"
+        android:background="@color/white"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/searchLayout"
         android:layout_marginHorizontal="10dp"
         />
 
@@ -95,7 +173,6 @@
         app:rippleColor="@color/purple"
         android:src="@drawable/ic_report"
         android:tint="@color/dark_purple"
-        android:backgroundTint="@color/pink"
         style="@style/Widget.Material3.FloatingActionButton.Primary"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintRight_toRightOf="parent"
@@ -110,13 +187,27 @@
         android:layout_margin="20dp"
         android:contentDescription="TODO"
         android:src="@drawable/ic_user_tracking"
-        android:backgroundTint="@color/pink"
         android:tint="@color/dark_purple"
         app:fabSize="auto"
         app:layout_constraintBottom_toTopOf="@+id/fabReport"
         app:layout_constraintEnd_toEndOf="@+id/fabReport"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintStart_toStartOf="@+id/fabReport"
+        app:rippleColor="@color/purple" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fabLocationTracking"
+        style="@style/Widget.Material3.FloatingActionButton.Primary"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:contentDescription="TODO"
+        android:src="@drawable/ic_tracking"
+        android:tint="@color/dark_purple"
+        app:fabSize="auto"
+        app:layout_constraintBottom_toTopOf="@+id/fabUserTracking"
+        app:layout_constraintEnd_toEndOf="@+id/fabUserTracking"
+        app:layout_constraintStart_toStartOf="@+id/fabUserTracking"
         app:rippleColor="@color/purple" />
 
 

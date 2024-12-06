@@ -16,7 +16,7 @@ import com.example.potholeapplication.R;
 import com.example.potholeapplication.class_pothole.CustomDialog;
 import com.example.potholeapplication.class_pothole.request.RegisterReq;
 import com.example.potholeapplication.class_pothole.RetrofitServices;
-import com.example.potholeapplication.class_pothole.ApiResponse;
+import com.example.potholeapplication.class_pothole.response.ApiResponse;
 import com.example.potholeapplication.class_pothole.request.UserVerificationReq;
 import com.example.potholeapplication.databinding.ActivitySignupBinding;
 import com.example.potholeapplication.interface_pothole.UserAPIInterface;

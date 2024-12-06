@@ -4,8 +4,10 @@ import static com.mapbox.maps.plugin.gestures.GesturesUtils.getGestures;
 import static com.mapbox.maps.plugin.locationcomponent.LocationComponentUtils.getLocationComponent;
 
 import android.content.Context;
+import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.hardware.Camera;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
@@ -77,12 +79,14 @@ public class MapViewActivity extends AppCompatActivity {
     PermissionsManager permissionsManager;//xin quyen
     //Bien xu ly lay danh sach dia chi
     PlaceAutocomplete autocomplete;
-    boolean ignoreNextQueryUpdate=false;
+    boolean ignoreNextQueryUpdate=false,isOnTracking=false,isListening=false;
     PlaceAutocompleteUiAdapter placeAutocompleteUiAdapter;
     //Marker;
     PointAnnotationManager pointAnnotationManager;
     Bitmap iconImage;
-
+    Context context;
+    //Camera
+    CameraOptions cameraForBearing,cameraForLocation,cameraForPosition;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -94,19 +98,51 @@ public class MapViewActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
         init();
         //xin quyen
         permissionChecking();
-        Log.d("hi",binding.searchView+"");
 
     }
     public void init(){
+        context=this;
         //cai dat icon cho Marker
         iconImage = BitmapFactory.decodeResource(getResources(),R.drawable.ic_puck);
         binding.btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
+            }
+        });
+        binding.fabLocationTracking.setBackgroundTintList(
+                ColorStateList.valueOf(ContextCompat.getColor(context,R.color.pink)));
+        binding.fabUserTracking.setBackgroundTintList(
+                ColorStateList.valueOf(ContextCompat.getColor(context,R.color.pink)));
+        binding.fabReport.setBackgroundTintList(
+                ColorStateList.valueOf(ContextCompat.getColor(context,R.color.pink)));
+        binding.fabLocationTracking.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(!isOnTracking){
+                    binding.SearchViewLayout.setVisibility(View.GONE);
+                    binding.fromViewLayout.setVisibility(View.VISIBLE);
+                    binding.toViewLayout.setVisibility(View.VISIBLE);
+                    binding.btnCurrentLocation.setVisibility(View.VISIBLE);
+                    binding.fabLocationTracking.setBackgroundTintList(
+                            ColorStateList.valueOf(ContextCompat.getColor(context,R.color.green)));
+                    binding.searchView.setText("");
+                    isOnTracking=true;
+                }else{
+                    binding.SearchViewLayout.setVisibility(View.VISIBLE);
+                    binding.fromViewLayout.setVisibility(View.GONE);
+                    binding.toViewLayout.setVisibility(View.GONE);
+                    binding.btnCurrentLocation.setVisibility(View.GONE);
+                    binding.fabLocationTracking.setBackgroundTintList(
+                            ColorStateList.valueOf(ContextCompat.getColor(context,R.color.pink)));
+                    binding.fromView.setText("");
+                    binding.toView.setText("");
+                    isOnTracking=false;
+                }
             }
         });
     }
@@ -116,6 +152,10 @@ public class MapViewActivity extends AppCompatActivity {
         binding.searchResultView.initialize(new SearchResultsView.Configuration(new CommonSearchViewConfiguration()));
         placeAutocompleteUiAdapter=new PlaceAutocompleteUiAdapter(
                 binding.searchResultView,autocomplete
+        );
+        AnnotationPlugin annotationPlugin= getAnnotations(binding.mapView);
+        pointAnnotationManager= (PointAnnotationManager) annotationPlugin.createAnnotationManager(
+                AnnotationType.PointAnnotation,null
         );
         //Lay toa do khi nguoi dung chon dia chi
         placeAutocompleteUiAdapter.addSearchListener(new PlaceAutocompleteUiAdapter.SearchListener() {
@@ -144,10 +184,6 @@ public class MapViewActivity extends AppCompatActivity {
                                 ignoreNextQueryUpdate=true;
 
                                 //gan marker ngay vi tri do
-                                AnnotationPlugin annotationPlugin= getAnnotations(binding.mapView);
-                                pointAnnotationManager= (PointAnnotationManager) annotationPlugin.createAnnotationManager(
-                                        AnnotationType.PointAnnotation,null
-                                );
                                 binding.searchView.setText(placeAutocompleteSuggestion.getFormattedAddress());
                                 binding.searchResultView.setVisibility(View.GONE);
                                 pointAnnotationManager.deleteAll();
@@ -267,12 +303,12 @@ public class MapViewActivity extends AppCompatActivity {
         getLocationComponent(binding.mapView).setPulsingEnabled(true);
         //cho phep hien thi vi tri nguoi dung
         getLocationComponent(binding.mapView).setEnabled(true);
-
         getLocationComponent(binding.mapView).
                 addOnIndicatorBearingChangedListener(indicatorBearingChangedListener);
         getLocationComponent(binding.mapView).
                 addOnIndicatorPositionChangedListener(indicatorPositionChangedListener);
         getGestures(binding.mapView).addOnMoveListener(onMoveListener);
+        isListening=true;
         binding.fabUserTracking.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -282,6 +318,7 @@ public class MapViewActivity extends AppCompatActivity {
                 getLocationComponent(binding.mapView).
                         addOnIndicatorPositionChangedListener(indicatorPositionChangedListener);
                 getGestures(binding.mapView).addOnMoveListener(onMoveListener);
+                isListening=true;
             }
         });
     }
@@ -289,7 +326,8 @@ public class MapViewActivity extends AppCompatActivity {
     OnIndicatorBearingChangedListener indicatorBearingChangedListener=new OnIndicatorBearingChangedListener() {
         @Override
         public void onIndicatorBearingChanged(double v) {
-            binding.mapView.getMapboxMap().setCamera(new CameraOptions.Builder().bearing(v).build());
+            cameraForBearing=new CameraOptions.Builder().bearing(v).build();
+            binding.mapView.getMapboxMap().setCamera(cameraForBearing);
         }
     };
 
@@ -307,12 +345,12 @@ public class MapViewActivity extends AppCompatActivity {
                 firstTime=false;
             }
 
-            CameraOptions cameraOptions = new CameraOptions.Builder()
+            cameraForPosition=new CameraOptions.Builder()
                     .center(point) // Đặt vị trí trung tâm là vị trí người dùng
                     .zoom(binding.mapView.getMapboxMap().getCameraState().getZoom()) // Đặt mức zoom của bản đồ hện tại
                     .build();
             CameraAnimationsUtils.flyTo(binding.mapView.getMapboxMap(),
-                    cameraOptions,
+                    cameraForPosition,
                     new MapAnimationOptions.Builder().duration(1000).build());
 
             //giu nguoi dung o vi tri hien tai khi zoom
@@ -339,24 +377,27 @@ public class MapViewActivity extends AppCompatActivity {
     };
     //ham xoa cac su kien lang nghe tu mapbox
     public void removeMapboxListener(){
-        getLocationComponent(binding.mapView)
-                .removeOnIndicatorBearingChangedListener(indicatorBearingChangedListener);
-        getLocationComponent(binding.mapView)
-                .removeOnIndicatorPositionChangedListener(indicatorPositionChangedListener);
-        getGestures(binding.mapView).removeOnMoveListener(onMoveListener);
+        if(isListening){
+            getLocationComponent(binding.mapView)
+                    .removeOnIndicatorBearingChangedListener(indicatorBearingChangedListener);
+            getLocationComponent(binding.mapView)
+                    .removeOnIndicatorPositionChangedListener(indicatorPositionChangedListener);
+            getGestures(binding.mapView).removeOnMoveListener(onMoveListener);
+            isListening=false;
+        }
     }
     public void updateCamera(Point point,double bearing){
         removeMapboxListener();
-        CameraOptions cameraOptions = new CameraOptions.Builder()
+        cameraForLocation=new CameraOptions.Builder()
                 .center(point) // Đặt vị trí trung tâm là vị trí người dùng
                 .zoom(binding.mapView.getMapboxMap().getCameraState().getZoom()) // Đặt mức zoom của bản đồ hện tại
                 .bearing(bearing)
                 .build();
         //cai animation
         CameraAnimationsUtils.flyTo(binding.mapView.getMapboxMap(),
-                cameraOptions,
+                cameraForLocation,
                 new MapAnimationOptions.Builder().duration(2000).build());
-        binding.mapView.getMapboxMap().setCamera(cameraOptions);
+        binding.mapView.getMapboxMap().setCamera(cameraForLocation);
     }
 
 

@@ -12,6 +12,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.potholeapplication.databinding.ActivitySplashScreenBinding;
+import com.example.potholeapplication.pothole_service.SensorService;
 import com.example.potholeapplication.user_auth.login.LoginScreenActivity;
 
 public class SplashScreenActivity extends AppCompatActivity {
@@ -28,6 +29,9 @@ public class SplashScreenActivity extends AppCompatActivity {
             return insets;
         });
         setClickEvent();
+        Intent intent = new Intent(this, SensorService.class);
+        startService(intent);
+
     }
     public void setClickEvent(){
         Handler handler=new Handler();

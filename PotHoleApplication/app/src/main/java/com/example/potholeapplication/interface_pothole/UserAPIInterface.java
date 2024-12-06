@@ -5,7 +5,7 @@ import com.example.potholeapplication.class_pothole.request.EditPasswordReq;
 import com.example.potholeapplication.class_pothole.request.EmailReq;
 import com.example.potholeapplication.class_pothole.request.LoginReq;
 import com.example.potholeapplication.class_pothole.request.RegisterReq;
-import com.example.potholeapplication.class_pothole.ApiResponse;
+import com.example.potholeapplication.class_pothole.response.ApiResponse;
 import com.example.potholeapplication.class_pothole.request.ResetPasswordReq;
 import com.example.potholeapplication.class_pothole.request.UserVerificationReq;
 
@@ -54,8 +54,7 @@ public interface UserAPIInterface {
     @Multipart
     @PUT("api/edit/image")//save image
     Call<ApiResponse> callSaveImage(@Part("email")RequestBody email, @Part MultipartBody.Part image);
-    @POST("api/find/Image")//kiem tra email co trong csdl ko
+    @POST("api/find/image")//lay image
     Call<ApiResponse> callFindImage(@Body EmailReq emailReq);
-
 
 }

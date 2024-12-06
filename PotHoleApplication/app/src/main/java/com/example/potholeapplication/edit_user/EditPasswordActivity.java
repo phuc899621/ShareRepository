@@ -1,17 +1,9 @@
 package com.example.potholeapplication.edit_user;
 
-import android.app.Dialog;
 import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -20,17 +12,13 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.potholeapplication.R;
-import com.example.potholeapplication.class_pothole.ApiResponse;
+import com.example.potholeapplication.class_pothole.response.ApiResponse;
 import com.example.potholeapplication.class_pothole.CustomDialog;
 import com.example.potholeapplication.class_pothole.DataEditor;
 import com.example.potholeapplication.class_pothole.RetrofitServices;
 import com.example.potholeapplication.class_pothole.request.EditPasswordReq;
-import com.example.potholeapplication.class_pothole.request.RegisterReq;
-import com.example.potholeapplication.class_pothole.request.UserVerificationReq;
 import com.example.potholeapplication.databinding.ActivityEditPasswordBinding;
 import com.example.potholeapplication.interface_pothole.UserAPIInterface;
-import com.example.potholeapplication.user_auth.signup.SignupActivity;
-import com.example.potholeapplication.user_auth.signup.VerificationActivity;
 import com.google.gson.Gson;
 
 import java.io.IOException;

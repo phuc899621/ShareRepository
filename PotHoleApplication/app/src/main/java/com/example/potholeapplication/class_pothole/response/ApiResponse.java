@@ -1,4 +1,4 @@
-package com.example.potholeapplication.class_pothole;
+package com.example.potholeapplication.class_pothole.response;
 
 import com.google.gson.annotations.SerializedName;
 

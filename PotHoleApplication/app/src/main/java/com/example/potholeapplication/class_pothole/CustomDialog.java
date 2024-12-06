@@ -12,6 +12,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.potholeapplication.R;
+import com.example.potholeapplication.class_pothole.response.ApiResponse;
 
 public class CustomDialog {
     public static void showDialogOkeThenFinish(Context context, String title){
