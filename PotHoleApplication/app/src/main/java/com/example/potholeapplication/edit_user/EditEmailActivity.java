@@ -14,6 +14,7 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.potholeapplication.R;
 import com.example.potholeapplication.class_pothole.CustomDialog;
+import com.example.potholeapplication.class_pothole.LocaleManager;
 import com.example.potholeapplication.class_pothole.RetrofitServices;
 import com.example.potholeapplication.class_pothole.response.ApiResponse;
 import com.example.potholeapplication.class_pothole.request.EmailReq;
@@ -43,7 +44,14 @@ public class EditEmailActivity extends AppCompatActivity {
         });
         context=this;
         setClickEvent();
+
     }
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(LocaleManager.updateLanguage(newBase));
+    }
+
     public void setClickEvent(){
         binding.btnSendCode.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -13,7 +13,9 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.potholeapplication.class_pothole.CustomDialog;
 import com.example.potholeapplication.class_pothole.DataEditor;
+import com.example.potholeapplication.class_pothole.LocaleManager;
 import com.example.potholeapplication.databinding.ActivitySettingBinding;
 import com.example.potholeapplication.edit_user.EditUserActivity;
 
@@ -34,6 +36,7 @@ public class SettingActivity extends AppCompatActivity {
         });
         context=this;
         setClickEvent();
+
     }
 
     @Override
@@ -84,5 +87,16 @@ public class SettingActivity extends AppCompatActivity {
 
             }
         });
+        binding.tvLanguage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                CustomDialog.showDialogLanguage(context);
+            }
+        });
+    }
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(LocaleManager.updateLanguage(newBase));
     }
 }

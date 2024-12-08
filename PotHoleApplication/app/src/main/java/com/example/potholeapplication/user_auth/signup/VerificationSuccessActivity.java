@@ -1,5 +1,6 @@
 package com.example.potholeapplication.user_auth.signup;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -11,6 +12,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.potholeapplication.R;
+import com.example.potholeapplication.class_pothole.LocaleManager;
 import com.example.potholeapplication.databinding.ActivityVerificationSuccessBinding;
 import com.example.potholeapplication.user_auth.login.LoginScreenActivity;
 
@@ -28,7 +30,13 @@ public class VerificationSuccessActivity extends AppCompatActivity {
             return insets;
         });
         setClickEvent();
+
     }
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(LocaleManager.updateLanguage(newBase));
+    }
+
     public void setClickEvent(){
         binding.btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override

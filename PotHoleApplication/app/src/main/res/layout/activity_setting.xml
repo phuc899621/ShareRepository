@@ -129,7 +129,7 @@
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:gravity="center"
-                        android:text="@string/str_report_nyou_have_nmade"
+                        android:text="@string/str_report_you_have_made"
                         android:textColor="@color/white"
                         android:textSize="14sp" />
                 </LinearLayout>
@@ -208,7 +208,7 @@
                         android:layout_height="match_parent"
                         android:layout_weight="3"
                         android:gravity="center"
-                        android:text="@string/str_golden_nmember"
+                        android:text="@string/str_golden_member"
                         android:textColor="@color/dark_purple"
                         android:textSize="14sp" />
                 </LinearLayout>
@@ -277,7 +277,7 @@
                 android:layout_marginStart="10dp"
                 android:drawablePadding="10dp"
                 android:layout_marginTop="30dp"
-                android:text="@string/str_select_language"
+                android:text="@string/str_choose_your_language"
                 android:textColor="@color/dark_purple"
                 android:textSize="18sp"
                 app:drawableStartCompat="@drawable/ic_language"

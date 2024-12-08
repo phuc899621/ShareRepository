@@ -22,6 +22,7 @@ import androidx.core.view.WindowInsetsCompat;
 import com.example.potholeapplication.R;
 import com.example.potholeapplication.class_pothole.CustomDialog;
 import com.example.potholeapplication.class_pothole.DataEditor;
+import com.example.potholeapplication.class_pothole.LocaleManager;
 import com.example.potholeapplication.class_pothole.response.User;
 import com.example.potholeapplication.class_pothole.request.EditInfoReq;
 import com.example.potholeapplication.class_pothole.RetrofitServices;
@@ -61,6 +62,7 @@ public class EditUserActivity extends AppCompatActivity {
         setClickEvent();
         CallGetImageAPI();
         setImageInfo();
+
     }
 
     @Override
@@ -68,7 +70,10 @@ public class EditUserActivity extends AppCompatActivity {
         super.onResume();
         //cai dat thong tin user
         setUserInfo();
-
+    }
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(LocaleManager.updateLanguage(newBase));
     }
     public void setImageInfo(){
         binding.imaUser.setImageBitmap(DataEditor.getImageBitmapFromSharePreferences(context));

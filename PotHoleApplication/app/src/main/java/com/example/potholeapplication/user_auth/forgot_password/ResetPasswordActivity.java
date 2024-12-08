@@ -18,6 +18,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.potholeapplication.R;
+import com.example.potholeapplication.class_pothole.LocaleManager;
 import com.example.potholeapplication.class_pothole.RetrofitServices;
 import com.example.potholeapplication.class_pothole.response.ApiResponse;
 import com.example.potholeapplication.class_pothole.request.ResetPasswordReq;
@@ -55,6 +56,11 @@ public class ResetPasswordActivity extends AppCompatActivity {
         getStringEmail();
         setClickEvent();
     }
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(LocaleManager.updateLanguage(newBase));
+    }
+
     public void setClickEvent(){
         binding.btnResetPassword.setOnClickListener(new View.OnClickListener() {
             @Override

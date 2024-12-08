@@ -14,6 +14,7 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.potholeapplication.R;
 import com.example.potholeapplication.class_pothole.CustomDialog;
+import com.example.potholeapplication.class_pothole.LocaleManager;
 import com.example.potholeapplication.class_pothole.request.EmailReq;
 import com.example.potholeapplication.class_pothole.RetrofitServices;
 import com.example.potholeapplication.class_pothole.response.ApiResponse;
@@ -47,18 +48,27 @@ public class ForgotPasswordVerificationActivity extends AppCompatActivity {
         setClickEvent();
         callAPiSendCode();
     }
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(LocaleManager.updateLanguage(newBase));
+    }
     public void setClickEvent(){
         binding.btnVerification.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(!binding.etCodeInput.getText().toString().trim().equals(code)){
                     CustomDialog.showDialogErrorString(context,getString(R.string.str_wrong_code));
+                }else{
+                    Intent intent=new Intent(ForgotPasswordVerificationActivity.this,
+                            ResetPasswordActivity.class);
+                    intent.putExtra("email",emailForResetPassword);
+                    startActivity(intent);
                 }
 
-                Intent intent=new Intent(ForgotPasswordVerificationActivity.this,
-                        ResetPasswordActivity.class);
-                intent.putExtra("email",emailForResetPassword);
-                startActivity(intent);
             }
         });
         binding.btnBack.setOnClickListener(new View.OnClickListener() {

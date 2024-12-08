@@ -1,7 +1,9 @@
 package com.example.potholeapplication.user_auth.login;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
@@ -17,6 +19,7 @@ import com.example.potholeapplication.HomeScreenActivity;
 import com.example.potholeapplication.R;
 import com.example.potholeapplication.class_pothole.CustomDialog;
 import com.example.potholeapplication.class_pothole.DataEditor;
+import com.example.potholeapplication.class_pothole.LocaleManager;
 import com.example.potholeapplication.class_pothole.request.EmailReq;
 import com.example.potholeapplication.class_pothole.request.LoginReq;
 import com.example.potholeapplication.class_pothole.RetrofitServices;
@@ -54,6 +57,11 @@ public class LoginScreenActivity extends AppCompatActivity {
         });
         context=this;
         setClickEvent();
+    }
+    @Override
+    protected void onResume() {
+        super.onResume();
+
 
     }
     public void callLoginAPI(){
@@ -93,6 +101,10 @@ public class LoginScreenActivity extends AppCompatActivity {
             }
         });
 
+    }
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(LocaleManager.updateLanguage(newBase));
     }
 
 
@@ -211,6 +223,12 @@ public class LoginScreenActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent=new Intent(LoginScreenActivity.this, ForgotPasswordActivity.class);
                 startActivity(intent);
+            }
+        });
+        binding.imaBtnChooseLanguage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                CustomDialog.showDialogLanguage(context);
             }
         });
     }

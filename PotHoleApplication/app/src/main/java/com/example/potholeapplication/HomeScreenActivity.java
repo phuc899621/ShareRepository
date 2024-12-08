@@ -1,9 +1,13 @@
 package com.example.potholeapplication;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -14,6 +18,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.potholeapplication.class_pothole.DataEditor;
+import com.example.potholeapplication.class_pothole.LocaleManager;
 import com.example.potholeapplication.databinding.ActivityHomeScreenBinding;
 import com.github.mikephil.charting.charts.LineChart;
 
@@ -37,12 +42,20 @@ public class HomeScreenActivity extends AppCompatActivity {
         setDisplay();
     }
     @Override
+    protected void onResume() {
+        super.onResume();
+
+    }
+    @Override
     protected void onStart() {
         super.onStart();
         setDisplay();
     }
 
-
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(LocaleManager.updateLanguage(newBase));
+    }
 
     public void setClickEvent(){
         binding.maplayout.setOnClickListener(new View.OnClickListener() {

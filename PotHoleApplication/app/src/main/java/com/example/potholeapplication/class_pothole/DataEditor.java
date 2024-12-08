@@ -85,4 +85,38 @@ public class DataEditor {
         editor.putBoolean("login",true);
         editor.apply();
     }
+    public static String getLanguagePreferences(Context context) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences(
+                "language", MODE_PRIVATE
+        );
+        if (!sharedPreferences.contains("language")) {
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putString("language", "en");
+            editor.apply();
+            return "en";
+        }
+        return sharedPreferences.getString("language","en");
+
+    }
+    public static void saveLanguagePreferences(Context context,String language) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences(
+                "language", MODE_PRIVATE
+        );
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString("language", language);
+        editor.apply();
+
+    }
+    public static String getEnableRealTimeDetection(Context context){
+        SharedPreferences sharedPreferences = context.getSharedPreferences(
+                "realtime_detection", MODE_PRIVATE
+        );
+        if (!sharedPreferences.contains("enable")) {
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putString("enable", "false");
+            editor.apply();
+            return "false";
+        }
+        return sharedPreferences.getString("enable","false");
+    }
 }

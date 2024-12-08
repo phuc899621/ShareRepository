@@ -1,9 +1,14 @@
 package com.example.potholeapplication;
 
+import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -11,6 +16,8 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.potholeapplication.class_pothole.DataEditor;
+import com.example.potholeapplication.class_pothole.LocaleManager;
 import com.example.potholeapplication.databinding.ActivitySplashScreenBinding;
 import com.example.potholeapplication.pothole_service.SensorService;
 import com.example.potholeapplication.user_auth.login.LoginScreenActivity;
@@ -29,8 +36,6 @@ public class SplashScreenActivity extends AppCompatActivity {
             return insets;
         });
         setClickEvent();
-        Intent intent = new Intent(this, SensorService.class);
-        startService(intent);
 
     }
     public void setClickEvent(){
@@ -54,6 +59,10 @@ public class SplashScreenActivity extends AppCompatActivity {
                 finish();
             }
         },1500);
+    }
 
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(LocaleManager.updateLanguage(newBase));
     }
 }

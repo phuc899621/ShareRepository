@@ -218,7 +218,7 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:gravity="center|top"
-                    android:text="@string/str_fixed_npotholes"
+                    android:text="@string/str_fixed_potholes"
                     android:textColor="@color/white"
                     android:textSize="14sp" />
             </LinearLayout>

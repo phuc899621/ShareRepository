@@ -36,7 +36,6 @@
     <string name="str_back_to_login">Back to Login</string>
     <string name="str_sign_up">Sign up</string>
     <string name="str_forgot_password">Forgot password</string>
-    <string name="API_KEY" translatable="false">AIzaSyDsbnsjqLNP9xWbj4EhGBPT-VwwgdtvXvM</string>
     <string name="str_login_successful">Login successful</string>
     <string name="str_confirm">Confirm</string>
     <string name="str_please_enter_your_email">Please enter your email</string>
@@ -54,16 +53,15 @@
     <string name="str_please_enter_your_new_email">Please enter your new email</string>
     <string name="str_old_password">Old password</string>
     <string name="str_email_not_found">Email not found</string>
-    <string name="str_secret_password" translatable="false">****************</string>
     <string name="str_please_enter_username_and_password">Please enter username and password</string>
     <string name="str_null_bundle">Null bundle</string>
     <string name="str_enter_name_and_username">Please enter full name and username</string>
     <string name="str_change_email_successfully">Change email successfully</string>
     <string name="str_total_reports">Total \nreports</string>
     <string name="str_distance_traveled">Distance \ttraveled</string>
-    <string name="str_fixed_potholes">Fixed \\npotholes</string>
+    <string name="str_fixed_potholes">Fixed \npotholes</string>
     <string name="str_golden_member">Golden \nMember</string>
-    <string name="str_report_you_have_made">Report \you have \made</string>
+    <string name="str_report_you_have_made">Report \nyou have \nmade</string>
     <string name="str_edit_user">Edit user</string>
     <string name="str_use_current_location">use current location</string>
     <string name="str_choose_your_language">Choose your language</string>

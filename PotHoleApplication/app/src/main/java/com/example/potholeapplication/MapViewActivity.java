@@ -30,6 +30,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.potholeapplication.class_pothole.LocaleManager;
 import com.example.potholeapplication.databinding.ActivityMapViewBinding;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -102,7 +103,14 @@ public class MapViewActivity extends AppCompatActivity {
         init();
         //xin quyen
         permissionChecking();
-
+    }
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(LocaleManager.updateLanguage(newBase));
     }
     public void init(){
         context=this;
