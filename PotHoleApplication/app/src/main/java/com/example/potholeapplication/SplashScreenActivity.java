@@ -36,6 +36,8 @@ public class SplashScreenActivity extends AppCompatActivity {
             return insets;
         });
         setClickEvent();
+        Intent serviceIntent = new Intent(this, SensorService.class);
+        startService(serviceIntent);
 
     }
     public void setClickEvent(){
