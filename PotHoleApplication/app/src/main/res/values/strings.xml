@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">PotHoleApplication</string>
+<!--    <string name="str_sign_in">Sign in</string>-->
     <string name="str_email">Email</string>
     <string name="str_username">Username</string>
     <string name="str_password">Password</string>
@@ -17,28 +18,42 @@
     <string name="str_unknown">Unknown</string>
     <string name="str_create_an_account">Create an account</string>
     <string name="str_edit_user_profile">Edit user profile</string>
-    <string name="str_your_username">Your username</string>
+    <string name="str_your_username">Your user name</string>
     <string name="str_name">Name</string>
     <string name="str_save">Save</string>
     <string name="str_reset_password">Reset password</string>
     <string name="str_new_password">New password</string>
     <string name="str_setting">Setting</string>
     <string name="str_real_time_detection">Real time detection</string>
+<!--    <string name="str_6">6</string>-->
+<!--    <string name="str_300">300</string>-->
+<!--    <string name="str_your_reports">Your reports</string>-->
     <string name="str_points">Points</string>
+<!--    <string name="str_member_type">Member type</string>-->
     <string name="str_notification">Notification</string>
+<!--    <string name="str_select_language">Select language</string>-->
     <string name="str_logout">Logout</string>
     <string name="str_map_downcase">Map</string>
     <string name="str_analytics">Analytics</string>
     <string name="str_community">Community</string>
+<!--    <string name="str_report">Report</string>-->
     <string name="str_ranking">Ranking</string>
     <string name="str_forgot_your_password">Forgot your password?</string>
+<!--    <string name="str_search_your_location">Search your location</string>-->
     <string name="str_change_password_successful">Change password successful!</string>
     <string name="str_back_to_login">Back to Login</string>
     <string name="str_sign_up">Sign up</string>
+<!--    <string name="str_home">Home</string>-->
     <string name="str_forgot_password">Forgot password</string>
+<!--    <string name="str_forgot_reset">Your password has been sent to your registered email.-->
+<!--Please click on Reset Password below to go to the new password setup screen!</string>-->
     <string name="API_KEY" translatable="false">AIzaSyDsbnsjqLNP9xWbj4EhGBPT-VwwgdtvXvM</string>
+<!--    <string name="ServerURL">null</string>-->
+<!--    <string name="LocalhostURL">http://localhost:8000/api/user/auth</string>-->
     <string name="str_login_successful">Login successful</string>
+<!--    <string name="ok">Ok</string>-->
     <string name="str_confirm">Confirm</string>
+<!--    <string name="str_sign_up_successful">Sign up successful</string>-->
     <string name="str_please_enter_your_email">Please enter your email</string>
     <string name="send_verification_code">Send Verification Code</string>
     <string name="str_enter_code_reset_password">Code have been sent to your email. Please enter your verification code below</string>
@@ -60,10 +75,11 @@
     <string name="str_enter_name_and_username">Please enter full name and username</string>
     <string name="str_change_email_successfully">Change email successfully</string>
     <string name="str_total_reports">Total \nreports</string>
-    <string name="str_distance_traveled">Distance \ttraveled</string>
-    <string name="str_fixed_potholes">Fixed \\npotholes</string>
-    <string name="str_golden_member">Golden \nMember</string>
-    <string name="str_report_you_have_made">Report \you have \made</string>
+    <string name="str_distance_traveled">Distance \ntraveled</string>
+<!--    <string name="str_fixed_npotholes">Fixed \npotholes</string>-->
+<!--    <string name="str_golden_nmember">Golden \nMember</string>-->
+<!--    <string name="str_report_nyou_have_nmade">Report \nyou have \nmade</string>-->
+<!--    <string name="str_edit_user_infomation">Edit user infomation</string>-->
     <string name="str_edit_user">Edit user</string>
     <string name="str_use_current_location">use current location</string>
     <string name="str_choose_your_language">Choose your language</string>
@@ -75,4 +91,9 @@
     <string name="str_user_not_found">User not found</string>
     <string name="str_username_already_exists">Username already exists</string>
     <string name="str_email_already_exists">Email already exists</string>
+    <string name="str_fixed_potholes">Fixed  potholes</string>
+    <string name="str_golden_member">"Golden "</string>
+    <string name="str_report_you_have_made">Report  you have  made</string>
+    <string name="str_pothole_classification" translatable="false"> Pothole classification</string>
+    <string name="str_day_month_analytics" translatable="false">Jan 01 - Jan 08</string>
 </resources>
