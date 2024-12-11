@@ -77,18 +77,18 @@
         tools:layout_editor_absoluteX="20dp">
 
         <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guideLeftSheet12"
+            android:id="@+id/guideLeftSheet16"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.12" />
+            app:layout_constraintGuide_percent="0.25" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideRightSheet88"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.88" />
+            app:layout_constraintGuide_percent="0.74" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideLeftSheet6"
@@ -102,7 +102,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.94" />
+            app:layout_constraintGuide_percent="0.99" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideBottomSheet"
@@ -140,20 +140,24 @@
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/cardViewBackground"
-            android:layout_width="376dp"
-            android:layout_height="248dp"
-            android:scaleType="centerCrop"
+            android:layout_width="360dp"
+            android:layout_height="240dp"
+            android:layout_marginVertical="30dp"
+            android:layout_marginHorizontal="20dp"
+            android:elevation="30dp"
+
+            android:scaleType="fitCenter"
             android:src="@drawable/corner_sheet"
             app:cardCornerRadius="40dp"
-            app:layout_constraintStart_toStartOf="@id/guideLeftSheet12"
+            app:layout_constraintStart_toStartOf="@id/guideLeftSheet16"
             app:layout_constraintEnd_toEndOf="@id/guideRightSheet88"
             app:layout_constraintTop_toBottomOf="@+id/tvDayMonth"
             android:layout_marginTop="13dp">
 
             <com.github.mikephil.charting.charts.BarChart
                 android:id="@+id/idBarChart"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_width="355dp"
+                android:layout_height="235dp" />
 
         </com.google.android.material.card.MaterialCardView>
 
