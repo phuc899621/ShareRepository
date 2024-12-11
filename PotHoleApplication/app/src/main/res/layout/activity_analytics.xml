@@ -141,11 +141,12 @@
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/cardViewBackground"
             android:layout_width="376dp"
-            android:layout_height="278dp"
-            android:scaleType="fitCenter"
+            android:layout_height="248dp"
+            android:scaleType="centerCrop"
             android:src="@drawable/corner_sheet"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            app:cardCornerRadius="40dp"
+            app:layout_constraintStart_toStartOf="@id/guideLeftSheet12"
+            app:layout_constraintEnd_toEndOf="@id/guideRightSheet88"
             app:layout_constraintTop_toBottomOf="@+id/tvDayMonth"
             android:layout_marginTop="13dp">
 

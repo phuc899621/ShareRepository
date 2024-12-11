@@ -68,7 +68,8 @@ public class HomeScreenActivity extends AppCompatActivity {
         binding.analyticslayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(context,"HI",Toast.LENGTH_LONG).show();
+                Intent intent=new Intent(HomeScreenActivity.this,AnalyticsActivity.class);
+                startActivity(intent);
             }
         });
         binding.btnSetting.setOnClickListener(new View.OnClickListener() {
