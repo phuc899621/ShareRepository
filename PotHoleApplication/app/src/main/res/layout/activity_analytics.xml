@@ -30,38 +30,34 @@
 
     <FrameLayout
         android:id="@+id/titleLayout"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintBottom_toTopOf="@+id/guideTop"
-        app:layout_constraintLeft_toRightOf="@id/guideLeft"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         >
 
         <ImageButton
             android:id="@+id/btnBack"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:background="@android:color/transparent"
+            android:layout_margin="10dp"
             android:src="@drawable/ic_back"
             app:tint="@color/dark_purple"
-            app:layout_constraintLeft_toRightOf="@id/guideLeft"
-            />
+            android:layout_gravity="center_vertical|start" />
 
         <TextView
             android:id="@+id/tvAnalytics"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="80dp"
+            android:layout_gravity="center"
             android:text="@string/str_analytics"
             android:textColor="@color/dark_purple"
-            android:textSize="40sp"
+            android:textSize="24dp"
             android:textStyle="bold"
-            app:layout_constraintBottom_toTopOf="@+id/guideTop"
-            app:layout_constraintLeft_toRightOf="@id/guideLeft"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="1.0" />
+            />
     </FrameLayout>
-
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -77,11 +73,18 @@
         tools:layout_editor_absoluteX="20dp">
 
         <androidx.constraintlayout.widget.Guideline
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/guideMiddleSheet"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.5"/>
+
+        <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideLeftSheet16"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.25" />
+            app:layout_constraintGuide_percent="0.16" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideRightSheet88"
@@ -117,49 +120,112 @@
             android:orientation="horizontal"
             app:layout_constraintGuide_percent="0.01"
             android:id="@+id/guideTopSheet"/>
-        <TextView
-            android:id="@+id/tvClassification"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/str_pothole_classification"
-            android:textColor="@color/dark_purple"
-            android:textStyle="bold"
-            android:textSize="20dp"
-            app:layout_constraintTop_toBottomOf="@+id/guideTopSheet"
-            app:layout_constraintLeft_toLeftOf="@id/guideLeftSheet6" />
-        <TextView
-            android:id="@+id/tvDayMonth"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/str_day_month_analytics"
-            android:textColor="@color/dark_purple"
-            android:textStyle="normal"
-            android:textSize="15dp"
-            app:layout_constraintLeft_toLeftOf="@id/guideLeftSheet6"
-            app:layout_constraintTop_toBottomOf="@id/tvClassification" />
 
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/cardViewBackground"
-            android:layout_width="360dp"
-            android:layout_height="240dp"
-            android:layout_marginVertical="30dp"
-            android:layout_marginHorizontal="20dp"
-            android:elevation="30dp"
+        <LinearLayout
 
-            android:scaleType="fitCenter"
-            android:src="@drawable/corner_sheet"
-            app:cardCornerRadius="40dp"
-            app:layout_constraintStart_toStartOf="@id/guideLeftSheet16"
-            app:layout_constraintEnd_toEndOf="@id/guideRightSheet88"
-            app:layout_constraintTop_toBottomOf="@+id/tvDayMonth"
-            android:layout_marginTop="13dp">
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/guideMiddleSheet"
+            >
 
-            <com.github.mikephil.charting.charts.BarChart
-                android:id="@+id/idBarChart"
-                android:layout_width="355dp"
-                android:layout_height="235dp" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:layout_weight="1">
 
-        </com.google.android.material.card.MaterialCardView>
+                <TextView
+                    android:id="@+id/tvClassification"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/str_pothole_classification"
+                    android:textColor="@color/dark_purple"
+                    android:textStyle="bold"
+                    android:textSize="20dp"
+                    app:layout_constraintTop_toBottomOf="@+id/guideTopSheet"
+                    app:layout_constraintLeft_toLeftOf="@id/guideLeftSheet6" />
+                <TextView
+                    android:id="@+id/tvDayMonthBarChart"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/str_day_month_analytics"
+                    android:textColor="@color/dark_purple"
+                    android:textStyle="normal"
+                    android:textSize="15dp"
+                    app:layout_constraintLeft_toLeftOf="@id/guideLeftSheet6"
+                    app:layout_constraintTop_toBottomOf="@id/tvClassification" />
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/cardViewbarChart"
+                    android:layout_width="360dp"
+                    android:layout_height="240dp"
+                    android:layout_marginVertical="10dp"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/corner_sheet"
+                    app:cardCornerRadius="40dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tvClassification"
+                    >
+
+                    <com.github.mikephil.charting.charts.BarChart
+                        android:id="@+id/idBarChart"
+                        android:layout_width="355dp"
+                        android:layout_height="235dp" />
+
+                </com.google.android.material.card.MaterialCardView>
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                >
+
+                <TextView
+                    android:id="@+id/tvMonthlyPotholes"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/str_pothole_classification"
+                    android:textColor="@color/dark_purple"
+                    android:textStyle="bold"
+                    android:textSize="20dp"
+                    app:layout_constraintTop_toBottomOf="@+id/guideTopSheet"
+                    app:layout_constraintLeft_toLeftOf="@id/guideLeftSheet6" />
+                <TextView
+                    android:id="@+id/tvDayMonthPieChart"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/str_day_month_analytics"
+                    android:textColor="@color/dark_purple"
+                    android:textStyle="normal"
+                    android:textSize="15dp"
+                    app:layout_constraintLeft_toLeftOf="@id/guideLeftSheet6"
+                    app:layout_constraintTop_toBottomOf="@id/tvClassification" />
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/cardViewPieChart"
+                    android:layout_width="360dp"
+                    android:layout_height="240dp"
+                    android:layout_marginVertical="10dp"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/corner_sheet"
+                    app:cardCornerRadius="40dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tvClassification"
+                    android:layout_marginTop="13dp">
+
+                    <com.github.mikephil.charting.charts.BarChart
+                        android:id="@+id/idPieChart"
+                        android:layout_width="355dp"
+                        android:layout_height="235dp" />
+
+                </com.google.android.material.card.MaterialCardView>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
 
 
 
