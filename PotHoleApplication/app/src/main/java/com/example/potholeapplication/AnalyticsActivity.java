@@ -2,6 +2,7 @@ package com.example.potholeapplication;
 
 import android.graphics.Color;
 import android.os.Bundle;
+import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -9,6 +10,8 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.potholeapplication.databinding.ActivityAnalyticsBinding;
+import com.example.potholeapplication.databinding.ActivityHomeScreenBinding;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.data.BarData;
@@ -16,33 +19,44 @@ import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
 
+import org.eazegraph.lib.charts.PieChart;
+import org.eazegraph.lib.models.PieModel;
+
 import java.util.ArrayList;
 
 public class AnalyticsActivity extends AppCompatActivity {
 
+    ActivityAnalyticsBinding binding;
     BarChart barChart;
-
-    // Variables for bar data sets
     BarDataSet barDataSet1, barDataSet2;
-
     // ArrayList for storing entries
     ArrayList<BarEntry> barEntries;
-
     // Creating a string array for displaying days
-    String[] days = new String[]{"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
+    String[] days = new String[]{"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
+
+    PieChart pieChart;
+    TextView tvLarge, tvMedium, tvSmall;
+    // Variables for bar data sets
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        binding=ActivityAnalyticsBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
-        setContentView(R.layout.activity_analytics);
-        barChart = findViewById(R.id.idBarChart);
+        barChart = binding.idBarChart;
 
-        // Creating a new bar data set
+        pieChart = binding.idPieChart;
+        tvLarge = binding.tvLargePercentage;
+        tvMedium = binding.tvMediumPercentage;
+        tvSmall = binding.tvSmallPercentage;
+
+        //BAR CHART
+        // Creating a new bar data set*
         barDataSet1 = new BarDataSet(getBarEntriesOne(), "First Set");
-        barDataSet1.setColor(getApplicationContext().getResources().getColor(R.color.purple));
+        barDataSet1.setColor(getApplicationContext().getResources().getColor(R.color.large));
         barDataSet2 = new BarDataSet(getBarEntriesTwo(), "Second Set");
-        barDataSet2.setColor(Color.BLUE);
+        barDataSet2.setColor(getApplicationContext().getResources().getColor(R.color.medium));
 
         // Adding bar data sets to the bar data
         BarData data = new BarData(barDataSet1, barDataSet2);
@@ -98,6 +112,8 @@ public class AnalyticsActivity extends AppCompatActivity {
 
         // Invalidating the bar chart
         barChart.invalidate();
+        setData();
+        pieChart.invalidate();
     }
 
     // ArrayList for the first set of bar entries
@@ -131,4 +147,18 @@ public class AnalyticsActivity extends AppCompatActivity {
 
         return barEntries;
     }
+
+    // PIE CHART
+    private void setData(){
+        tvLarge.setText(Integer.toString(40));
+        tvMedium.setText(Integer.toString(30));
+        tvSmall.setText(Integer.toString(30));
+
+        pieChart.addPieSlice(new PieModel("Large", Integer.parseInt(tvLarge.getText().toString()), Color.parseColor("#3B1E54")));
+        pieChart.addPieSlice(new PieModel("Medium", Integer.parseInt(tvMedium.getText().toString()), Color.parseColor("#9B7EBD")));
+        pieChart.addPieSlice(new PieModel("Small", Integer.parseInt(tvSmall.getText().toString()), Color.parseColor("#D4BEE4")));;
+        pieChart.startAnimation();
+    }
+
+
 }

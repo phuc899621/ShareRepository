@@ -161,6 +161,7 @@
                     android:layout_width="360dp"
                     android:layout_height="240dp"
                     android:layout_marginVertical="10dp"
+                    app:cardElevation="4dp"
                     android:scaleType="fitCenter"
                     android:src="@drawable/corner_sheet"
                     app:cardCornerRadius="40dp"
@@ -171,7 +172,8 @@
                     <com.github.mikephil.charting.charts.BarChart
                         android:id="@+id/idBarChart"
                         android:layout_width="355dp"
-                        android:layout_height="235dp" />
+                        android:layout_height="235dp"
+                        android:layout_marginRight="10dp"/>
 
                 </com.google.android.material.card.MaterialCardView>
 
@@ -211,6 +213,7 @@
                     android:scaleType="fitCenter"
                     android:src="@drawable/corner_sheet"
                     app:cardCornerRadius="40dp"
+                    app:cardElevation="4dp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/tvClassification"
                     android:layout_marginTop="13dp">
@@ -223,7 +226,7 @@
 
                         <org.eazegraph.lib.charts.PieChart
                             xmlns:app="http://schemas.android.com/apk/res-auto"
-                            android:id="@+id/piechart"
+                            android:id="@+id/idPieChart"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:padding="6dp"
@@ -240,68 +243,89 @@
                             android:gravity="center_vertical">
                             <LinearLayout
                                 android:layout_width="match_parent"
-                                android:layout_height="15dp"
+                                android:layout_height="17dp"
+                                android:layout_marginTop="10dp"
                                 android:layout_gravity="center_vertical">
                                 <View
                                     android:layout_width="15dp"
                                     android:layout_height="match_parent"
-                                    android:background="@color/R"/>
+                                    android:background="@color/large"/>
                                 <TextView
+                                    android:id="@+id/tvLarge"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="R"
+                                    android:text="Large"
                                     android:paddingLeft="10dp"/>
+                                <TextView
+                                    android:id="@+id/tvLargePercentage"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="0"
+                                    android:layout_marginRight="10dp"
+                                    android:textAlignment="textEnd"
+                                    android:textColor="@color/dark_purple"
+                                    android:textStyle="bold"
+                                    android:fontFamily="sans-serif-light"
+                                    />
 
                             </LinearLayout>
                             <LinearLayout
                                 android:layout_width="match_parent"
-                                android:layout_height="15dp"
+                                android:layout_height="17dp"
                                 android:layout_gravity="center_vertical"
-                                android:layout_marginTop="5dp">
+                                android:layout_marginTop="10dp">
                                 <View
                                     android:layout_width="15dp"
                                     android:layout_height="match_parent"
-                                    android:background="@color/Python"/>
+                                    android:background="@color/medium"/>
                                 <TextView
+                                    android:id="@+id/tvMedium"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="Python"
+                                    android:text="Medium"
                                     android:paddingLeft="10dp"/>
+                                <TextView
+                                    android:id="@+id/tvMediumPercentage"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="0"
+                                    android:layout_marginRight="10dp"
+                                    android:textStyle="bold"
+                                    android:textAlignment="textEnd"
+                                    android:textColor="@color/dark_purple"
+                                    android:fontFamily="sans-serif-light"
+                                    />
 
                             </LinearLayout>
 
                             <LinearLayout
                                 android:layout_width="match_parent"
-                                android:layout_height="15dp"
+                                android:layout_height="17dp"
                                 android:layout_gravity="center_vertical"
-                                android:layout_marginTop="5dp">
+                                android:layout_marginTop="10dp">
                                 <View
                                     android:layout_width="15dp"
                                     android:layout_height="match_parent"
-                                    android:background="@color/CPP"/>
+                                    android:background="@color/small"/>
                                 <TextView
+                                    android:id="@+id/tvSmall"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="C++"
+                                    android:text="Small"
                                     android:paddingLeft="10dp"/>
-
-                            </LinearLayout>
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="15dp"
-                                android:layout_gravity="center_vertical"
-                                android:layout_marginTop="5dp">
-                                <View
-                                    android:layout_width="15dp"
-                                    android:layout_height="match_parent"
-                                    android:background="@color/Java"/>
                                 <TextView
-                                    android:layout_width="wrap_content"
+                                    android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:text="Java"
-                                    android:paddingLeft="10dp"/>
+                                    android:id="@+id/tvSmallPercentage"
+                                    android:text="0"
+                                    android:layout_marginRight="10dp"
+                                    android:textStyle="bold"
+                                    android:textAlignment="textEnd"
+                                    android:textColor="@color/dark_purple"
+                                    android:fontFamily="sans-serif-light"
+                                    />
                             </LinearLayout>
+
                         </LinearLayout>
 
 
