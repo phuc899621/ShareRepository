@@ -17,9 +17,11 @@ import android.widget.TextView;
 import com.example.potholeapplication.R;
 import com.example.potholeapplication.SplashScreenActivity;
 import com.example.potholeapplication.class_pothole.response.ApiResponse;
+import com.google.android.material.button.MaterialButton;
 import com.google.android.material.card.MaterialCardView;
 
 public class CustomDialog {
+    private static boolean isDialogShowing=false;
     public static void showDialogOkeThenFinish(Context context, String title){
         Dialog dialog=new Dialog(context);
         dialog.setContentView(R.layout.custom_dialog_oke);
@@ -176,5 +178,50 @@ public class CustomDialog {
                 ((Activity)context).finish();
             }
         });
+    }
+    public static void showDialogSavePothole(Context context,double longtitude,
+                                      double latitude,String severity){
+        Dialog dialog=new Dialog(context);
+        dialog.setContentView(R.layout.custom_dialog_save_pothole);
+        dialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+        dialog.setCancelable(true);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+
+        TextView tvLatitude=dialog.findViewById(R.id.tvLatitude);
+        TextView tvLongtitude=dialog.findViewById(R.id.tvLongtitude);
+        TextView tvSeverity=dialog.findViewById(R.id.tvSeverity);
+        MaterialButton btnYes=dialog.findViewById(R.id.btnYes);
+        MaterialButton btnNo=dialog.findViewById(R.id.btnNo);
+
+        tvLatitude.setText(context.getString(R.string.str_latitude)+": "+
+                latitude);
+        tvLongtitude.setText(context.getString(R.string.str_longtitude)+": "+
+                longtitude);
+        tvSeverity.setText(context.getString(R.string.str_severity)+": "+
+                severity);
+        dialog.show();
+        setIsDialogShowing(true);
+        btnYes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                setIsDialogShowing(false);
+            }
+        });
+        btnNo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                setIsDialogShowing(false);
+            }
+        });
+    }
+
+    public static boolean isIsDialogShowing() {
+        return isDialogShowing;
+    }
+
+    public static void setIsDialogShowing(boolean isDialogShowing) {
+        CustomDialog.isDialogShowing = isDialogShowing;
     }
 }

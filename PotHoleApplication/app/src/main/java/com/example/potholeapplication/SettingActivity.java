@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.view.View;
+import android.widget.CompoundButton;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -18,6 +19,7 @@ import com.example.potholeapplication.class_pothole.DataEditor;
 import com.example.potholeapplication.class_pothole.LocaleManager;
 import com.example.potholeapplication.databinding.ActivitySettingBinding;
 import com.example.potholeapplication.edit_user.EditUserActivity;
+import com.example.potholeapplication.pothole_service.SensorService;
 
 public class SettingActivity extends AppCompatActivity {
     ActivitySettingBinding binding;
@@ -43,10 +45,15 @@ public class SettingActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         setData();
+        setSwitchRealtime();
     }
     public void setData(){
         binding.tvUsername.setText(DataEditor.getNameFromSharePreferences(context));
         binding.imaPicture.setImageBitmap(DataEditor.getImageBitmapFromSharePreferences(context));
+    }
+    public void setSwitchRealtime(){
+        boolean isCheck=DataEditor.getEnableRealTimeDetection(this);
+        binding.switchRealtime.setChecked(isCheck);
     }
 
     public void setClickEvent(){
@@ -91,6 +98,18 @@ public class SettingActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 CustomDialog.showDialogLanguage(context);
+            }
+        });
+        binding.switchRealtime.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                DataEditor.setEnableRealTimeDetection(context,isChecked);
+                Intent serviceIntent = new Intent(context, SensorService.class);
+                if(isChecked){
+                    startService(serviceIntent);
+                }else{
+                    stopService(serviceIntent);
+                }
             }
         });
     }

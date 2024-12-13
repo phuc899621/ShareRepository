@@ -9,6 +9,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.util.Base64;
+import android.util.Log;
 
 import com.example.potholeapplication.class_pothole.response.User;
 
@@ -107,7 +108,7 @@ public class DataEditor {
         editor.apply();
 
     }
-    public static String getEnableRealTimeDetection(Context context){
+    public static boolean getEnableRealTimeDetection(Context context){
         SharedPreferences sharedPreferences = context.getSharedPreferences(
                 "realtime_detection", MODE_PRIVATE
         );
@@ -115,8 +116,32 @@ public class DataEditor {
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.putString("enable", "false");
             editor.apply();
-            return "false";
+            Log.d("Enable",sharedPreferences.getString("enable", "false"));
+            return false;
         }
-        return sharedPreferences.getString("enable","false");
+        if(sharedPreferences.getString("enable", "false").equals("true")){
+            Log.d("Enable",sharedPreferences.getString("enable", "false"));
+            return true;
+        }else{
+            Log.d("Enable",sharedPreferences.getString("enable", "false"));
+            return  false;
+        }
+
+    }
+    public static boolean setEnableRealTimeDetection(Context context,Boolean enable) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences(
+                "realtime_detection", MODE_PRIVATE
+        );
+        if (!sharedPreferences.contains("enable")) {
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putString("enable", "false");
+            editor.apply();
+            return false;
+        } else {
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putString("enable", enable.toString());
+            editor.apply();
+            return enable;
+        }
     }
 }

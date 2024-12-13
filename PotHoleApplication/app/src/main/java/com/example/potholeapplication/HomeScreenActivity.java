@@ -1,8 +1,10 @@
 package com.example.potholeapplication;
 
 import android.annotation.SuppressLint;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.Resources;
@@ -17,6 +19,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.potholeapplication.class_pothole.CustomDialog;
 import com.example.potholeapplication.class_pothole.DataEditor;
 import com.example.potholeapplication.class_pothole.LocaleManager;
 import com.example.potholeapplication.databinding.ActivityHomeScreenBinding;
@@ -40,6 +43,7 @@ public class HomeScreenActivity extends AppCompatActivity {
         context=this;
         setClickEvent();
         setDisplay();
+        setReceivePotholeAlert();
     }
     @Override
     protected void onResume() {
@@ -55,6 +59,28 @@ public class HomeScreenActivity extends AppCompatActivity {
     @Override
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(LocaleManager.updateLanguage(newBase));
+    }
+
+    //nhan thong bao ve pothole tu services
+    private final BroadcastReceiver potholeReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if ("com.example.SHOW_DIALOG".equals(intent.getAction())) {
+                double latitude = intent.getDoubleExtra("latitude", 0);
+                double longitude = intent.getDoubleExtra("longitude", 0);
+                String severity= intent.getStringExtra("severity");
+                Toast.makeText(context, severity, Toast.LENGTH_SHORT).show();
+                if(!CustomDialog.isIsDialogShowing()) {
+                    CustomDialog.showDialogSavePothole(context,
+                            longitude, latitude, severity);
+                }
+            }
+        }
+    };
+    @SuppressLint("UnspecifiedRegisterReceiverFlag")
+    public void setReceivePotholeAlert(){
+        IntentFilter filter = new IntentFilter("com.example.SHOW_DIALOG");
+        registerReceiver(potholeReceiver, filter);
     }
 
     public void setClickEvent(){

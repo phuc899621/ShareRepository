@@ -74,4 +74,10 @@
     <string name="str_user_not_found">Không tìm thấy người dùng</string>
     <string name="str_username_already_exists">Tên đăng nhập đã tồn tại</string>
     <string name="str_email_already_exists">Email đã tồn tại</string>
+    <string name="str_save_this_pothole">Lưu ổ gà này?</string>
+    <string name="str_longtitude">Kinh độ</string>
+    <string name="str_latitude">Vĩ độ</string>
+    <string name="str_severity">Mức độ</string>
+    <string name="str_yes">Vâng</string>
+    <string name="str_no">Không</string>
 </resources>

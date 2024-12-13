@@ -36,9 +36,16 @@ public class SplashScreenActivity extends AppCompatActivity {
             return insets;
         });
         setClickEvent();
-        Intent serviceIntent = new Intent(this, SensorService.class);
-        startService(serviceIntent);
+        checkRealtimePothole();
 
+    }
+    public void checkRealtimePothole(){
+        Intent serviceIntent = new Intent(this, SensorService.class);
+        if(DataEditor.getEnableRealTimeDetection(this)){
+            startService(serviceIntent);
+        }else{
+            stopService(serviceIntent);
+        }
     }
     public void setClickEvent(){
         Handler handler=new Handler();

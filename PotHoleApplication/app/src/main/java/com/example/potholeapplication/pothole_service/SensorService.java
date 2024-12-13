@@ -107,9 +107,19 @@ public class SensorService extends Service {
         if (lastLinear > 10) {
             double latitude = gpsListener.latitude;
             double longitude = gpsListener.longitude;
+            Intent intent = new Intent("com.example.SHOW_DIALOG");
+            intent.putExtra("latitude", latitude);
+            intent.putExtra("longitude", longitude);
+            intent.putExtra("severity",getPotholeSeverity(lastLinear));
+            sendBroadcast(intent);
             vibratePhone();
             System.out.println("Pothole detected"+lastLinear+ " at: " + latitude + ", " + longitude);
         }
+    }
+    private String getPotholeSeverity(double lastLinear){
+        if(lastLinear>30) return "large";
+        if(lastLinear>20) return "medium";
+        return "small";
     }
 
     public SensorService() {
@@ -119,16 +129,9 @@ public class SensorService extends Service {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        /*stopSelf();
-        sensorManager.unregisterListener(this);
-        Log.d("Services","Service stopped");*/
         sensorManager.unregisterListener(accelerometerListener);
         locationManager.removeUpdates(gpsListener);
     }
-    /*    @Override
-    public int onStartCommand(Intent intent, int flags, int startId) {
-        return START_STICKY;
-    }*/
 
     @Override
     public IBinder onBind(Intent intent) {
