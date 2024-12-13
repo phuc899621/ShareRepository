@@ -158,7 +158,7 @@
                     app:layout_constraintTop_toBottomOf="@id/tvClassification" />
                 <com.google.android.material.card.MaterialCardView
                     android:id="@+id/cardViewbarChart"
-                    android:layout_width="360dp"
+                    android:layout_width="match_parent"
                     android:layout_height="240dp"
                     android:layout_marginVertical="10dp"
                     app:cardElevation="4dp"
@@ -171,8 +171,8 @@
 
                     <com.github.mikephil.charting.charts.BarChart
                         android:id="@+id/idBarChart"
-                        android:layout_width="355dp"
-                        android:layout_height="235dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
                         android:layout_marginRight="10dp"/>
 
                 </com.google.android.material.card.MaterialCardView>
@@ -207,8 +207,9 @@
                     app:layout_constraintTop_toBottomOf="@id/tvClassification" />
                 <com.google.android.material.card.MaterialCardView
                     android:id="@+id/cardViewPieChart"
-                    android:layout_width="360dp"
-                    android:layout_height="240dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+
                     android:layout_marginVertical="10dp"
                     android:scaleType="fitCenter"
                     android:src="@drawable/corner_sheet"
@@ -216,7 +217,8 @@
                     app:cardElevation="4dp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/tvClassification"
-                    android:layout_marginTop="13dp">
+                    android:layout_marginTop="13dp"
+                   >
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -241,10 +243,12 @@
                             android:layout_marginLeft="20dp"
                             android:orientation="vertical"
                             android:gravity="center_vertical">
+
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="17dp"
                                 android:layout_marginTop="10dp"
+                                android:layout_marginEnd="20dp"
                                 android:layout_gravity="center_vertical">
                                 <View
                                     android:layout_width="15dp"
@@ -273,6 +277,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="17dp"
                                 android:layout_gravity="center_vertical"
+                                android:layout_marginEnd="20dp"
                                 android:layout_marginTop="10dp">
                                 <View
                                     android:layout_width="15dp"
@@ -302,6 +307,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="17dp"
                                 android:layout_gravity="center_vertical"
+                                android:layout_marginEnd="20dp"
                                 android:layout_marginTop="10dp">
                                 <View
                                     android:layout_width="15dp"
