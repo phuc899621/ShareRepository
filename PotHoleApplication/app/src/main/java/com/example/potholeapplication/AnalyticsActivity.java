@@ -154,9 +154,9 @@ public class AnalyticsActivity extends AppCompatActivity {
         tvMedium.setText(Integer.toString(30));
         tvSmall.setText(Integer.toString(30));
 
-        pieChart.addPieSlice(new PieModel("Large", Integer.parseInt(tvLarge.getText().toString()), Color.parseColor("#3B1E54")));
-        pieChart.addPieSlice(new PieModel("Medium", Integer.parseInt(tvMedium.getText().toString()), Color.parseColor("#9B7EBD")));
-        pieChart.addPieSlice(new PieModel("Small", Integer.parseInt(tvSmall.getText().toString()), Color.parseColor("#D4BEE4")));;
+        pieChart.addPieSlice(new PieModel("Large", Integer.parseInt(tvLarge.getText().toString()), Color.parseColor("#793FDF")));
+        pieChart.addPieSlice(new PieModel("Medium", Integer.parseInt(tvMedium.getText().toString()), Color.parseColor("#7091F5")));
+        pieChart.addPieSlice(new PieModel("Small", Integer.parseInt(tvSmall.getText().toString()), Color.parseColor("#97FFF4")));;
         pieChart.startAnimation();
     }
 

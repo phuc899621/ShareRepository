@@ -243,32 +243,24 @@
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="17dp"
+                                android:layout_gravity="center_vertical"
                                 android:layout_marginTop="10dp"
-                                android:layout_marginEnd="20dp"
-                                android:layout_gravity="center_vertical">
+                                android:layout_marginEnd="20dp">
+
                                 <View
                                     android:layout_width="15dp"
                                     android:layout_height="match_parent"
-                                    android:background="@color/large"/>
+                                    android:background="@color/large" />
+
                                 <TextView
                                     android:id="@+id/tvLarge"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="Large"
-                                    android:paddingLeft="10dp"/>
-                                <TextView
-                                    android:id="@+id/tvLargePercentage"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:text="0"
-                                    android:layout_marginRight="10dp"
-                                    android:textAlignment="textEnd"
-                                    android:textColor="@color/dark_purple"
-                                    android:textStyle="bold"
-                                    android:fontFamily="sans-serif-light"
-                                    />
+                                    android:paddingLeft="10dp"
+                                    android:text="Large" />
 
                             </LinearLayout>
+
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="17dp"
@@ -285,17 +277,6 @@
                                     android:layout_height="wrap_content"
                                     android:text="Medium"
                                     android:paddingLeft="10dp"/>
-                                <TextView
-                                    android:id="@+id/tvMediumPercentage"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:text="0"
-                                    android:layout_marginRight="10dp"
-                                    android:textStyle="bold"
-                                    android:textAlignment="textEnd"
-                                    android:textColor="@color/dark_purple"
-                                    android:fontFamily="sans-serif-light"
-                                    />
 
                             </LinearLayout>
 
@@ -315,17 +296,6 @@
                                     android:layout_height="wrap_content"
                                     android:text="Small"
                                     android:paddingLeft="10dp"/>
-                                <TextView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:id="@+id/tvSmallPercentage"
-                                    android:text="0"
-                                    android:layout_marginRight="10dp"
-                                    android:textStyle="bold"
-                                    android:textAlignment="textEnd"
-                                    android:textColor="@color/dark_purple"
-                                    android:fontFamily="sans-serif-light"
-                                    />
                             </LinearLayout>
 
                         </LinearLayout>
