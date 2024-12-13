@@ -122,8 +122,7 @@
             android:id="@+id/guideTopSheet"/>
 
         <LinearLayout
-
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
             app:layout_constraintStart_toStartOf="parent"
@@ -172,8 +171,7 @@
                     <com.github.mikephil.charting.charts.BarChart
                         android:id="@+id/idBarChart"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_marginRight="10dp"/>
+                        android:layout_height="match_parent"/>
 
                 </com.google.android.material.card.MaterialCardView>
 
@@ -182,8 +180,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:orientation="vertical"
-                >
+                android:orientation="vertical">
 
                 <TextView
                     android:id="@+id/tvMonthlyPotholes"
@@ -209,7 +206,6 @@
                     android:id="@+id/cardViewPieChart"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-
                     android:layout_marginVertical="10dp"
                     android:scaleType="fitCenter"
                     android:src="@drawable/corner_sheet"
@@ -229,7 +225,7 @@
                         <org.eazegraph.lib.charts.PieChart
                             xmlns:app="http://schemas.android.com/apk/res-auto"
                             android:id="@+id/idPieChart"
-                            android:layout_width="0dp"
+                            android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:padding="6dp"
                             android:layout_weight="1"
@@ -237,7 +233,7 @@
                             android:layout_marginLeft="15dp"
                             android:layout_marginBottom="15dp"/>
                         <LinearLayout
-                            android:layout_width="0dp"
+                            android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:layout_weight="1"
                             android:layout_marginLeft="20dp"
