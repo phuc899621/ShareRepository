@@ -51,7 +51,7 @@
     <string name="str_password_does_not_match">Mật khẩu không khớp</string>
     <string name="str_wrong_code">Sai mã xác thực</string>
     <string name="str_please_enter_your_password">Vui lòng nhập mật khẩu</string>
-    <string name="str_please_enter_your_new_email">Vui loòng nhập email mới</string>
+    <string name="str_please_enter_your_new_email">Vui lòng nhập email mới</string>
     <string name="str_old_password">Mật khẩu cũ</string>
     <string name="str_email_not_found">Email không tồn tại</string>
     <string name="str_please_enter_username_and_password">Vui lòng nhập tên đăng nhập và mật khẩu</string>
