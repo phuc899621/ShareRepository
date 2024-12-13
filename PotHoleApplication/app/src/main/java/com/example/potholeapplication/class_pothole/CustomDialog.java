@@ -41,6 +41,11 @@ public class CustomDialog {
             }
         },1500);
     }
+    public static void showDialogPieChartDetail(Context context, String title){
+        Dialog dialog=new Dialog(context);
+        dialog.setContentView(R.layout.custom_dialog_pie_chart);
+
+    }
     public static void showDialogError(Context context, ApiResponse apiResponse){
         Dialog dialog=new Dialog(context);
         dialog.setContentView(R.layout.custom_dialog_error);
