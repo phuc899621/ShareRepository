@@ -47,9 +47,6 @@ public class AnalyticsActivity extends AppCompatActivity {
         barChart = binding.idBarChart;
 
         pieChart = binding.idPieChart;
-        tvLarge = binding.tvLargePercentage;
-        tvMedium = binding.tvMediumPercentage;
-        tvSmall = binding.tvSmallPercentage;
 
         //BAR CHART
         // Creating a new bar data set*
