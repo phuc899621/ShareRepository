@@ -80,4 +80,5 @@
     <string name="str_severity">Mức độ</string>
     <string name="str_yes">Vâng</string>
     <string name="str_no">Không</string>
+    <string name="str_error_save_pothole">Lỗi khi lưu ổ gà</string>
 </resources>

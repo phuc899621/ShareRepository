@@ -1,5 +1,6 @@
 package com.example.potholeapplication.interface_pothole;
 
+import com.example.potholeapplication.class_pothole.request.AddPotholeReq;
 import com.example.potholeapplication.class_pothole.request.EditInfoReq;
 import com.example.potholeapplication.class_pothole.request.EditPasswordReq;
 import com.example.potholeapplication.class_pothole.request.EmailReq;
@@ -56,5 +57,8 @@ public interface UserAPIInterface {
     Call<ApiResponse> callSaveImage(@Part("email")RequestBody email, @Part MultipartBody.Part image);
     @POST("api/find/image")//lay image
     Call<ApiResponse> callFindImage(@Body EmailReq emailReq);
+    //--------------------API lưu pothole-------------------
+    @POST("api/pothole/add")//luu pothole
+    Call<ApiResponse> callAddPothole(@Body AddPotholeReq addPotholeReq);
 
 }

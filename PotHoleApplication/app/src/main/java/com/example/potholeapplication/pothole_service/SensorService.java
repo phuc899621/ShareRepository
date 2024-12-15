@@ -2,6 +2,7 @@ package com.example.potholeapplication.pothole_service;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -14,6 +15,7 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.location.Location;
+import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -42,6 +44,7 @@ public class SensorService extends Service {
     private Handler handler;
     private Location lastLocation;
     private double totalDistance = 0;
+    Context context;
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
@@ -59,29 +62,55 @@ public class SensorService extends Service {
 
         // Khởi tạo listener
         accelerometerListener = new AccelerometerListener();
-        gpsListener = new GPSListener();
-
+        gpsListener = new GPSListener(this);
+        context=this;
         accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION);
 
         // Đăng ký listener cho cảm biến gia tốc
         sensorManager.registerListener(accelerometerListener, accelerometer, SensorManager.SENSOR_DELAY_NORMAL);
 
         // Đăng ký listener cho GPS
-        try {
-            if (ActivityCompat.checkSelfPermission(this,
-                    Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,
-                        500, 0, gpsListener);
-            }
-        } catch (SecurityException e) {
-            e.printStackTrace();
-        }
+        requestLocationPermission();
 
         // Tạo một Handler để xử lý các hành động định kỳ
         handler = new Handler();
         startPotholeDetection();
         startDistanceTracking();
 
+    }
+    private void requestLocationPermission() {
+        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+            // Nếu quyền chưa được cấp, yêu cầu cấp quyền
+            ActivityCompat.requestPermissions((Activity) context,
+                    new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},
+                    1); // 1 là mã yêu cầu quyền
+        } else {
+            // Nếu quyền đã được cấp, bắt đầu yêu cầu vị trí
+            startLocationUpdates();
+        }
+    }
+    private void startLocationUpdates() {
+        try {
+
+            // Đăng ký nhận updates từ GPS
+            locationManager.requestLocationUpdates(
+                    LocationManager.GPS_PROVIDER,
+                    1000, // minimum time interval between updates (ms)
+                    1,    // minimum distance between updates (meters)
+                    gpsListener
+            );
+
+            // Đăng ký nhận updates từ Network provider
+            locationManager.requestLocationUpdates(
+                    LocationManager.NETWORK_PROVIDER,
+                    1000,
+                    1,
+                    gpsListener
+            );
+        } catch (SecurityException e) {
+            Log.e("Location", "Error requesting location updates: " + e.getMessage());
+        }
     }
     private void startPotholeDetection() {
         Runnable runnable = new Runnable() {

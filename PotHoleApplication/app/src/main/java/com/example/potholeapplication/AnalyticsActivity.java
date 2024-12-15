@@ -34,7 +34,7 @@ public class AnalyticsActivity extends AppCompatActivity {
     // ArrayList for storing entries
     ArrayList<BarEntry> barEntries;
     // Creating a string array for displaying days
-    String[] days = getResources().getStringArray(R.array.months_array);
+    String[] days;
 
 
     // Variables for bar data sets
@@ -44,6 +44,7 @@ public class AnalyticsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding=ActivityAnalyticsBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+        days=getResources().getStringArray(R.array.months_array);
         context = this;
         setClickEvent();
         setBarChart();

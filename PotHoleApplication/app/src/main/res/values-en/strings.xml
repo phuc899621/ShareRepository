@@ -79,4 +79,5 @@
     <string name="str_severity">Severity</string>
     <string name="str_yes">Yes</string>
     <string name="str_no">No</string>
+    <string name="str_error_save_pothole">Error save pothole</string>
 </resources>

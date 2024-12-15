@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Handler;
+import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,9 +17,24 @@ import android.widget.TextView;
 
 import com.example.potholeapplication.R;
 import com.example.potholeapplication.SplashScreenActivity;
+import com.example.potholeapplication.class_pothole.request.AddPotholeReq;
+import com.example.potholeapplication.class_pothole.request.EmailReq;
 import com.example.potholeapplication.class_pothole.response.ApiResponse;
+import com.example.potholeapplication.class_pothole.response.LocationClass;
+import com.example.potholeapplication.edit_user.EditEmailActivity;
+import com.example.potholeapplication.edit_user.EditEmailVerificationActivity;
+import com.example.potholeapplication.interface_pothole.UserAPIInterface;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.card.MaterialCardView;
+import com.google.gson.Gson;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class CustomDialog {
     private static boolean isDialogShowing=false;
@@ -71,6 +87,9 @@ public class CustomDialog {
         }
         if(apiResponse.getMessage().trim().equals("Email already exists")){
             tvErrorTitle.setText(R.string.str_email_already_exists);
+        }
+        if(apiResponse.getMessage().trim().equals("Error save pothole")){
+            tvErrorTitle.setText(R.string.str_error_save_pothole);
         }
         dialog.show();
         btnConfirm.setOnClickListener(new View.OnClickListener() {
@@ -230,12 +249,23 @@ public class CustomDialog {
         tvSeverity.setText(context.getString(R.string.str_severity)+": "+
                 severity);
         dialog.show();
+
         setIsDialogShowing(true);
         btnYes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
+                List<Double> coordinates=new ArrayList<>();
+                coordinates.add(longtitude);
+                coordinates.add(latitude);
+
+                callSavePotholeAPI(context, new AddPotholeReq(
+                        new LocationClass(coordinates),
+                        DataEditor.getEmail(context),
+                        severity
+                ));
                 setIsDialogShowing(false);
+
             }
         });
         btnNo.setOnClickListener(new View.OnClickListener() {
@@ -243,6 +273,36 @@ public class CustomDialog {
             public void onClick(View v) {
                 dialog.dismiss();
                 setIsDialogShowing(false);
+            }
+        });
+    }
+    public static void callSavePotholeAPI(Context context, AddPotholeReq addPotholeReq){
+
+        UserAPIInterface apiService = RetrofitServices.getApiService();
+        Call<ApiResponse> call = apiService.callAddPothole(addPotholeReq);
+        call.enqueue(new Callback<ApiResponse>() {
+            @Override
+            public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
+                if(response.isSuccessful()&&response.body()!=null){
+
+                }
+                else{
+                    String errorString;
+                    ApiResponse apiResponse;
+                    try {
+                        errorString=response.errorBody().string();
+                        Gson gson=new Gson();
+                        apiResponse=gson.fromJson(errorString, ApiResponse.class);
+                        CustomDialog.showDialogError(context,apiResponse);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ApiResponse> call, Throwable t) {
+                Log.e("API Error", "Failure: " + t.getMessage());
             }
         });
     }

@@ -101,6 +101,7 @@
     <string name="str_yes">Yes</string>
     <string name="str_no">No</string>
     <string name="str_save_this_pothole">Save this pothole?</string>
+    <string name="str_error_save_pothole">Error save pothole</string>
     <string-array name="months_array">
         <item>Jan</item>
         <item>Feb</item>

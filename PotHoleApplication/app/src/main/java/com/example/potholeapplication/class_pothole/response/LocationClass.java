@@ -10,8 +10,8 @@ public class LocationClass {
     @SerializedName("coordinates")
     List<Double> coordinates;
 
-    public LocationClass(String type, List<Double> coordinates) {
-        this.type = type;
+    public LocationClass(List<Double> coordinates) {
+        this.type = "Point";
         this.coordinates = coordinates;
     }
 
