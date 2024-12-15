@@ -41,11 +41,7 @@ public class CustomDialog {
             }
         },1500);
     }
-    public static void showDialogPieChartDetail(Context context, String title){
-        Dialog dialog=new Dialog(context);
-        dialog.setContentView(R.layout.custom_dialog_pie_chart);
 
-    }
     public static void showDialogError(Context context, ApiResponse apiResponse){
         Dialog dialog=new Dialog(context);
         dialog.setContentView(R.layout.custom_dialog_error);
@@ -184,8 +180,37 @@ public class CustomDialog {
             }
         });
     }
+    public static void showDialogPieChartDetail(Context context, int large,int medium, int small){
+        Dialog dialog=new Dialog(context);
+        dialog.setContentView(R.layout.custom_dialog_pie_chart);
+        dialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+        dialog.setCancelable(true);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+
+        TextView tvLargePercentage=dialog.findViewById(R.id.tvLargePercentage);
+        TextView tvMediumPercentage=dialog.findViewById(R.id.tvMediumPercentage);
+        TextView tvSmallPercentage=dialog.findViewById(R.id.tvSmallPercentage);
+
+        tvLargePercentage.setText(large+"%");
+        tvMediumPercentage.setText(medium+"%");
+        tvSmallPercentage.setText(small+"%");
+
+
+
+        dialog.show();
+        setIsDialogShowing(true);
+
+    }
+
+    public static boolean isIsDialogShowing() {
+        return isDialogShowing;
+    }
+
+    public static void setIsDialogShowing(boolean isDialogShowing) {
+        CustomDialog.isDialogShowing = isDialogShowing;
+    }
     public static void showDialogSavePothole(Context context,double longtitude,
-                                      double latitude,String severity){
+                                             double latitude,String severity){
         Dialog dialog=new Dialog(context);
         dialog.setContentView(R.layout.custom_dialog_save_pothole);
         dialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -220,13 +245,5 @@ public class CustomDialog {
                 setIsDialogShowing(false);
             }
         });
-    }
-
-    public static boolean isIsDialogShowing() {
-        return isDialogShowing;
-    }
-
-    public static void setIsDialogShowing(boolean isDialogShowing) {
-        CustomDialog.isDialogShowing = isDialogShowing;
     }
 }

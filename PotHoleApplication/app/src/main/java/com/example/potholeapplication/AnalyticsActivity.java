@@ -1,7 +1,9 @@
 package com.example.potholeapplication;
 
+import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
@@ -10,6 +12,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.potholeapplication.class_pothole.CustomDialog;
 import com.example.potholeapplication.databinding.ActivityAnalyticsBinding;
 import com.example.potholeapplication.databinding.ActivityHomeScreenBinding;
 import com.github.mikephil.charting.charts.BarChart;
@@ -27,32 +30,44 @@ import java.util.ArrayList;
 public class AnalyticsActivity extends AppCompatActivity {
 
     ActivityAnalyticsBinding binding;
-    BarChart barChart;
     BarDataSet barDataSet1, barDataSet2;
     // ArrayList for storing entries
     ArrayList<BarEntry> barEntries;
     // Creating a string array for displaying days
     String[] days = new String[]{"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
 
-    PieChart pieChart;
-    TextView tvLarge, tvMedium, tvSmall;
-    // Variables for bar data sets
 
+    // Variables for bar data sets
+    Context context;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding=ActivityAnalyticsBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+        context = this;
+        setClickEvent();
+        setBarChart();
 
-        barChart = binding.idBarChart;
-
-        pieChart = binding.idPieChart;
-//        tvLarge = binding.tvLargePercentage;
-//        tvMedium = binding.tvMediumPercentage;
-//        tvSmall = binding.tvSmallPercentage;
-
-        //BAR CHART
+    //BAR CHART
         // Creating a new bar data set*
+
+    }
+    private void setClickEvent() {
+        binding.btnBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+        binding.idPieChart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                CustomDialog.showDialogPieChartDetail(context, 40, 30, 30);
+            }
+        });
+    }
+    
+    private void setBarChart() {
         barDataSet1 = new BarDataSet(getBarEntriesOne(), "First Set");
         barDataSet1.setColor(getApplicationContext().getResources().getColor(R.color.large));
         barDataSet2 = new BarDataSet(getBarEntriesTwo(), "Second Set");
@@ -62,13 +77,13 @@ public class AnalyticsActivity extends AppCompatActivity {
         BarData data = new BarData(barDataSet1, barDataSet2);
 
         // Setting the data to the bar chart
-        barChart.setData(data);
+        binding.idBarChart.setData(data);
 
         // Removing the description label of the bar chart
-        barChart.getDescription().setEnabled(false);
+        binding.idBarChart.getDescription().setEnabled(false);
 
         // Getting the x-axis of the bar chart
-        XAxis xAxis = barChart.getXAxis();
+        XAxis xAxis = binding.idBarChart.getXAxis();
 
         // Setting value formatter to the x-axis
         // and adding the days to the x-axis labels
@@ -87,10 +102,10 @@ public class AnalyticsActivity extends AppCompatActivity {
         xAxis.setGranularityEnabled(true);
 
         // Making the bar chart draggable
-        barChart.setDragEnabled(true);
+        binding.idBarChart.setDragEnabled(true);
 
         // Setting the visible range for the bar chart
-        barChart.setVisibleXRangeMaximum(3);
+        binding.idBarChart.setVisibleXRangeMaximum(3);
 
         // Adding bar space to the chart
         float barSpace = 0.1f;
@@ -102,19 +117,22 @@ public class AnalyticsActivity extends AppCompatActivity {
         data.setBarWidth(0.15f);
 
         // Setting the minimum axis value for the chart
-        barChart.getXAxis().setAxisMinimum(0);
+        binding.idBarChart.getXAxis().setAxisMinimum(0);
 
         // Animating the chart
-        barChart.animate();
+        binding.idBarChart.animate();
 
         // Grouping bars and adding spacing to them
-        barChart.groupBars(0, groupSpace, barSpace);
+        binding.idBarChart.groupBars(0, groupSpace, barSpace);
 
         // Invalidating the bar chart
-        barChart.invalidate();
+        binding.idBarChart.invalidate();
+
         setData();
-        pieChart.invalidate();
+        binding.idPieChart.invalidate();
     }
+
+
 
     // ArrayList for the first set of bar entries
     private ArrayList<BarEntry> getBarEntriesOne() {
@@ -150,15 +168,17 @@ public class AnalyticsActivity extends AppCompatActivity {
 
     // PIE CHART
     private void setData(){
-        tvLarge.setText(Integer.toString(40));
-        tvMedium.setText(Integer.toString(30));
-        tvSmall.setText(Integer.toString(30));
+        binding.tvLarge.setText(Integer.toString(40));
+        binding.tvMedium.setText(Integer.toString(30));
+        binding.tvSmall.setText(Integer.toString(30));
 
-        pieChart.addPieSlice(new PieModel("Large", Integer.parseInt(tvLarge.getText().toString()), Color.parseColor("#793FDF")));
-        pieChart.addPieSlice(new PieModel("Medium", Integer.parseInt(tvMedium.getText().toString()), Color.parseColor("#7091F5")));
-        pieChart.addPieSlice(new PieModel("Small", Integer.parseInt(tvSmall.getText().toString()), Color.parseColor("#97FFF4")));;
-        pieChart.startAnimation();
+        binding.idPieChart.addPieSlice(new PieModel("Large", Integer.parseInt(binding.tvLarge.getText().toString()), Color.parseColor("#793FDF")));
+        binding.idPieChart.addPieSlice(new PieModel("Medium", Integer.parseInt(binding.tvMedium.getText().toString()), Color.parseColor("#7091F5")));
+        binding.idPieChart.addPieSlice(new PieModel("Small", Integer.parseInt(binding.tvSmall.getText().toString()), Color.parseColor("#97FFF4")));;
+        binding.idPieChart.startAnimation();
     }
+
+
 
 
 }
