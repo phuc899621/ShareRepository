@@ -22,15 +22,23 @@ import com.google.android.material.card.MaterialCardView;
 
 public class CustomDialog {
     private static boolean isDialogShowing=false;
-    public static void showDialogOkeThenFinish(Context context, String title){
+
+    //ham tao 1 dialog
+    private static Dialog createDialog(Context context,int layoutID,boolean isCancelable){
         Dialog dialog=new Dialog(context);
-        dialog.setContentView(R.layout.custom_dialog_oke);
+        dialog.setContentView(layoutID);
         dialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
-        dialog.setCancelable(false);
+        dialog.setCancelable(isCancelable);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        return dialog;
+    }
+    public static void showDialogOkeThenFinish(Context context, String title){
+        Dialog dialog=createDialog(context,R.layout.custom_dialog_oke,false);
         dialog.show();
+
         TextView tvTitle=dialog.findViewById(R.id.tvTitle);
         tvTitle.setText(title);
+
         Handler handler=new Handler();
         handler.postDelayed(new Runnable() {
             @Override
@@ -47,11 +55,7 @@ public class CustomDialog {
 
     }
     public static void showDialogError(Context context, ApiResponse apiResponse){
-        Dialog dialog=new Dialog(context);
-        dialog.setContentView(R.layout.custom_dialog_error);
-        dialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
-        dialog.setCancelable(true);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        Dialog dialog=createDialog(context,R.layout.custom_dialog_error,true);
 
         Button btnConfirm=dialog.findViewById(R.id.btnConfirm);
         TextView tvErrorTitle=dialog.findViewById(R.id.tvTitle);
@@ -85,11 +89,8 @@ public class CustomDialog {
         });
     }
     public static void showDialogErrorString(Context context, String message){
-        Dialog dialog=new Dialog(context);
-        dialog.setContentView(R.layout.custom_dialog_error);
-        dialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
-        dialog.setCancelable(true);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        Dialog dialog=createDialog(context,R.layout.custom_dialog_error,true);
+
         Button btnConfirm=dialog.findViewById(R.id.btnConfirm);
         TextView tvErrorTitle=dialog.findViewById(R.id.tvTitle);
         tvErrorTitle.setText(message);
@@ -103,11 +104,7 @@ public class CustomDialog {
     }
     public static void showDialogOkeNavigation(Context context, String title,
                                                Class<?> next){
-        Dialog dialog=new Dialog(context);
-        dialog.setContentView(R.layout.custom_dialog_oke);
-        dialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
-        dialog.setCancelable(false);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        Dialog dialog=createDialog(context,R.layout.custom_dialog_oke,false);
         dialog.show();
         TextView tvTitle=dialog.findViewById(R.id.tvTitle);
         tvTitle.setText(title);
@@ -123,11 +120,7 @@ public class CustomDialog {
     }
     public static void showDialogOkeNavigationClear(Context context, String title,
                                                Class<?> next){
-        Dialog dialog=new Dialog(context);
-        dialog.setContentView(R.layout.custom_dialog_oke);
-        dialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
-        dialog.setCancelable(false);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        Dialog dialog=createDialog(context,R.layout.custom_dialog_oke,false);
         dialog.show();
         TextView tvTitle=dialog.findViewById(R.id.tvTitle);
         tvTitle.setText(title);
@@ -144,11 +137,7 @@ public class CustomDialog {
         },1500);
     }
     public static void showDialogLanguage(Context context){
-        Dialog dialog=new Dialog(context);
-        dialog.setContentView(R.layout.custom_dialog_language);
-        dialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
-        dialog.setCancelable(true);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        Dialog dialog=createDialog(context,R.layout.custom_dialog_language,true);
 
         MaterialCardView cvEnglish=dialog.findViewById(R.id.cvEnglish);
         MaterialCardView cvVietnamese=dialog.findViewById(R.id.cvVietnamese);
@@ -186,11 +175,7 @@ public class CustomDialog {
     }
     public static void showDialogSavePothole(Context context,double longtitude,
                                       double latitude,String severity){
-        Dialog dialog=new Dialog(context);
-        dialog.setContentView(R.layout.custom_dialog_save_pothole);
-        dialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
-        dialog.setCancelable(true);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        Dialog dialog=createDialog(context,R.layout.custom_dialog_save_pothole,true);
 
         TextView tvLatitude=dialog.findViewById(R.id.tvLatitude);
         TextView tvLongtitude=dialog.findViewById(R.id.tvLongtitude);
