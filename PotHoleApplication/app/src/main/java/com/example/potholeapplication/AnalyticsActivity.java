@@ -34,7 +34,7 @@ public class AnalyticsActivity extends AppCompatActivity {
     // ArrayList for storing entries
     ArrayList<BarEntry> barEntries;
     // Creating a string array for displaying days
-    String[] days = new String[]{"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
+    String[] days = getResources().getStringArray(R.array.months_array);
 
 
     // Variables for bar data sets

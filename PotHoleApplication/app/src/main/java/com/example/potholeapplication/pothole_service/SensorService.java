@@ -13,7 +13,10 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.location.Location;
 import android.location.LocationManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
@@ -28,24 +31,17 @@ import com.example.potholeapplication.class_pothole.AccelerometerListener;
 import com.example.potholeapplication.class_pothole.GPSListener;
 
 public class SensorService extends Service {
-   /* private final float LARGE_THRESHOLE=35.0f;
-    private final float MEDIUM_THRESHOLE=25.0f;
-    private final float SMALL_THRESHOLE=15.0f;
-    private long lastPotholeTime = 0; // Thời gian lần cuối phát hiện ổ gà
-    private static final long DETECTION_COOLDOWN = 2000; // 2 giây
-    private static final String TAG = "PotholeService";
-    private static final String CHANNEL_ID = "PotholeDetectionChannel";*/
+
     Vibrator vibrator;//rung ung dung
-    /*private boolean isStart;
-    float DeltaZ;
-    private SensorManager sensorManager;
-    private float[] accelerationData=new float[3];*/
+
    private SensorManager sensorManager;
     private Sensor accelerometer;
     private LocationManager locationManager;
     private AccelerometerListener accelerometerListener;
     private GPSListener gpsListener;
     private Handler handler;
+    private Location lastLocation;
+    private double totalDistance = 0;
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
@@ -57,12 +53,6 @@ public class SensorService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        /*createNotificationChannel();
-        startForeground(1, getNotification());
-        sensorManager= (SensorManager) getSystemService(Context.SENSOR_SERVICE);
-        Sensor accelerometer=sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-        sensorManager.registerListener(this,accelerometer,SensorManager.SENSOR_DELAY_NORMAL);
-        Log.d("Services","Service started");*/
         // Khởi tạo các đối tượng SensorManager và LocationManager
         sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
         locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
@@ -80,7 +70,8 @@ public class SensorService extends Service {
         try {
             if (ActivityCompat.checkSelfPermission(this,
                     Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 500, 0, gpsListener);
+                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,
+                        500, 0, gpsListener);
             }
         } catch (SecurityException e) {
             e.printStackTrace();
@@ -89,6 +80,7 @@ public class SensorService extends Service {
         // Tạo một Handler để xử lý các hành động định kỳ
         handler = new Handler();
         startPotholeDetection();
+        startDistanceTracking();
 
     }
     private void startPotholeDetection() {
@@ -122,10 +114,6 @@ public class SensorService extends Service {
         return "small";
     }
 
-    public SensorService() {
-
-    }
-
     @Override
     public void onDestroy() {
         super.onDestroy();
@@ -139,59 +127,6 @@ public class SensorService extends Service {
         throw new UnsupportedOperationException("Not yet implemented");
     }
 
-   /* @Override
-    public void onSensorChanged(SensorEvent event) {
-        if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
-            accelerationData = event.values.clone();
-            float x=accelerationData[0];
-            float y=accelerationData[1];
-            float z=accelerationData[2];
-            *//*Log.d(TAG, "Accelerometer: Z=" +
-                    accelerationData[2]);*//*
-            DeltaZ= (float) Math.sqrt(x*x+y*y+z*z);
-            DeltaZ=Math.abs(DeltaZ);
-            // Lấy thời gian hiện tại
-            long currentTime = System.currentTimeMillis();
-
-            // Phát hiện ổ gà
-            if (DeltaZ > SMALL_THRESHOLE &&(currentTime - lastPotholeTime) > DETECTION_COOLDOWN) {
-                lastPotholeTime = currentTime; // Cập nhật thời gian phát hiện
-                vibratePhone();
-                Log.d("POTHOLE_DETECTION", "Pothole detected! "
-                        +potholeSeverity(DeltaZ));
-            }
-        }
-    }*/
-    /*private String potholeSeverity(float data){
-        if(data > LARGE_THRESHOLE) return "large";
-        if(data > MEDIUM_THRESHOLE) return "medium";
-        return "small";
-    }*/
-   /* private Notification getNotification() {
-        return new NotificationCompat.Builder(this, CHANNEL_ID)
-                .setContentTitle("Pothole Detection")
-                .setContentText("Monitoring road conditions...")
-                .setSmallIcon(android.R.drawable.ic_menu_mylocation)
-                .build();
-    }*/
-
-   /* private void createNotificationChannel() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationChannel channel = new NotificationChannel(
-                    CHANNEL_ID,
-                    "Pothole Detection Service",
-                    NotificationManager.IMPORTANCE_DEFAULT
-            );
-            NotificationManager manager = getSystemService(NotificationManager.class);
-            if (manager != null) {
-                manager.createNotificationChannel(channel);
-            }
-        }
-    }*/
-    /*@Override
-    public void onAccuracyChanged(Sensor sensor, int accuracy) {
-
-    }*/
     @SuppressLint("ServiceCast")
     private void vibratePhone() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
@@ -208,5 +143,40 @@ public class SensorService extends Service {
             }
         }
     }
+    private void startDistanceTracking() {
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                updateDistance();
+                handler.postDelayed(this, 5000); // Cập nhật mỗi 20s
+            }
+        }, 5000);
+    }
+    private boolean isConnectedToWifi() {
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = cm.getActiveNetworkInfo();
+        return networkInfo != null && networkInfo.isConnected() &&
+                networkInfo.getType() == ConnectivityManager.TYPE_WIFI;
+    }
+    private void updateDistance() {
+            Location currentLocation = gpsListener.lastLocation;
+        Log.d("DISTANCE_TRACKING", "Distance: " + currentLocation + " meters");
+            if (currentLocation != null && lastLocation != null) {
+                float distance = lastLocation.distanceTo(currentLocation);
+                totalDistance += distance;
+                Log.d("DISTANCE_TRACKING", "Distance: " + distance + " meters");
+
+                // Lưu dữ liệu vào cơ sở dữ liệu hoặc file tại đây
+                if (isConnectedToWifi()) {
+                    saveDistanceToStorage(totalDistance);
+                }
+                else Log.e("WIFI", "No wifi");
+            }
+            lastLocation = currentLocation;
+    }
+    private void saveDistanceToStorage(double distance) {
+        Log.d("DATA_STORAGE", "Distance saved: " + distance + " meters");
+    }
+
 
 }

@@ -8,9 +8,13 @@ import androidx.annotation.NonNull;
 public class GPSListener implements LocationListener {
     public double latitude =0;
     public double longitude =0;
+    public Location lastLocation;
+
     @Override
     public void onLocationChanged(@NonNull Location location) {
         latitude = location.getLatitude();
         longitude = location.getLongitude();
+        lastLocation=location;
     }
+
 }

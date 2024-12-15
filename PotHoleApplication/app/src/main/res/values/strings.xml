@@ -43,7 +43,6 @@
     <string name="str_change_password_successful">Change password successful!</string>
     <string name="str_back_to_login">Back to Login</string>
     <string name="str_sign_up">Sign up</string>
-    <!--    <string name="str_home">Home</string>-->
     <string name="str_forgot_password">Forgot password</string>
     <!--    <string name="str_forgot_reset">Your password has been sent to your registered email.-->
     <!--Please click on Reset Password below to go to the new password setup screen!</string>-->
@@ -102,5 +101,18 @@
     <string name="str_yes">Yes</string>
     <string name="str_no">No</string>
     <string name="str_save_this_pothole">Save this pothole?</string>
-    <!--    <string name="str_pothole_classification_in_percentage">Pothole Classification (In Percentage)</string>-->
+    <string-array name="months_array">
+        <item>Jan</item>
+        <item>Feb</item>
+        <item>Mar</item>
+        <item>Apr</item>
+        <item>May</item>
+        <item>Jun</item>
+        <item>Jul</item>
+        <item>Aug</item>
+        <item>Sep</item>
+        <item>Oct</item>
+        <item>Nov</item>
+        <item>Dec</item>
+    </string-array>
 </resources>
