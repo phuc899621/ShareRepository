@@ -20,16 +20,16 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.potholeapplication.R;
-import com.example.potholeapplication.class_pothole.CustomDialog;
-import com.example.potholeapplication.class_pothole.DataEditor;
-import com.example.potholeapplication.class_pothole.LocaleManager;
+import com.example.potholeapplication.class_pothole.manager.DialogManager;
+import com.example.potholeapplication.class_pothole.manager.LocalDataManager;
+import com.example.potholeapplication.class_pothole.manager.LocaleManager;
 import com.example.potholeapplication.class_pothole.response.User;
 import com.example.potholeapplication.class_pothole.request.EditInfoReq;
-import com.example.potholeapplication.class_pothole.RetrofitServices;
+import com.example.potholeapplication.Retrofit2.RetrofitServices;
 import com.example.potholeapplication.class_pothole.response.ApiResponse;
 import com.example.potholeapplication.class_pothole.request.EmailReq;
 import com.example.potholeapplication.databinding.ActivityEditUserBinding;
-import com.example.potholeapplication.interface_pothole.UserAPIInterface;
+import com.example.potholeapplication.Retrofit2.APIInterface;
 import com.google.gson.Gson;
 
 import java.io.ByteArrayOutputStream;
@@ -76,7 +76,7 @@ public class EditUserActivity extends AppCompatActivity {
         super.attachBaseContext(LocaleManager.updateLanguage(newBase));
     }
     public void setImageInfo(){
-        binding.imaUser.setImageBitmap(DataEditor.getImageBitmapFromSharePreferences(context));
+        binding.imaUser.setImageBitmap(LocalDataManager.getImageBitmapFromSharePreferences(context));
     }
 
     public void setClickEvent() {
@@ -148,11 +148,11 @@ public class EditUserActivity extends AppCompatActivity {
         String newUsername=binding.etUsername.getText().toString().trim();
         String newName=binding.etName.getText().toString().trim();
         if(newUsername.isEmpty() || newName.isEmpty()){
-            CustomDialog.showDialogErrorString(context,getString(R.string.str_enter_name_and_username));
+            DialogManager.showDialogErrorString(context,getString(R.string.str_enter_name_and_username));
             return;
         }
         EditInfoReq editInfoReq =new EditInfoReq(newUsername,newName);
-        UserAPIInterface apiService = RetrofitServices.getApiService();
+        APIInterface apiService = RetrofitServices.getApiService();
 
         Call<ApiResponse> call = apiService.callEditInfo(email, editInfoReq);
         call.enqueue(new Callback<ApiResponse>() {
@@ -160,7 +160,7 @@ public class EditUserActivity extends AppCompatActivity {
             public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
                 if(response.isSuccessful()&&response.body()!=null){
                     //luu thong tin vao dien thoai
-                    DataEditor.saveUsernameName(context,newUsername,newName);
+                    LocalDataManager.saveUsernameName(context,newUsername,newName);
                     CallSaveImageAPI();
                 }
                 else{
@@ -170,7 +170,7 @@ public class EditUserActivity extends AppCompatActivity {
                         errorString=response.errorBody().string();
                         Gson gson=new Gson();
                         apiResponse=gson.fromJson(errorString, ApiResponse.class);
-                        CustomDialog.showDialogError(context,apiResponse);
+                        DialogManager.showDialogError(context,apiResponse);
 
                     } catch (IOException e) {
                         throw new RuntimeException(e);
@@ -188,14 +188,14 @@ public class EditUserActivity extends AppCompatActivity {
         byte[] imageBytes = getImageBytesFromImageView();
         RequestBody requestBody = RequestBody.create(MediaType.parse("image/jpeg"), imageBytes);
         MultipartBody.Part imagePart = MultipartBody.Part.createFormData("image", "image.jpg", requestBody);
-        String email=DataEditor.getEmail(context);
+        String email= LocalDataManager.getEmail(context);
         if(email.isEmpty()){
-            CustomDialog.showDialogErrorString(context,getString(R.string.str_email_not_found));
+            DialogManager.showDialogErrorString(context,getString(R.string.str_email_not_found));
             return;
         }
         // Tạo RequestBody cho email và task
         RequestBody emailReq = RequestBody.create(MediaType.parse("text/plain"), email);
-        UserAPIInterface apiServices=RetrofitServices.getApiService();
+        APIInterface apiServices=RetrofitServices.getApiService();
         Call<ApiResponse> call = apiServices.callSaveImage(emailReq,imagePart);
 
         // Gửi yêu cầu
@@ -203,8 +203,8 @@ public class EditUserActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
                 if(response.isSuccessful()&&response.body()!=null){
-                    DataEditor.saveImageBytesToSharedPreferences(context,imageBytes);
-                    CustomDialog.showDialogOkeThenFinish(context,getString(R.string.str_save_successfully));
+                    LocalDataManager.saveImageBytesToSharedPreferences(context,imageBytes);
+                    DialogManager.showDialogOkeThenFinish(context,getString(R.string.str_save_successfully));
                 }
                 else{
                     String errorString;
@@ -213,7 +213,7 @@ public class EditUserActivity extends AppCompatActivity {
                         errorString=response.errorBody().string();
                         Gson gson=new Gson();
                         apiResponse=gson.fromJson(errorString, ApiResponse.class);
-                        CustomDialog.showDialogError(context,apiResponse);
+                        DialogManager.showDialogError(context,apiResponse);
                     } catch (IOException e) {
                         throw new RuntimeException(e);
                     }
@@ -227,13 +227,13 @@ public class EditUserActivity extends AppCompatActivity {
         });
     }
     public void CallGetImageAPI() {
-        String email=DataEditor.getEmail(context);
+        String email= LocalDataManager.getEmail(context);
         if(email.isEmpty()){
-            CustomDialog.showDialogErrorString(context,getString(R.string.str_email_not_found));
+            DialogManager.showDialogErrorString(context,getString(R.string.str_email_not_found));
             return;
         }
         EmailReq emailReq=new EmailReq(email);
-        UserAPIInterface apiServices=RetrofitServices.getApiService();
+        APIInterface apiServices=RetrofitServices.getApiService();
         Call<ApiResponse> call = apiServices.callFindImage(emailReq);
         // Gửi yêu cầu
         call.enqueue(new Callback<ApiResponse>() {
@@ -247,7 +247,7 @@ public class EditUserActivity extends AppCompatActivity {
                         if (imageBase64 != null) {
                             // Giải mã Base64 thành byte[]
                             byte[] decodedBytes = Base64.decode(imageBase64, Base64.DEFAULT);
-                            DataEditor.saveImageBytesToSharedPreferences(context,decodedBytes);
+                            LocalDataManager.saveImageBytesToSharedPreferences(context,decodedBytes);
                         }
                     }
                 }
@@ -258,7 +258,7 @@ public class EditUserActivity extends AppCompatActivity {
                         errorString=response.errorBody().string();
                         Gson gson=new Gson();
                         apiResponse=gson.fromJson(errorString, ApiResponse.class);
-                        CustomDialog.showDialogError(context,apiResponse);
+                        DialogManager.showDialogError(context,apiResponse);
                     } catch (IOException e) {
                         throw new RuntimeException(e);
                     }

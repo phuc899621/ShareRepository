@@ -12,7 +12,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.potholeapplication.R;
-import com.example.potholeapplication.class_pothole.LocaleManager;
+import com.example.potholeapplication.class_pothole.manager.LocaleManager;
 import com.example.potholeapplication.databinding.ActivityVerificationSuccessBinding;
 import com.example.potholeapplication.user_auth.login.LoginScreenActivity;
 

@@ -13,14 +13,14 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.potholeapplication.R;
-import com.example.potholeapplication.class_pothole.CustomDialog;
-import com.example.potholeapplication.class_pothole.LocaleManager;
+import com.example.potholeapplication.class_pothole.manager.DialogManager;
+import com.example.potholeapplication.class_pothole.manager.LocaleManager;
 import com.example.potholeapplication.class_pothole.request.EmailReq;
 import com.example.potholeapplication.class_pothole.request.RegisterReq;
-import com.example.potholeapplication.class_pothole.RetrofitServices;
+import com.example.potholeapplication.Retrofit2.RetrofitServices;
 import com.example.potholeapplication.class_pothole.response.ApiResponse;
 import com.example.potholeapplication.databinding.ActivityVerificationBinding;
-import com.example.potholeapplication.interface_pothole.UserAPIInterface;
+import com.example.potholeapplication.Retrofit2.APIInterface;
 import com.google.gson.Gson;
 
 import java.io.IOException;
@@ -61,7 +61,7 @@ public class VerificationActivity extends AppCompatActivity {
         Intent intent=getIntent();
         bundle=intent.getBundleExtra("sendEmail");
         if (bundle == null) {
-            CustomDialog.showDialogErrorString(context,getString(R.string.str_null_bundle));
+            DialogManager.showDialogErrorString(context,getString(R.string.str_null_bundle));
             return;
         }
 
@@ -70,7 +70,7 @@ public class VerificationActivity extends AppCompatActivity {
         );
 
         //call api gui mail, kem theo thong tin email can gui
-        UserAPIInterface apiService = RetrofitServices.getApiService();
+        APIInterface apiService = RetrofitServices.getApiService();
         Call<ApiResponse> call = apiService.callRegisterCode(emailReq);
         call.enqueue(new Callback<ApiResponse>() {
             @Override
@@ -86,7 +86,7 @@ public class VerificationActivity extends AppCompatActivity {
                         errorString=response.errorBody().string();
                         Gson gson=new Gson();
                         apiResponse=gson.fromJson(errorString, ApiResponse.class);
-                        CustomDialog.showDialogError(context,apiResponse);
+                        DialogManager.showDialogError(context,apiResponse);
                     } catch (IOException e) {
                         throw new RuntimeException(e);
                     }
@@ -100,10 +100,10 @@ public class VerificationActivity extends AppCompatActivity {
     }
     public void callAPIAddUser(){
         if (bundle == null) {
-            CustomDialog.showDialogErrorString(context,getString(R.string.str_null_bundle));
+            DialogManager.showDialogErrorString(context,getString(R.string.str_null_bundle));
             return;
         }
-        UserAPIInterface apiService = RetrofitServices.getApiService();
+        APIInterface apiService = RetrofitServices.getApiService();
         RegisterReq registerReq =new RegisterReq(
                 bundle.getString("username"),bundle.getString("name"),
                 bundle.getString("email"),bundle.getString("password")
@@ -126,7 +126,7 @@ public class VerificationActivity extends AppCompatActivity {
                         errorString=response.errorBody().string();
                         Gson gson=new Gson();
                         apiResponse=gson.fromJson(errorString, ApiResponse.class);
-                        CustomDialog.showDialogError(context,apiResponse);
+                        DialogManager.showDialogError(context,apiResponse);
                     } catch (IOException e) {
                         throw new RuntimeException(e);
                     }
@@ -151,7 +151,7 @@ public class VerificationActivity extends AppCompatActivity {
                 //kiem tra code hop le
                 String codeEntered=binding.etCodeInput.getText().toString().trim();
                 if(!codeEntered.equals(code)) {
-                    CustomDialog.showDialogErrorString(context,getString(R.string.str_wrong_code));
+                    DialogManager.showDialogErrorString(context,getString(R.string.str_wrong_code));
                     return;
                 }
                 callAPIAddUser();

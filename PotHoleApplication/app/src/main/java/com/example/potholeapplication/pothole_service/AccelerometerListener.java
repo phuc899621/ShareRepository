@@ -1,4 +1,4 @@
-package com.example.potholeapplication.class_pothole;
+package com.example.potholeapplication.pothole_service;
 
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;

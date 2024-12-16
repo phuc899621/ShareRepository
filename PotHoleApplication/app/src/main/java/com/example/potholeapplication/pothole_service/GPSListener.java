@@ -1,12 +1,10 @@
-package com.example.potholeapplication.class_pothole;
+package com.example.potholeapplication.pothole_service;
 
 import android.location.Location;
 import android.location.LocationListener;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
-
-import com.example.potholeapplication.pothole_service.SensorService;
 
 public class GPSListener implements LocationListener {
     public double latitude =0;

@@ -13,14 +13,14 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.potholeapplication.R;
-import com.example.potholeapplication.class_pothole.LocaleManager;
+import com.example.potholeapplication.class_pothole.manager.LocaleManager;
 import com.example.potholeapplication.class_pothole.response.ApiResponse;
-import com.example.potholeapplication.class_pothole.CustomDialog;
-import com.example.potholeapplication.class_pothole.DataEditor;
-import com.example.potholeapplication.class_pothole.RetrofitServices;
+import com.example.potholeapplication.class_pothole.manager.DialogManager;
+import com.example.potholeapplication.class_pothole.manager.LocalDataManager;
+import com.example.potholeapplication.Retrofit2.RetrofitServices;
 import com.example.potholeapplication.class_pothole.request.EmailReq;
 import com.example.potholeapplication.databinding.ActivityEditEmailVerificationBinding;
-import com.example.potholeapplication.interface_pothole.UserAPIInterface;
+import com.example.potholeapplication.Retrofit2.APIInterface;
 import com.google.gson.Gson;
 
 import java.io.IOException;
@@ -56,13 +56,13 @@ public class EditEmailVerificationActivity extends AppCompatActivity {
         super.attachBaseContext(LocaleManager.updateLanguage(newBase));
     }
     public void getOldAndNewEmail(){
-        oldEmail= DataEditor.getEmail(context);
+        oldEmail= LocalDataManager.getEmail(context);
 
         Intent intent=getIntent();
         newEmail= intent.getStringExtra("email");
     }
     public void callSendCodeApi(){
-        UserAPIInterface apiService = RetrofitServices.getApiService();
+        APIInterface apiService = RetrofitServices.getApiService();
         EmailReq emailReq=new EmailReq(newEmail);
         Call<ApiResponse> call = apiService.callEmailCode(emailReq);
         call.enqueue(new Callback<ApiResponse>() {
@@ -79,7 +79,7 @@ public class EditEmailVerificationActivity extends AppCompatActivity {
                         errorString=response.errorBody().string();
                         Gson gson=new Gson();
                         apiResponse=gson.fromJson(errorString, ApiResponse.class);
-                        CustomDialog.showDialogError(context,apiResponse);
+                        DialogManager.showDialogError(context,apiResponse);
                     } catch (IOException e) {
                         throw new RuntimeException(e);
                     }
@@ -92,7 +92,7 @@ public class EditEmailVerificationActivity extends AppCompatActivity {
         });
     }
     public void callEditEmailApi(){
-        UserAPIInterface apiService = RetrofitServices.getApiService();
+        APIInterface apiService = RetrofitServices.getApiService();
         EmailReq emailReq=new EmailReq(newEmail);
         Call<ApiResponse> call = apiService.callEditEmail(oldEmail,emailReq);
         call.enqueue(new Callback<ApiResponse>() {
@@ -100,8 +100,8 @@ public class EditEmailVerificationActivity extends AppCompatActivity {
             public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
 
                 if(response.isSuccessful()&&response.body()!=null){
-                    DataEditor.saveEmail(context,newEmail);
-                    CustomDialog.showDialogOkeNavigationClear(context,
+                    LocalDataManager.saveEmail(context,newEmail);
+                    DialogManager.showDialogOkeNavigationClear(context,
                             getString(R.string.str_change_email_successfully), EditUserActivity.class);
                 }
                 else{
@@ -111,7 +111,7 @@ public class EditEmailVerificationActivity extends AppCompatActivity {
                         errorString=response.errorBody().string();
                         Gson gson=new Gson();
                         apiResponse=gson.fromJson(errorString, ApiResponse.class);
-                        CustomDialog.showDialogError(context,apiResponse);
+                        DialogManager.showDialogError(context,apiResponse);
                     } catch (IOException e) {
                         throw new RuntimeException(e);
                     }

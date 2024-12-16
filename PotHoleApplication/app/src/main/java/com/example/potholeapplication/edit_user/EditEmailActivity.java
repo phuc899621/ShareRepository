@@ -13,13 +13,13 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.potholeapplication.R;
-import com.example.potholeapplication.class_pothole.CustomDialog;
-import com.example.potholeapplication.class_pothole.LocaleManager;
-import com.example.potholeapplication.class_pothole.RetrofitServices;
+import com.example.potholeapplication.class_pothole.manager.DialogManager;
+import com.example.potholeapplication.class_pothole.manager.LocaleManager;
+import com.example.potholeapplication.Retrofit2.RetrofitServices;
 import com.example.potholeapplication.class_pothole.response.ApiResponse;
 import com.example.potholeapplication.class_pothole.request.EmailReq;
 import com.example.potholeapplication.databinding.ActivityEditEmailBinding;
-import com.example.potholeapplication.interface_pothole.UserAPIInterface;
+import com.example.potholeapplication.Retrofit2.APIInterface;
 import com.google.gson.Gson;
 
 import java.io.IOException;
@@ -69,11 +69,11 @@ public class EditEmailActivity extends AppCompatActivity {
     public void callCheckEmailAPI(){
         String newEmail=binding.etEmail.getText().toString().trim();
         if(newEmail.isEmpty()) {
-            CustomDialog.showDialogErrorString(context,getString(R.string.str_please_enter_your_new_email));
+            DialogManager.showDialogErrorString(context,getString(R.string.str_please_enter_your_new_email));
             return;
         }
         EmailReq emailReq=new EmailReq(newEmail);
-        UserAPIInterface apiService = RetrofitServices.getApiService();
+        APIInterface apiService = RetrofitServices.getApiService();
         Call<ApiResponse> call = apiService.callFindEmailNonExists(emailReq);
         call.enqueue(new Callback<ApiResponse>() {
             @Override
@@ -90,7 +90,7 @@ public class EditEmailActivity extends AppCompatActivity {
                         errorString=response.errorBody().string();
                         Gson gson=new Gson();
                         apiResponse=gson.fromJson(errorString, ApiResponse.class);
-                        CustomDialog.showDialogError(context,apiResponse);
+                        DialogManager.showDialogError(context,apiResponse);
                     } catch (IOException e) {
                         throw new RuntimeException(e);
                     }

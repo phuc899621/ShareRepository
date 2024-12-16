@@ -4,25 +4,17 @@ import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.TextView;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
-import com.example.potholeapplication.class_pothole.CustomDialog;
+import com.example.potholeapplication.class_pothole.manager.DialogManager;
 import com.example.potholeapplication.databinding.ActivityAnalyticsBinding;
-import com.example.potholeapplication.databinding.ActivityHomeScreenBinding;
-import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
 
-import org.eazegraph.lib.charts.PieChart;
 import org.eazegraph.lib.models.PieModel;
 
 import java.util.ArrayList;
@@ -63,7 +55,7 @@ public class AnalyticsActivity extends AppCompatActivity {
         binding.idPieChart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                CustomDialog.showDialogPieChartDetail(context, 40, 30, 30);
+                DialogManager.showDialogPieChartDetail(context, 40, 30, 30);
             }
         });
     }

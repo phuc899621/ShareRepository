@@ -116,4 +116,5 @@
         <item>Nov</item>
         <item>Dec</item>
     </string-array>
+    <string name="str_percent" translatable="false">%</string>
 </resources>

@@ -1,4 +1,4 @@
-package com.example.potholeapplication.interface_pothole;
+package com.example.potholeapplication.Retrofit2;
 
 import com.example.potholeapplication.class_pothole.request.AddPotholeReq;
 import com.example.potholeapplication.class_pothole.request.EditInfoReq;
@@ -20,7 +20,7 @@ import retrofit2.http.PUT;
 import retrofit2.http.Part;
 import retrofit2.http.Path;
 
-public interface UserAPIInterface {
+public interface APIInterface {
     //-----------------------API danh cho dang nhap-----------------------
     @POST("api/auth/login")//dang nhap
     Call<ApiResponse> callLogin(@Body LoginReq loginReq);

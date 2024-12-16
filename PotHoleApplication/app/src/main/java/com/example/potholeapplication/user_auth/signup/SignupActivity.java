@@ -13,14 +13,14 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.potholeapplication.R;
-import com.example.potholeapplication.class_pothole.CustomDialog;
-import com.example.potholeapplication.class_pothole.LocaleManager;
+import com.example.potholeapplication.class_pothole.manager.DialogManager;
+import com.example.potholeapplication.class_pothole.manager.LocaleManager;
 import com.example.potholeapplication.class_pothole.request.RegisterReq;
-import com.example.potholeapplication.class_pothole.RetrofitServices;
+import com.example.potholeapplication.Retrofit2.RetrofitServices;
 import com.example.potholeapplication.class_pothole.response.ApiResponse;
 import com.example.potholeapplication.class_pothole.request.UserVerificationReq;
 import com.example.potholeapplication.databinding.ActivitySignupBinding;
-import com.example.potholeapplication.interface_pothole.UserAPIInterface;
+import com.example.potholeapplication.Retrofit2.APIInterface;
 import com.example.potholeapplication.user_auth.login.LoginScreenActivity;
 import com.google.gson.Gson;
 
@@ -54,7 +54,7 @@ public class SignupActivity extends AppCompatActivity {
         super.attachBaseContext(LocaleManager.updateLanguage(newBase));
     }
     public void callUserVerificationAPI(){
-        UserAPIInterface apiService = RetrofitServices.getApiService();
+        APIInterface apiService = RetrofitServices.getApiService();
         //lay du lieu
         String username=binding.etUsername.getText().toString().trim();
         String password=binding.etPassword.getText().toString().trim();
@@ -64,11 +64,11 @@ public class SignupActivity extends AppCompatActivity {
 
         //kiem tra du lieu nhap vao
         if(username.isEmpty() || password.isEmpty()||name.isEmpty()||email.isEmpty()||confirmPassword.isEmpty()){
-            CustomDialog.showDialogErrorString(context,getString(R.string.str_please_enter_your_information));
+            DialogManager.showDialogErrorString(context,getString(R.string.str_please_enter_your_information));
             return;
         }
         if(!password.equals(confirmPassword)){
-            CustomDialog.showDialogErrorString(context,getString(R.string.str_password_does_not_match));
+            DialogManager.showDialogErrorString(context,getString(R.string.str_password_does_not_match));
             return;
         }
         //tao doi tuong chua email va username de call api kiem tra
@@ -91,7 +91,7 @@ public class SignupActivity extends AppCompatActivity {
                         errorString=response.errorBody().string();
                         Gson gson=new Gson();
                         apiResponse=gson.fromJson(errorString, ApiResponse.class);
-                        CustomDialog.showDialogError(context,apiResponse);
+                        DialogManager.showDialogError(context,apiResponse);
                     } catch (IOException e) {
                         throw new RuntimeException(e);
                     }

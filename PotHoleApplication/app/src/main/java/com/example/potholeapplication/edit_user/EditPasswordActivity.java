@@ -12,14 +12,14 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.potholeapplication.R;
-import com.example.potholeapplication.class_pothole.LocaleManager;
+import com.example.potholeapplication.class_pothole.manager.LocaleManager;
 import com.example.potholeapplication.class_pothole.response.ApiResponse;
-import com.example.potholeapplication.class_pothole.CustomDialog;
-import com.example.potholeapplication.class_pothole.DataEditor;
-import com.example.potholeapplication.class_pothole.RetrofitServices;
+import com.example.potholeapplication.class_pothole.manager.DialogManager;
+import com.example.potholeapplication.class_pothole.manager.LocalDataManager;
+import com.example.potholeapplication.Retrofit2.RetrofitServices;
 import com.example.potholeapplication.class_pothole.request.EditPasswordReq;
 import com.example.potholeapplication.databinding.ActivityEditPasswordBinding;
-import com.example.potholeapplication.interface_pothole.UserAPIInterface;
+import com.example.potholeapplication.Retrofit2.APIInterface;
 import com.google.gson.Gson;
 
 import java.io.IOException;
@@ -50,29 +50,29 @@ public class EditPasswordActivity extends AppCompatActivity {
         super.attachBaseContext(LocaleManager.updateLanguage(newBase));
     }
     public void callEditPasswordApi(){
-        String email= DataEditor.getEmail(context);
+        String email= LocalDataManager.getEmail(context);
         String oldPassword=binding.etOldPassword.getText().toString().trim();
         String newPassword=binding.etNewPassword.getText().toString().trim();
         String confirmPassword=binding.etConfirmPassword.getText().toString().trim();
 
         if(email.isEmpty()){
-            CustomDialog.showDialogErrorString(context,getString(R.string.str_email_not_found));
+            DialogManager.showDialogErrorString(context,getString(R.string.str_email_not_found));
             return;
         }
         if(!newPassword.equals(confirmPassword)){
-            CustomDialog.showDialogErrorString(context,getString(R.string.str_password_does_not_match));
+            DialogManager.showDialogErrorString(context,getString(R.string.str_password_does_not_match));
             return;
         }
 
         EditPasswordReq editPasswordReq=new EditPasswordReq(email,oldPassword,newPassword);
-        UserAPIInterface apiService = RetrofitServices.getApiService();
+        APIInterface apiService = RetrofitServices.getApiService();
         Call<ApiResponse> call = apiService.callChangePassword(editPasswordReq);
         call.enqueue(new Callback<ApiResponse>() {
             @Override
             public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
 
                 if(response.isSuccessful()&&response.body()!=null){
-                    CustomDialog.showDialogOkeThenFinish(context,getString(R.string.str_change_password_successful));
+                    DialogManager.showDialogOkeThenFinish(context,getString(R.string.str_change_password_successful));
                 }
                 else{
                     String errorString;
@@ -81,7 +81,7 @@ public class EditPasswordActivity extends AppCompatActivity {
                         errorString=response.errorBody().string();
                         Gson gson=new Gson();
                         apiResponse=gson.fromJson(errorString, ApiResponse.class);
-                        CustomDialog.showDialogError(context,apiResponse);
+                        DialogManager.showDialogError(context,apiResponse);
                     } catch (IOException e) {
                         throw new RuntimeException(e);
                     }

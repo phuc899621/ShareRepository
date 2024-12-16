@@ -1,4 +1,4 @@
-package com.example.potholeapplication.class_pothole;
+package com.example.potholeapplication.class_pothole.manager;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -16,7 +16,7 @@ import com.example.potholeapplication.class_pothole.response.User;
 import java.io.ByteArrayOutputStream;
 import java.util.List;
 
-public class DataEditor {
+public class LocalDataManager {
     public static byte[] getImageBytesFromSharedPreferences(Context context) {
         SharedPreferences sharedPreferences=context.getSharedPreferences("user_info", MODE_PRIVATE);
         String base64Image = sharedPreferences.getString("image", null);

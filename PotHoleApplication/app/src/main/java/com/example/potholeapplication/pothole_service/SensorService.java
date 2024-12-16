@@ -1,21 +1,14 @@
 package com.example.potholeapplication.pothole_service;
 
-import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.Notification;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.hardware.Sensor;
-import android.hardware.SensorEvent;
-import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.location.Location;
-import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -27,10 +20,6 @@ import android.os.Vibrator;
 import android.util.Log;
 
 import androidx.core.app.ActivityCompat;
-import androidx.core.app.NotificationCompat;
-
-import com.example.potholeapplication.class_pothole.AccelerometerListener;
-import com.example.potholeapplication.class_pothole.GPSListener;
 
 public class SensorService extends Service {
 

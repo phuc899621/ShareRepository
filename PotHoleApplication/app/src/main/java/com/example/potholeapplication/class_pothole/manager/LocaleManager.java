@@ -1,12 +1,15 @@
-package com.example.potholeapplication.class_pothole;
+package com.example.potholeapplication.class_pothole.manager;
 
 import android.annotation.SuppressLint;
-import android.app.Application;
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.util.DisplayMetrics;
 import android.util.Log;
+
+import com.example.potholeapplication.SplashScreenActivity;
 
 import java.util.Locale;
 
@@ -17,10 +20,10 @@ public class LocaleManager {
         Resources resources = context.getResources();
         Configuration config = resources.getConfiguration();
         config.setLocale(locale);
-        DataEditor.saveLanguagePreferences(context,language);
+        LocalDataManager.saveLanguagePreferences(context,language);
     }
     public static Context updateLanguage(Context context){
-        String language=DataEditor.getLanguagePreferences(context);
+        String language= LocalDataManager.getLanguagePreferences(context);
         Locale locale=new Locale(language);
         Locale.setDefault(locale);
         Resources resources = context.getResources();
@@ -29,5 +32,18 @@ public class LocaleManager {
         config.setLocale(locale);
         resources.updateConfiguration(config,dm);
         return context;
+    }
+    public static void updateNewLanguageThenReload(
+            Context context,String newLanguage,Class<?> next
+    ){
+        LocaleManager.updateNewLanguage(context,newLanguage);
+        Resources resources = context.getResources();
+        @SuppressLint({"NewApi", "LocalSuppress"}) String config =
+                resources.getConfiguration().getLocales().get(0).getLanguage();
+
+        Intent intent = new Intent(context, next);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        context.startActivity(intent);
+        ((Activity)context).finish();
     }
 }

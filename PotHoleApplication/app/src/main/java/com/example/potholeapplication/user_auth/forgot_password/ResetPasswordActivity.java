@@ -18,12 +18,12 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.potholeapplication.R;
-import com.example.potholeapplication.class_pothole.LocaleManager;
-import com.example.potholeapplication.class_pothole.RetrofitServices;
+import com.example.potholeapplication.class_pothole.manager.LocaleManager;
+import com.example.potholeapplication.Retrofit2.RetrofitServices;
 import com.example.potholeapplication.class_pothole.response.ApiResponse;
 import com.example.potholeapplication.class_pothole.request.ResetPasswordReq;
 import com.example.potholeapplication.databinding.ActivityResetPasswordBinding;
-import com.example.potholeapplication.interface_pothole.UserAPIInterface;
+import com.example.potholeapplication.Retrofit2.APIInterface;
 import com.google.gson.Gson;
 
 import java.io.IOException;
@@ -92,7 +92,7 @@ public class ResetPasswordActivity extends AppCompatActivity {
             return;
         }
 
-        UserAPIInterface apiService= RetrofitServices.getApiService();
+        APIInterface apiService= RetrofitServices.getApiService();
         ResetPasswordReq resetPasswordReq =new ResetPasswordReq(emailForResetPassword,password);
         Call<ApiResponse> call = apiService.callResetPassword(resetPasswordReq);
         call.enqueue(new Callback<ApiResponse>() {

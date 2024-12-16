@@ -13,13 +13,13 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.potholeapplication.R;
-import com.example.potholeapplication.class_pothole.CustomDialog;
-import com.example.potholeapplication.class_pothole.LocaleManager;
+import com.example.potholeapplication.class_pothole.manager.DialogManager;
+import com.example.potholeapplication.class_pothole.manager.LocaleManager;
 import com.example.potholeapplication.class_pothole.request.EmailReq;
-import com.example.potholeapplication.class_pothole.RetrofitServices;
+import com.example.potholeapplication.Retrofit2.RetrofitServices;
 import com.example.potholeapplication.class_pothole.response.ApiResponse;
 import com.example.potholeapplication.databinding.ActivityForgotPasswordBinding;
-import com.example.potholeapplication.interface_pothole.UserAPIInterface;
+import com.example.potholeapplication.Retrofit2.APIInterface;
 import com.google.gson.Gson;
 
 import java.io.IOException;
@@ -76,13 +76,13 @@ public class ForgotPasswordActivity extends AppCompatActivity {
     public void callFindEmailApi(){
         String email=binding.etEmail.getText().toString().trim();
         if(email.isEmpty()){
-            CustomDialog.showDialogErrorString(context,
+            DialogManager.showDialogErrorString(context,
                     getString(R.string.str_please_enter_your_email));
             return;
         }
 
         // Call API kiem tra email
-        UserAPIInterface apiService = RetrofitServices.getApiService();
+        APIInterface apiService = RetrofitServices.getApiService();
         EmailReq emailReq=new EmailReq(email);
         Call<ApiResponse> call = apiService.callFindEmail(emailReq);
         call.enqueue(new Callback<ApiResponse>() {
@@ -101,7 +101,7 @@ public class ForgotPasswordActivity extends AppCompatActivity {
                         errorString=response.errorBody().string();
                         Gson gson=new Gson();
                         apiResponse=gson.fromJson(errorString, ApiResponse.class);
-                        CustomDialog.showDialogError(context,apiResponse);
+                        DialogManager.showDialogError(context,apiResponse);
 
                     } catch (IOException e) {
                         throw new RuntimeException(e);

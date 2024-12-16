@@ -1,14 +1,11 @@
-package com.example.potholeapplication.class_pothole;
+package com.example.potholeapplication.class_pothole.manager;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Handler;
-import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,14 +13,12 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.potholeapplication.R;
+import com.example.potholeapplication.Retrofit2.RetrofitServices;
 import com.example.potholeapplication.SplashScreenActivity;
 import com.example.potholeapplication.class_pothole.request.AddPotholeReq;
-import com.example.potholeapplication.class_pothole.request.EmailReq;
 import com.example.potholeapplication.class_pothole.response.ApiResponse;
 import com.example.potholeapplication.class_pothole.response.LocationClass;
-import com.example.potholeapplication.edit_user.EditEmailActivity;
-import com.example.potholeapplication.edit_user.EditEmailVerificationActivity;
-import com.example.potholeapplication.interface_pothole.UserAPIInterface;
+import com.example.potholeapplication.Retrofit2.APIInterface;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.card.MaterialCardView;
 import com.google.gson.Gson;
@@ -36,15 +31,23 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class CustomDialog {
+public class DialogManager {
     private static boolean isDialogShowing=false;
-    public static void showDialogOkeThenFinish(Context context, String title){
+
+    //hàm tao dialog
+    private static Dialog createDialog(Context context, int layoutID,boolean isCancelable){
         Dialog dialog=new Dialog(context);
-        dialog.setContentView(R.layout.custom_dialog_oke);
+        dialog.setContentView(layoutID);
         dialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
-        dialog.setCancelable(false);
+        dialog.setCancelable(isCancelable);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        return dialog;
+    }
+    //tạo dialog xong đóng activity
+    public static void showDialogOkeThenFinish(Context context, String title){
+        Dialog dialog=createDialog(context,R.layout.custom_dialog_oke,false);
         dialog.show();
+
         TextView tvTitle=dialog.findViewById(R.id.tvTitle);
         tvTitle.setText(title);
         Handler handler=new Handler();
@@ -58,38 +61,38 @@ public class CustomDialog {
         },1500);
     }
 
+    //tạo dialog lỗi, in ra lôi từ sever trả ve
     public static void showDialogError(Context context, ApiResponse apiResponse){
-        Dialog dialog=new Dialog(context);
-        dialog.setContentView(R.layout.custom_dialog_error);
-        dialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
-        dialog.setCancelable(true);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        Dialog dialog=createDialog(context,R.layout.custom_dialog_error,true);
 
         Button btnConfirm=dialog.findViewById(R.id.btnConfirm);
         TextView tvErrorTitle=dialog.findViewById(R.id.tvTitle);
-        if(apiResponse.getMessage().trim().equals("Server error")){
-            tvErrorTitle.setText(R.string.str_server_error);
-        }
-        if(apiResponse.getMessage().trim().equals("Username not found")){
-            tvErrorTitle.setText(R.string.str_username_not_found);
-        }
-        if(apiResponse.getMessage().trim().equals("Wrong Password")){
-            tvErrorTitle.setText(R.string.str_wrong_password);
-        }
-        if(apiResponse.getMessage().trim().equals("User not found")){
-            tvErrorTitle.setText(R.string.str_user_not_found);
-        }
-        if(apiResponse.getMessage().trim().equals("Username already exists")){
-            tvErrorTitle.setText(R.string.str_username_already_exists);
-        }
-        if(apiResponse.getMessage().trim().equals("Email not found")){
-            tvErrorTitle.setText(R.string.str_email_not_found);
-        }
-        if(apiResponse.getMessage().trim().equals("Email already exists")){
-            tvErrorTitle.setText(R.string.str_email_already_exists);
-        }
-        if(apiResponse.getMessage().trim().equals("Error save pothole")){
-            tvErrorTitle.setText(R.string.str_error_save_pothole);
+        switch (apiResponse.getMessage().trim()){
+            case "Server error":
+                tvErrorTitle.setText(R.string.str_server_error);
+                break;
+            case "Username not found":
+                tvErrorTitle.setText(R.string.str_username_not_found);
+                break;
+            case "Wrong Password":
+                tvErrorTitle.setText(R.string.str_wrong_password);
+                break;
+            case "User not found":
+                tvErrorTitle.setText(R.string.str_user_not_found);
+                break;
+            case "Username already exists":
+                tvErrorTitle.setText(R.string.str_username_already_exists);
+                break;
+            case "Email not found":
+                tvErrorTitle.setText(R.string.str_email_not_found);
+                break;
+            case "Email already exists":
+                tvErrorTitle.setText(R.string.str_email_already_exists);
+                break;
+            case "Error save pothole":
+                tvErrorTitle.setText(R.string.str_error_save_pothole);
+                break;
+            default: break;
         }
         dialog.show();
         btnConfirm.setOnClickListener(new View.OnClickListener() {
@@ -99,12 +102,11 @@ public class CustomDialog {
             }
         });
     }
+
+    //tao dialog lỗi v in ra 1 chuỗi string
     public static void showDialogErrorString(Context context, String message){
-        Dialog dialog=new Dialog(context);
-        dialog.setContentView(R.layout.custom_dialog_error);
-        dialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
-        dialog.setCancelable(true);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        Dialog dialog=createDialog(context,R.layout.custom_dialog_error,true);
+
         Button btnConfirm=dialog.findViewById(R.id.btnConfirm);
         TextView tvErrorTitle=dialog.findViewById(R.id.tvTitle);
         tvErrorTitle.setText(message);
@@ -116,14 +118,13 @@ public class CustomDialog {
             }
         });
     }
+
+    //tao dialog oke và chuyển dđến 1 activity khác
     public static void showDialogOkeNavigation(Context context, String title,
                                                Class<?> next){
-        Dialog dialog=new Dialog(context);
-        dialog.setContentView(R.layout.custom_dialog_oke);
-        dialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
-        dialog.setCancelable(false);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        Dialog dialog=createDialog(context,R.layout.custom_dialog_oke,false);
         dialog.show();
+
         TextView tvTitle=dialog.findViewById(R.id.tvTitle);
         tvTitle.setText(title);
         Handler handler=new Handler();
@@ -136,14 +137,13 @@ public class CustomDialog {
             }
         },1500);
     }
+
+    //tạo dialog oke, chuyển đến 1 activity mới, xoóa activity truước nó
     public static void showDialogOkeNavigationClear(Context context, String title,
                                                Class<?> next){
-        Dialog dialog=new Dialog(context);
-        dialog.setContentView(R.layout.custom_dialog_oke);
-        dialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
-        dialog.setCancelable(false);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        Dialog dialog=createDialog(context,R.layout.custom_dialog_oke,false);
         dialog.show();
+
         TextView tvTitle=dialog.findViewById(R.id.tvTitle);
         tvTitle.setText(title);
         Handler handler=new Handler();
@@ -158,12 +158,10 @@ public class CustomDialog {
             }
         },1500);
     }
+
+    //gọi dialog đổi ngon ngữ
     public static void showDialogLanguage(Context context){
-        Dialog dialog=new Dialog(context);
-        dialog.setContentView(R.layout.custom_dialog_language);
-        dialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
-        dialog.setCancelable(true);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        Dialog dialog=createDialog(context,R.layout.custom_dialog_language,true);
 
         MaterialCardView cvEnglish=dialog.findViewById(R.id.cvEnglish);
         MaterialCardView cvVietnamese=dialog.findViewById(R.id.cvVietnamese);
@@ -171,50 +169,30 @@ public class CustomDialog {
         cvEnglish.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                LocaleManager.updateNewLanguage(context,"en");
-                Resources resources = context.getResources();
-                @SuppressLint({"NewApi", "LocalSuppress"}) String config =
-                        resources.getConfiguration().getLocales().get(0).getLanguage();
-                Log.d("Language",config);
+                LocaleManager.updateNewLanguageThenReload(context,"en", SplashScreenActivity.class);
                 dialog.dismiss();
-                Intent intent = new Intent(context, SplashScreenActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                context.startActivity(intent);
-                ((Activity)context).finish();
             }
         });
         cvVietnamese.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                LocaleManager.updateNewLanguage(context,"vi");
-                Resources resources = context.getResources();
-                @SuppressLint({"NewApi", "LocalSuppress"}) String config =
-                        resources.getConfiguration().getLocales().get(0).getLanguage();
-                Log.d("Language",config);
+                LocaleManager.updateNewLanguageThenReload(context,"vi", SplashScreenActivity.class);
                 dialog.dismiss();
-                Intent intent = new Intent(context, SplashScreenActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                context.startActivity(intent);
-                ((Activity)context).finish();
             }
         });
     }
+
+    //Goi dialog hien thi thong tin lên piechart
     public static void showDialogPieChartDetail(Context context, int large,int medium, int small){
-        Dialog dialog=new Dialog(context);
-        dialog.setContentView(R.layout.custom_dialog_pie_chart);
-        dialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
-        dialog.setCancelable(true);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        Dialog dialog=createDialog(context,R.layout.custom_dialog_pie_chart,true);
 
         TextView tvLargePercentage=dialog.findViewById(R.id.tvLargePercentage);
         TextView tvMediumPercentage=dialog.findViewById(R.id.tvMediumPercentage);
         TextView tvSmallPercentage=dialog.findViewById(R.id.tvSmallPercentage);
 
-        tvLargePercentage.setText(large+"%");
-        tvMediumPercentage.setText(medium+"%");
-        tvSmallPercentage.setText(small+"%");
-
-
+        tvLargePercentage.setText(large+R.string.str_percent);
+        tvMediumPercentage.setText(medium+R.string.str_percent);
+        tvSmallPercentage.setText(small+R.string.str_percent);
 
         dialog.show();
         setIsDialogShowing(true);
@@ -226,15 +204,11 @@ public class CustomDialog {
     }
 
     public static void setIsDialogShowing(boolean isDialogShowing) {
-        CustomDialog.isDialogShowing = isDialogShowing;
+        DialogManager.isDialogShowing = isDialogShowing;
     }
     public static void showDialogSavePothole(Context context,double longtitude,
                                              double latitude,String severity){
-        Dialog dialog=new Dialog(context);
-        dialog.setContentView(R.layout.custom_dialog_save_pothole);
-        dialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
-        dialog.setCancelable(true);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        Dialog dialog=createDialog(context,R.layout.custom_dialog_save_pothole,true);
 
         TextView tvLatitude=dialog.findViewById(R.id.tvLatitude);
         TextView tvLongtitude=dialog.findViewById(R.id.tvLongtitude);
@@ -248,6 +222,7 @@ public class CustomDialog {
                 longtitude);
         tvSeverity.setText(context.getString(R.string.str_severity)+": "+
                 severity);
+
         dialog.show();
 
         setIsDialogShowing(true);
@@ -261,7 +236,7 @@ public class CustomDialog {
 
                 callSavePotholeAPI(context, new AddPotholeReq(
                         new LocationClass(coordinates),
-                        DataEditor.getEmail(context),
+                        LocalDataManager.getEmail(context),
                         severity
                 ));
                 setIsDialogShowing(false);
@@ -278,7 +253,7 @@ public class CustomDialog {
     }
     public static void callSavePotholeAPI(Context context, AddPotholeReq addPotholeReq){
 
-        UserAPIInterface apiService = RetrofitServices.getApiService();
+        APIInterface apiService = RetrofitServices.getApiService();
         Call<ApiResponse> call = apiService.callAddPothole(addPotholeReq);
         call.enqueue(new Callback<ApiResponse>() {
             @Override
@@ -293,7 +268,7 @@ public class CustomDialog {
                         errorString=response.errorBody().string();
                         Gson gson=new Gson();
                         apiResponse=gson.fromJson(errorString, ApiResponse.class);
-                        CustomDialog.showDialogError(context,apiResponse);
+                        DialogManager.showDialogError(context,apiResponse);
                     } catch (IOException e) {
                         throw new RuntimeException(e);
                     }

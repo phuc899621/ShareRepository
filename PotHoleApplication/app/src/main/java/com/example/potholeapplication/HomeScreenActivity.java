@@ -6,10 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
-import android.content.res.Configuration;
-import android.content.res.Resources;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -19,9 +16,9 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import com.example.potholeapplication.class_pothole.CustomDialog;
-import com.example.potholeapplication.class_pothole.DataEditor;
-import com.example.potholeapplication.class_pothole.LocaleManager;
+import com.example.potholeapplication.class_pothole.manager.DialogManager;
+import com.example.potholeapplication.class_pothole.manager.LocalDataManager;
+import com.example.potholeapplication.class_pothole.manager.LocaleManager;
 import com.example.potholeapplication.databinding.ActivityHomeScreenBinding;
 import com.github.mikephil.charting.charts.LineChart;
 
@@ -70,8 +67,8 @@ public class HomeScreenActivity extends AppCompatActivity {
                 double longitude = intent.getDoubleExtra("longitude", 0);
                 String severity= intent.getStringExtra("severity");
                 Toast.makeText(context, severity, Toast.LENGTH_SHORT).show();
-                if(!CustomDialog.isIsDialogShowing()) {
-                    CustomDialog.showDialogSavePothole(context,
+                if(!DialogManager.isIsDialogShowing()) {
+                    DialogManager.showDialogSavePothole(context,
                             longitude, latitude, severity);
                 }
             }
@@ -112,7 +109,7 @@ public class HomeScreenActivity extends AppCompatActivity {
         );
         String name= sharedPreferences.getString("name","");
         binding.tvName.setText(name);
-        binding.imaUserIcon.setImageBitmap(DataEditor.getImageBitmapFromSharePreferences(context));
+        binding.imaUserIcon.setImageBitmap(LocalDataManager.getImageBitmapFromSharePreferences(context));
     }
 //    public void chartData(){
 //        lineChart = findViewById(R.id.lineChart);
