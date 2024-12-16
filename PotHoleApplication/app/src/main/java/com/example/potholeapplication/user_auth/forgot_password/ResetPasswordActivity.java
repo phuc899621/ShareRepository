@@ -1,15 +1,10 @@
 package com.example.potholeapplication.user_auth.forgot_password;
 
-import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -18,22 +13,14 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.potholeapplication.R;
-import com.example.potholeapplication.Retrofit2.APICallBack;
-import com.example.potholeapplication.class_pothole.manager.APIManager;
+import com.example.potholeapplication.Retrofit2.UserAPICallBack;
+import com.example.potholeapplication.class_pothole.manager.UserAPIManager;
 import com.example.potholeapplication.class_pothole.manager.DialogManager;
 import com.example.potholeapplication.class_pothole.manager.LocaleManager;
-import com.example.potholeapplication.Retrofit2.RetrofitServices;
-import com.example.potholeapplication.class_pothole.request.EmailReq;
 import com.example.potholeapplication.class_pothole.response.UserResponse;
 import com.example.potholeapplication.class_pothole.request.ResetPasswordReq;
 import com.example.potholeapplication.databinding.ActivityResetPasswordBinding;
-import com.example.potholeapplication.Retrofit2.APIInterface;
-import com.google.gson.Gson;
 
-import java.io.IOException;
-
-import retrofit2.Call;
-import retrofit2.Callback;
 import retrofit2.Response;
 
 public class ResetPasswordActivity extends AppCompatActivity {
@@ -91,8 +78,8 @@ public class ResetPasswordActivity extends AppCompatActivity {
             DialogManager.showDialogErrorString(this,getString(R.string.str_password_does_not_match));
             return;
         }
-        APIManager.callResetPassword(new ResetPasswordReq(emailForResetPassword,password)
-                ,new APICallBack() {
+        UserAPIManager.callResetPassword(new ResetPasswordReq(emailForResetPassword,password)
+                ,new UserAPICallBack() {
                     @Override
                     public void onSuccess(Response<UserResponse> response) {
                         Intent intent=new Intent(ResetPasswordActivity.this,

@@ -81,4 +81,9 @@
     <string name="str_yes">Vâng</string>
     <string name="str_no">Không</string>
     <string name="str_error_save_pothole">Lỗi khi lưu ổ gà</string>
+    <string name="str_pothole_detection_repairs_overview"><![CDATA[Biểu đồ ổ gà tìm thấy & được sửa]]></string>
+    <string name="str_large">Lớn</string>
+    <string name="str_medium">Vừa</string>
+    <string name="str_small">Nhỏ</string>
+    <string name="pothole_count_by_size">Biểu đồ ổ gà theo kích cỡ</string>
 </resources>

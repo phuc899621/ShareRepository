@@ -1,5 +1,6 @@
 package com.example.potholeapplication.class_pothole.response;
 
+import com.example.potholeapplication.class_pothole.other.Pothole;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;

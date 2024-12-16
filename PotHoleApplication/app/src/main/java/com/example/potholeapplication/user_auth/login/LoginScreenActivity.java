@@ -15,15 +15,15 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.potholeapplication.HomeScreenActivity;
 import com.example.potholeapplication.R;
-import com.example.potholeapplication.Retrofit2.APICallBack;
-import com.example.potholeapplication.class_pothole.manager.APIManager;
+import com.example.potholeapplication.Retrofit2.UserAPICallBack;
+import com.example.potholeapplication.class_pothole.manager.UserAPIManager;
 import com.example.potholeapplication.class_pothole.manager.DialogManager;
 import com.example.potholeapplication.class_pothole.manager.LocalDataManager;
 import com.example.potholeapplication.class_pothole.manager.LocaleManager;
 import com.example.potholeapplication.class_pothole.request.EmailReq;
 import com.example.potholeapplication.class_pothole.request.LoginReq;
 import com.example.potholeapplication.Retrofit2.RetrofitServices;
-import com.example.potholeapplication.class_pothole.response.User;
+import com.example.potholeapplication.class_pothole.other.User;
 import com.example.potholeapplication.class_pothole.response.UserResponse;
 import com.example.potholeapplication.databinding.ActivityLoginScreenBinding;
 import com.example.potholeapplication.Retrofit2.APIInterface;
@@ -71,7 +71,7 @@ public class LoginScreenActivity extends AppCompatActivity {
             DialogManager.showDialogErrorString(context,getString(R.string.str_please_enter_username_and_password));
             return;
         }
-        APIManager.callLogin(new LoginReq(username,password), new APICallBack() {
+        UserAPIManager.callLogin(new LoginReq(username,password), new UserAPICallBack() {
             @Override
             public void onSuccess(Response<UserResponse> response) {
                 LocalDataManager.saveUserToSharePreferences(context,response.body().getData());

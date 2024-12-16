@@ -13,21 +13,14 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.potholeapplication.R;
-import com.example.potholeapplication.Retrofit2.APICallBack;
-import com.example.potholeapplication.class_pothole.manager.APIManager;
+import com.example.potholeapplication.Retrofit2.UserAPICallBack;
+import com.example.potholeapplication.class_pothole.manager.UserAPIManager;
 import com.example.potholeapplication.class_pothole.manager.DialogManager;
 import com.example.potholeapplication.class_pothole.manager.LocaleManager;
 import com.example.potholeapplication.class_pothole.request.EmailReq;
-import com.example.potholeapplication.Retrofit2.RetrofitServices;
 import com.example.potholeapplication.class_pothole.response.UserResponse;
 import com.example.potholeapplication.databinding.ActivityForgotPasswordVerificationBinding;
-import com.example.potholeapplication.Retrofit2.APIInterface;
-import com.google.gson.Gson;
 
-import java.io.IOException;
-
-import retrofit2.Call;
-import retrofit2.Callback;
 import retrofit2.Response;
 
 public class ForgotPasswordVerificationActivity extends AppCompatActivity {
@@ -85,8 +78,8 @@ public class ForgotPasswordVerificationActivity extends AppCompatActivity {
         emailForResetPassword=intent.getStringExtra("email");
     }
     public void callAPiSendCode(){
-        APIManager.callResetPassCode(new EmailReq(emailForResetPassword)
-                ,new APICallBack() {
+        UserAPIManager.callResetPassCode(new EmailReq(emailForResetPassword)
+                ,new UserAPICallBack() {
                     @Override
                     public void onSuccess(Response<UserResponse> response) {
                         code=response.body().getMessage().trim();

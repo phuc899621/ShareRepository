@@ -13,8 +13,8 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.potholeapplication.R;
-import com.example.potholeapplication.Retrofit2.APICallBack;
-import com.example.potholeapplication.class_pothole.manager.APIManager;
+import com.example.potholeapplication.Retrofit2.UserAPICallBack;
+import com.example.potholeapplication.class_pothole.manager.UserAPIManager;
 import com.example.potholeapplication.class_pothole.manager.DialogManager;
 import com.example.potholeapplication.class_pothole.manager.LocaleManager;
 import com.example.potholeapplication.class_pothole.request.RegisterReq;
@@ -24,12 +24,7 @@ import com.example.potholeapplication.class_pothole.request.UserVerificationReq;
 import com.example.potholeapplication.databinding.ActivitySignupBinding;
 import com.example.potholeapplication.Retrofit2.APIInterface;
 import com.example.potholeapplication.user_auth.login.LoginScreenActivity;
-import com.google.gson.Gson;
 
-import java.io.IOException;
-
-import retrofit2.Call;
-import retrofit2.Callback;
 import retrofit2.Response;
 
 public class SignupActivity extends AppCompatActivity {
@@ -74,8 +69,8 @@ public class SignupActivity extends AppCompatActivity {
             return;
         }
         //call api kiem tra username va email co ton tai chua
-        APIManager.callVerifyBeforeRegister(new UserVerificationReq(username,email)
-                , new APICallBack() {
+        UserAPIManager.callVerifyBeforeRegister(new UserVerificationReq(username,email)
+                , new UserAPICallBack() {
             @Override
             public void onSuccess(Response<UserResponse> response) {
                 RegisterReq registerReq=new RegisterReq(username,name,email,password);

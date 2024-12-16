@@ -139,7 +139,7 @@
                     android:id="@+id/tvClassification"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/str_pothole_classification"
+                    android:text="@string/str_pothole_detection_repairs_overview"
                     android:textColor="@color/dark_purple"
                     android:textStyle="bold"
                     android:textSize="17dp"
@@ -186,10 +186,10 @@
                     android:id="@+id/tvMonthlyPotholes"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/str_pothole_classification"
+                    android:text="@string/pothole_count_by_size"
                     android:textColor="@color/dark_purple"
                     android:textStyle="bold"
-                    android:textSize="17dp"
+                    android:textSize="17sp"
                     app:layout_constraintTop_toBottomOf="@+id/guideTopSheet"
                     app:layout_constraintLeft_toLeftOf="@id/guideLeftSheet6" />
                 <TextView

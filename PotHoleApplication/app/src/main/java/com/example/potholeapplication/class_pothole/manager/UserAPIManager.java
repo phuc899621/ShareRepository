@@ -1,6 +1,6 @@
 package com.example.potholeapplication.class_pothole.manager;
 
-import com.example.potholeapplication.Retrofit2.APICallBack;
+import com.example.potholeapplication.Retrofit2.UserAPICallBack;
 import com.example.potholeapplication.Retrofit2.APIInterface;
 import com.example.potholeapplication.Retrofit2.RetrofitServices;
 import com.example.potholeapplication.class_pothole.request.AddPotholeReq;
@@ -21,21 +21,20 @@ import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.http.Multipart;
 
-public class APIManager {
+public class UserAPIManager {
     private static APIInterface apiInterface;
     private static void getApiInterface(){
         if(apiInterface==null){
             apiInterface= RetrofitServices.getApiService();
         }
     }
-    private static void setAPIReturn(Call<UserResponse> call, APICallBack apiCallBack){
+    private static void setUserAPIReturn(Call<UserResponse> call, UserAPICallBack userApiCallBack){
         call.enqueue(new Callback<UserResponse>() {
             @Override
             public void onResponse(Call<UserResponse> call, Response<UserResponse> response) {
                 if(response.isSuccessful()&&response.body()!=null){
-                    apiCallBack.onSuccess(response);
+                    userApiCallBack.onSuccess(response);
                 }
                 else{
                     String errorString;
@@ -44,102 +43,103 @@ public class APIManager {
                         errorString=response.errorBody().string();
                         Gson gson=new Gson();
                         userResponse =gson.fromJson(errorString, UserResponse.class);
-                        apiCallBack.onError(userResponse);
+                        userApiCallBack.onError(userResponse);
 
                     } catch (IOException e) {
-                        apiCallBack.onFailure(e);
+                        userApiCallBack.onFailure(e);
                     }
                 }
             }
             @Override
             public void onFailure(Call<UserResponse> call, Throwable t) {
-                apiCallBack.onFailure(t);
+                userApiCallBack.onFailure(t);
             }
         });
     }
+
     //--------------------API Đăng nhập------------------------------
-    public static void callLogin(LoginReq loginReq, APICallBack apiCallBack){
+    public static void callLogin(LoginReq loginReq, UserAPICallBack userApiCallBack){
         getApiInterface();
         Call<UserResponse> call = apiInterface.callLogin(loginReq);
-        setAPIReturn(call,apiCallBack);
+        setUserAPIReturn(call, userApiCallBack);
     }
     //-----------------------API danh cho dang ki-----------------------------
     public static void callVerifyBeforeRegister(UserVerificationReq userVerificationReq,
-                                                APICallBack apiCallBack){
+                                                UserAPICallBack userApiCallBack){
         getApiInterface();
         Call<UserResponse> call = apiInterface.callVerifyBeforeRegister(userVerificationReq);
-        setAPIReturn(call,apiCallBack);
+        setUserAPIReturn(call, userApiCallBack);
     }
-    public static void callRegisterCode(EmailReq emailReq, APICallBack apiCallBack){
+    public static void callRegisterCode(EmailReq emailReq, UserAPICallBack userApiCallBack){
         getApiInterface();
         Call<UserResponse> call = apiInterface.callRegisterCode(emailReq);
-        setAPIReturn(call,apiCallBack);
+        setUserAPIReturn(call, userApiCallBack);
     }
-    public static void callRegister(RegisterReq registerReq, APICallBack apiCallBack){
+    public static void callRegister(RegisterReq registerReq, UserAPICallBack userApiCallBack){
         getApiInterface();
         Call<UserResponse> call = apiInterface.callRegister(registerReq);
-        setAPIReturn(call,apiCallBack);
+        setUserAPIReturn(call, userApiCallBack);
     }
     //----------------------API cho forgot password------------------------
-    public static void callFindEmail(EmailReq emailReq, APICallBack apiCallBack){
+    public static void callFindEmail(EmailReq emailReq, UserAPICallBack userApiCallBack){
         getApiInterface();
         Call<UserResponse> call = apiInterface.callFindEmail(emailReq);
-        setAPIReturn(call,apiCallBack);
+        setUserAPIReturn(call, userApiCallBack);
     }
-    public static void callResetPassCode(EmailReq emailReq, APICallBack apiCallBack){
+    public static void callResetPassCode(EmailReq emailReq, UserAPICallBack userApiCallBack){
         getApiInterface();
         Call<UserResponse> call = apiInterface.callResetPassCode(emailReq);
-        setAPIReturn(call,apiCallBack);
+        setUserAPIReturn(call, userApiCallBack);
     }
-    public static void callResetPassword(ResetPasswordReq resetPasswordReq, APICallBack apiCallBack){
+    public static void callResetPassword(ResetPasswordReq resetPasswordReq, UserAPICallBack userApiCallBack){
         getApiInterface();
         Call<UserResponse> call = apiInterface.callResetPassword(resetPasswordReq);
-        setAPIReturn(call,apiCallBack);
+        setUserAPIReturn(call, userApiCallBack);
     }
     //------------------------API cho edit email-------------
-    public static void callFindEmailNonExists(EmailReq emailReq, APICallBack apiCallBack){
+    public static void callFindEmailNonExists(EmailReq emailReq, UserAPICallBack userApiCallBack){
         getApiInterface();
         Call<UserResponse> call = apiInterface.callFindEmailNonExists(emailReq);
-        setAPIReturn(call,apiCallBack);
+        setUserAPIReturn(call, userApiCallBack);
     }
-    public static void callEmailCode(EmailReq emailReq, APICallBack apiCallBack){
+    public static void callEmailCode(EmailReq emailReq, UserAPICallBack userApiCallBack){
         getApiInterface();
         Call<UserResponse> call = apiInterface.callEmailCode(emailReq);
-        setAPIReturn(call,apiCallBack);
+        setUserAPIReturn(call, userApiCallBack);
     }
-    public static void callEditEmail(String email,EmailReq emailReq, APICallBack apiCallBack){
+    public static void callEditEmail(String email,EmailReq emailReq, UserAPICallBack userApiCallBack){
         getApiInterface();
         Call<UserResponse> call = apiInterface.callEditEmail(email,emailReq);
-        setAPIReturn(call,apiCallBack);
+        setUserAPIReturn(call, userApiCallBack);
     }
     //---------------------API cho edit username va name--------
-    public static void callEditInfo(String email, EditInfoReq editInfoReq, APICallBack apiCallBack){
+    public static void callEditInfo(String email, EditInfoReq editInfoReq, UserAPICallBack userApiCallBack){
         getApiInterface();
         Call<UserResponse> call = apiInterface.callEditInfo(email,editInfoReq);
-        setAPIReturn(call,apiCallBack);
+        setUserAPIReturn(call, userApiCallBack);
     }
     //---------------------API cho edit password---------------------
-    public static void callChangePassword(EditPasswordReq editPasswordReq, APICallBack apiCallBack){
+    public static void callChangePassword(EditPasswordReq editPasswordReq, UserAPICallBack userApiCallBack){
         getApiInterface();
         Call<UserResponse> call = apiInterface.callChangePassword(editPasswordReq);
-        setAPIReturn(call,apiCallBack);
+        setUserAPIReturn(call, userApiCallBack);
     }
     //---------------------API lấy hinh anh-----------------------
-    public static void callSaveImage(RequestBody email, MultipartBody.Part image, APICallBack apiCallBack){
+    public static void callSaveImage(RequestBody email, MultipartBody.Part image, UserAPICallBack userApiCallBack){
         getApiInterface();
         Call<UserResponse> call = apiInterface.callSaveImage(email,image);
-        setAPIReturn(call,apiCallBack);
+        setUserAPIReturn(call, userApiCallBack);
     }
-    public static void callFindImage(EmailReq emailReq, APICallBack apiCallBack){
+    public static void callFindImage(EmailReq emailReq, UserAPICallBack userApiCallBack){
         getApiInterface();
         Call<UserResponse> call = apiInterface.callFindImage(emailReq);
-        setAPIReturn(call,apiCallBack);
+        setUserAPIReturn(call, userApiCallBack);
     }
     //--------------------API lưu pothole-------------------
-    public static void callAddPothole(AddPotholeReq addPotholeReq, APICallBack apiCallBack){
+    public static void callAddPothole(AddPotholeReq addPotholeReq, UserAPICallBack userApiCallBack){
         getApiInterface();
         Call<UserResponse> call = apiInterface.callAddPothole(addPotholeReq);
-        setAPIReturn(call,apiCallBack);
+        setUserAPIReturn(call, userApiCallBack);
     }
 
 }

@@ -117,4 +117,9 @@
         <item>Dec</item>
     </string-array>
     <string name="str_percent" translatable="false">%</string>
+    <string name="str_pothole_detection_repairs_overview"><![CDATA[Pothole Detection & Repairs Overview]]></string>
+    <string name="str_large">Large</string>
+    <string name="str_medium">Medium</string>
+    <string name="str_small">Small</string>
+    <string name="pothole_count_by_size">Pothole Count By Size</string>
 </resources>

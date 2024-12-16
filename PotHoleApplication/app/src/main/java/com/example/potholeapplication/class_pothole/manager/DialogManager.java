@@ -13,23 +13,17 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.potholeapplication.R;
-import com.example.potholeapplication.Retrofit2.APICallBack;
-import com.example.potholeapplication.Retrofit2.RetrofitServices;
+import com.example.potholeapplication.Retrofit2.UserAPICallBack;
 import com.example.potholeapplication.SplashScreenActivity;
 import com.example.potholeapplication.class_pothole.request.AddPotholeReq;
 import com.example.potholeapplication.class_pothole.response.UserResponse;
-import com.example.potholeapplication.class_pothole.response.LocationClass;
-import com.example.potholeapplication.Retrofit2.APIInterface;
+import com.example.potholeapplication.class_pothole.other.LocationClass;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.card.MaterialCardView;
-import com.google.gson.Gson;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import retrofit2.Call;
-import retrofit2.Callback;
 import retrofit2.Response;
 
 public class DialogManager {
@@ -184,16 +178,16 @@ public class DialogManager {
     }
 
     //Goi dialog hien thi thong tin lên piechart
-    public static void showDialogPieChartDetail(Context context, int large,int medium, int small){
+    public static void showDialogPieChartDetail(Context context, float large,float medium, float small){
         Dialog dialog=createDialog(context,R.layout.custom_dialog_pie_chart,true);
 
         TextView tvLargePercentage=dialog.findViewById(R.id.tvLargePercentage);
         TextView tvMediumPercentage=dialog.findViewById(R.id.tvMediumPercentage);
         TextView tvSmallPercentage=dialog.findViewById(R.id.tvSmallPercentage);
 
-        tvLargePercentage.setText(large+R.string.str_percent);
-        tvMediumPercentage.setText(medium+R.string.str_percent);
-        tvSmallPercentage.setText(small+R.string.str_percent);
+        tvLargePercentage.setText(String.format("%.2f%%", large));
+        tvMediumPercentage.setText(String.format("%.2f%%", medium));
+        tvSmallPercentage.setText(String.format("%.2f%%", small));
 
         dialog.show();
         setIsDialogShowing(true);
@@ -254,8 +248,8 @@ public class DialogManager {
     }
     private static void callSavePotholeAPI(Context context, AddPotholeReq addPotholeReq){
 
-        APIManager.callAddPothole(addPotholeReq
-                ,new APICallBack() {
+        UserAPIManager.callAddPothole(addPotholeReq
+                ,new UserAPICallBack() {
                     @Override
                     public void onSuccess(Response<UserResponse> response) {
 

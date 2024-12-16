@@ -13,23 +13,14 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.potholeapplication.R;
-import com.example.potholeapplication.Retrofit2.APICallBack;
-import com.example.potholeapplication.class_pothole.manager.APIManager;
+import com.example.potholeapplication.Retrofit2.UserAPICallBack;
+import com.example.potholeapplication.class_pothole.manager.UserAPIManager;
 import com.example.potholeapplication.class_pothole.manager.DialogManager;
 import com.example.potholeapplication.class_pothole.manager.LocaleManager;
-import com.example.potholeapplication.Retrofit2.RetrofitServices;
 import com.example.potholeapplication.class_pothole.response.UserResponse;
 import com.example.potholeapplication.class_pothole.request.EmailReq;
 import com.example.potholeapplication.databinding.ActivityEditEmailBinding;
-import com.example.potholeapplication.Retrofit2.APIInterface;
-import com.example.potholeapplication.user_auth.forgot_password.ForgotPasswordActivity;
-import com.example.potholeapplication.user_auth.forgot_password.ForgotPasswordVerificationActivity;
-import com.google.gson.Gson;
 
-import java.io.IOException;
-
-import retrofit2.Call;
-import retrofit2.Callback;
 import retrofit2.Response;
 
 public class EditEmailActivity extends AppCompatActivity {
@@ -76,8 +67,8 @@ public class EditEmailActivity extends AppCompatActivity {
             DialogManager.showDialogErrorString(context,getString(R.string.str_please_enter_your_new_email));
             return;
         }
-        APIManager.callFindEmailNonExists(new EmailReq(newEmail)
-                ,new APICallBack() {
+        UserAPIManager.callFindEmailNonExists(new EmailReq(newEmail)
+                ,new UserAPICallBack() {
                     @Override
                     public void onSuccess(Response<UserResponse> response) {
                         Intent intent=new Intent(EditEmailActivity.this, EditEmailVerificationActivity.class);

@@ -80,4 +80,9 @@
     <string name="str_yes">Yes</string>
     <string name="str_no">No</string>
     <string name="str_error_save_pothole">Error save pothole</string>
+    <string name="str_pothole_detection_repairs_overview"><![CDATA[Pothole Detection & Repairs Overview]]></string>
+    <string name="str_large">Large</string>
+    <string name="str_medium">Medium</string>
+    <string name="str_small">Small</string>
+    <string name="pothole_count_by_size">Pothole Count By Size</string>
 </resources>

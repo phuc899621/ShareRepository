@@ -1,11 +1,14 @@
 package com.example.potholeapplication.Retrofit2;
 
 import com.example.potholeapplication.class_pothole.request.AddPotholeReq;
+import com.example.potholeapplication.class_pothole.request.DayReq;
 import com.example.potholeapplication.class_pothole.request.EditInfoReq;
 import com.example.potholeapplication.class_pothole.request.EditPasswordReq;
 import com.example.potholeapplication.class_pothole.request.EmailReq;
 import com.example.potholeapplication.class_pothole.request.LoginReq;
 import com.example.potholeapplication.class_pothole.request.RegisterReq;
+import com.example.potholeapplication.class_pothole.response.CountResponse;
+import com.example.potholeapplication.class_pothole.response.SeverityResponse;
 import com.example.potholeapplication.class_pothole.response.UserResponse;
 import com.example.potholeapplication.class_pothole.request.ResetPasswordReq;
 import com.example.potholeapplication.class_pothole.request.UserVerificationReq;
@@ -14,6 +17,7 @@ import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.GET;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
@@ -60,5 +64,12 @@ public interface APIInterface {
     //--------------------API lưu pothole-------------------
     @POST("api/pothole/add")//luu pothole
     Call<UserResponse> callAddPothole(@Body AddPotholeReq addPotholeReq);
+    //--------------------API cho analystic-----------------------
+    @POST("api/pothole/find/year")//goi so luong pothole/fixed pothole theo tung thang
+    Call<CountResponse> callGetPotholeCountByMonth(@Body DayReq dayReq);
+    @GET("api/pothole/find/severity")//goi lay so luong pothole theo kích thước
+    Call<SeverityResponse> callGetPotholeBySeverity();
+
+    //--------------------API
 
 }

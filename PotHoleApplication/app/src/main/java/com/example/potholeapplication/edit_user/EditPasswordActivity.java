@@ -12,23 +12,15 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.potholeapplication.R;
-import com.example.potholeapplication.Retrofit2.APICallBack;
-import com.example.potholeapplication.class_pothole.manager.APIManager;
+import com.example.potholeapplication.Retrofit2.UserAPICallBack;
+import com.example.potholeapplication.class_pothole.manager.UserAPIManager;
 import com.example.potholeapplication.class_pothole.manager.LocaleManager;
-import com.example.potholeapplication.class_pothole.request.EmailReq;
 import com.example.potholeapplication.class_pothole.response.UserResponse;
 import com.example.potholeapplication.class_pothole.manager.DialogManager;
 import com.example.potholeapplication.class_pothole.manager.LocalDataManager;
-import com.example.potholeapplication.Retrofit2.RetrofitServices;
 import com.example.potholeapplication.class_pothole.request.EditPasswordReq;
 import com.example.potholeapplication.databinding.ActivityEditPasswordBinding;
-import com.example.potholeapplication.Retrofit2.APIInterface;
-import com.google.gson.Gson;
 
-import java.io.IOException;
-
-import retrofit2.Call;
-import retrofit2.Callback;
 import retrofit2.Response;
 
 public class EditPasswordActivity extends AppCompatActivity {
@@ -66,9 +58,9 @@ public class EditPasswordActivity extends AppCompatActivity {
             DialogManager.showDialogErrorString(context,getString(R.string.str_password_does_not_match));
             return;
         }
-        APIManager.callChangePassword(
+        UserAPIManager.callChangePassword(
                 new EditPasswordReq(email,oldPassword,newPassword)
-                ,new APICallBack() {
+                ,new UserAPICallBack() {
                     @Override
                     public void onSuccess(Response<UserResponse> response) {
                         DialogManager.showDialogOkeThenFinish(context,getString(R.string.str_change_password_successful));

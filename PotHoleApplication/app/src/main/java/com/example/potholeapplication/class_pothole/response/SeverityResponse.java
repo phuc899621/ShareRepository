@@ -1,25 +1,26 @@
 package com.example.potholeapplication.class_pothole.response;
 
-import com.example.potholeapplication.class_pothole.other.User;
+import com.example.potholeapplication.class_pothole.other.PotholeCountByMonth;
+import com.example.potholeapplication.class_pothole.other.SeverityCount;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class UserResponse {
+public class SeverityResponse {
     @SerializedName("success")
     private boolean success=false;
     @SerializedName("message")
     private String Message;
     @SerializedName("data")
-    private List<User> data;
-    public UserResponse() {
+    private List<SeverityCount> data;
+    public SeverityResponse() {
         this.success = false;
         this.Message = "";
         this.data = new ArrayList<>();
     }
 
-    public UserResponse(boolean success, String message, List<User> data) {
+    public SeverityResponse(boolean success, String message, List<SeverityCount> data) {
         this.success = success;
         Message = message;
         this.data = data;
@@ -41,11 +42,11 @@ public class UserResponse {
         Message = message;
     }
 
-    public List<User> getData() {
+    public List<SeverityCount> getData() {
         return data;
     }
 
-    public void setData(List<User> data) {
+    public void setData(List<SeverityCount> data) {
         this.data = data;
     }
 }

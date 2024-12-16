@@ -1,6 +1,6 @@
 package com.example.potholeapplication.class_pothole.request;
 
-import com.example.potholeapplication.class_pothole.response.LocationClass;
+import com.example.potholeapplication.class_pothole.other.LocationClass;
 import com.google.gson.annotations.SerializedName;
 
 public class AddPotholeReq {

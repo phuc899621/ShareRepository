@@ -13,22 +13,15 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.potholeapplication.R;
-import com.example.potholeapplication.Retrofit2.APICallBack;
-import com.example.potholeapplication.class_pothole.manager.APIManager;
+import com.example.potholeapplication.Retrofit2.UserAPICallBack;
+import com.example.potholeapplication.class_pothole.manager.UserAPIManager;
 import com.example.potholeapplication.class_pothole.manager.LocaleManager;
 import com.example.potholeapplication.class_pothole.response.UserResponse;
 import com.example.potholeapplication.class_pothole.manager.DialogManager;
 import com.example.potholeapplication.class_pothole.manager.LocalDataManager;
-import com.example.potholeapplication.Retrofit2.RetrofitServices;
 import com.example.potholeapplication.class_pothole.request.EmailReq;
 import com.example.potholeapplication.databinding.ActivityEditEmailVerificationBinding;
-import com.example.potholeapplication.Retrofit2.APIInterface;
-import com.google.gson.Gson;
 
-import java.io.IOException;
-
-import retrofit2.Call;
-import retrofit2.Callback;
 import retrofit2.Response;
 
 public class EditEmailVerificationActivity extends AppCompatActivity {
@@ -64,8 +57,8 @@ public class EditEmailVerificationActivity extends AppCompatActivity {
         newEmail= intent.getStringExtra("email");
     }
     public void callSendCodeApi(){
-        APIManager.callEmailCode(new EmailReq(newEmail)
-                ,new APICallBack() {
+        UserAPIManager.callEmailCode(new EmailReq(newEmail)
+                ,new UserAPICallBack() {
                     @Override
                     public void onSuccess(Response<UserResponse> response) {
                         code=response.body().getMessage().toString().trim();
@@ -84,8 +77,8 @@ public class EditEmailVerificationActivity extends AppCompatActivity {
                 });
     }
     public void callEditEmailApi(){
-        APIManager.callEditEmail(oldEmail,new EmailReq(newEmail)
-                ,new APICallBack() {
+        UserAPIManager.callEditEmail(oldEmail,new EmailReq(newEmail)
+                ,new UserAPICallBack() {
                     @Override
                     public void onSuccess(Response<UserResponse> response) {
                         LocalDataManager.saveEmail(context,newEmail);

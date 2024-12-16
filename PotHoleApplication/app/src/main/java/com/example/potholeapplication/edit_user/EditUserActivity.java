@@ -2,7 +2,6 @@ package com.example.potholeapplication.edit_user;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
@@ -20,19 +19,16 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.potholeapplication.R;
-import com.example.potholeapplication.Retrofit2.APICallBack;
-import com.example.potholeapplication.class_pothole.manager.APIManager;
+import com.example.potholeapplication.Retrofit2.UserAPICallBack;
+import com.example.potholeapplication.class_pothole.manager.UserAPIManager;
 import com.example.potholeapplication.class_pothole.manager.DialogManager;
 import com.example.potholeapplication.class_pothole.manager.LocalDataManager;
 import com.example.potholeapplication.class_pothole.manager.LocaleManager;
-import com.example.potholeapplication.class_pothole.response.User;
+import com.example.potholeapplication.class_pothole.other.User;
 import com.example.potholeapplication.class_pothole.request.EditInfoReq;
-import com.example.potholeapplication.Retrofit2.RetrofitServices;
 import com.example.potholeapplication.class_pothole.response.UserResponse;
 import com.example.potholeapplication.class_pothole.request.EmailReq;
 import com.example.potholeapplication.databinding.ActivityEditUserBinding;
-import com.example.potholeapplication.Retrofit2.APIInterface;
-import com.google.gson.Gson;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -41,8 +37,6 @@ import java.util.List;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
-import retrofit2.Call;
-import retrofit2.Callback;
 import retrofit2.Response;
 
 public class EditUserActivity extends AppCompatActivity {
@@ -150,10 +144,10 @@ public class EditUserActivity extends AppCompatActivity {
             DialogManager.showDialogErrorString(context,getString(R.string.str_enter_name_and_username));
             return;
         }
-        APIManager.callEditInfo(
+        UserAPIManager.callEditInfo(
                 LocalDataManager.getEmail(this)
                 ,new EditInfoReq(newUsername,newName)
-                ,new APICallBack() {
+                ,new UserAPICallBack() {
                     @Override
                     public void onSuccess(Response<UserResponse> response) {
                         LocalDataManager.saveUsernameName(context,newUsername,newName);
@@ -183,8 +177,8 @@ public class EditUserActivity extends AppCompatActivity {
         }
         // Tạo RequestBody cho email và task
         RequestBody emailReq = RequestBody.create(MediaType.parse("text/plain"), email);
-        APIManager.callSaveImage(emailReq,imagePart
-                ,new APICallBack() {
+        UserAPIManager.callSaveImage(emailReq,imagePart
+                ,new UserAPICallBack() {
                     @Override
                     public void onSuccess(Response<UserResponse> response) {
                         LocalDataManager.saveImageBytesToSharedPreferences(context,imageBytes);
@@ -210,8 +204,8 @@ public class EditUserActivity extends AppCompatActivity {
             return;
         }
 
-        APIManager.callFindImage(new EmailReq(email)
-                ,new APICallBack() {
+        UserAPIManager.callFindImage(new EmailReq(email)
+                ,new UserAPICallBack() {
                     @Override
                     public void onSuccess(Response<UserResponse> response) {
                         List<User> data = response.body().getData();

@@ -13,23 +13,15 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.potholeapplication.R;
-import com.example.potholeapplication.Retrofit2.APICallBack;
-import com.example.potholeapplication.class_pothole.manager.APIManager;
+import com.example.potholeapplication.Retrofit2.UserAPICallBack;
+import com.example.potholeapplication.class_pothole.manager.UserAPIManager;
 import com.example.potholeapplication.class_pothole.manager.DialogManager;
 import com.example.potholeapplication.class_pothole.manager.LocaleManager;
 import com.example.potholeapplication.class_pothole.request.EmailReq;
 import com.example.potholeapplication.class_pothole.request.RegisterReq;
-import com.example.potholeapplication.Retrofit2.RetrofitServices;
-import com.example.potholeapplication.class_pothole.request.UserVerificationReq;
 import com.example.potholeapplication.class_pothole.response.UserResponse;
 import com.example.potholeapplication.databinding.ActivityVerificationBinding;
-import com.example.potholeapplication.Retrofit2.APIInterface;
-import com.google.gson.Gson;
 
-import java.io.IOException;
-
-import retrofit2.Call;
-import retrofit2.Callback;
 import retrofit2.Response;
 
 public class VerificationActivity extends AppCompatActivity {
@@ -69,9 +61,9 @@ public class VerificationActivity extends AppCompatActivity {
         }
 
         //call api gui mail, kem theo thong tin email can gui
-        APIManager.callRegisterCode(
+        UserAPIManager.callRegisterCode(
                 new EmailReq(bundle.getString("email"))
-                , new APICallBack() {
+                , new UserAPICallBack() {
                     @Override
                     public void onSuccess(Response<UserResponse> response) {
                         code=response.body().getMessage().trim();
@@ -99,8 +91,8 @@ public class VerificationActivity extends AppCompatActivity {
                 bundle.getString("email"),bundle.getString("password")
         );
         // Call API login
-        APIManager.callRegister(registerReq
-                ,new APICallBack() {
+        UserAPIManager.callRegister(registerReq
+                ,new UserAPICallBack() {
                     @Override
                     public void onSuccess(Response<UserResponse> response) {
                         Intent intent=new Intent(VerificationActivity.this, VerificationSuccessActivity.class);

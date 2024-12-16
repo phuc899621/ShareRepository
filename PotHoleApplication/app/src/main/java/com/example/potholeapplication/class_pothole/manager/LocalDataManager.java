@@ -11,7 +11,7 @@ import android.graphics.drawable.Drawable;
 import android.util.Base64;
 import android.util.Log;
 
-import com.example.potholeapplication.class_pothole.response.User;
+import com.example.potholeapplication.class_pothole.other.User;
 
 import java.io.ByteArrayOutputStream;
 import java.util.List;
