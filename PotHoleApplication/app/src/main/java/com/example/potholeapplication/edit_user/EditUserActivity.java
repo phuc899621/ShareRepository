@@ -20,13 +20,15 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.potholeapplication.R;
+import com.example.potholeapplication.Retrofit2.APICallBack;
+import com.example.potholeapplication.class_pothole.manager.APIManager;
 import com.example.potholeapplication.class_pothole.manager.DialogManager;
 import com.example.potholeapplication.class_pothole.manager.LocalDataManager;
 import com.example.potholeapplication.class_pothole.manager.LocaleManager;
 import com.example.potholeapplication.class_pothole.response.User;
 import com.example.potholeapplication.class_pothole.request.EditInfoReq;
 import com.example.potholeapplication.Retrofit2.RetrofitServices;
-import com.example.potholeapplication.class_pothole.response.ApiResponse;
+import com.example.potholeapplication.class_pothole.response.UserResponse;
 import com.example.potholeapplication.class_pothole.request.EmailReq;
 import com.example.potholeapplication.databinding.ActivityEditUserBinding;
 import com.example.potholeapplication.Retrofit2.APIInterface;
@@ -135,14 +137,11 @@ public class EditUserActivity extends AppCompatActivity {
         return byteArrayOutputStream.toByteArray();
     }
     public void setUserInfo(){
-        SharedPreferences sharedPreferences=getSharedPreferences("user_info",MODE_PRIVATE);
-        binding.etName.setText(sharedPreferences.getString("name",""));
-        binding.etEmail.setText(sharedPreferences.getString("email",""));
-        binding.etUsername.setText(sharedPreferences.getString("username",""));
+        binding.etName.setText(LocalDataManager.getName(this));
+        binding.etEmail.setText(LocalDataManager.getEmail(this));
+        binding.etUsername.setText(LocalDataManager.getUsername(this));
     }
     public void callSaveInfoAPI(){
-        SharedPreferences sharedPreferences=getSharedPreferences("user_info",MODE_PRIVATE);
-        String email=sharedPreferences.getString("email","");
 
         //lay du lieu
         String newUsername=binding.etUsername.getText().toString().trim();
@@ -151,38 +150,27 @@ public class EditUserActivity extends AppCompatActivity {
             DialogManager.showDialogErrorString(context,getString(R.string.str_enter_name_and_username));
             return;
         }
-        EditInfoReq editInfoReq =new EditInfoReq(newUsername,newName);
-        APIInterface apiService = RetrofitServices.getApiService();
-
-        Call<ApiResponse> call = apiService.callEditInfo(email, editInfoReq);
-        call.enqueue(new Callback<ApiResponse>() {
-            @Override
-            public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
-                if(response.isSuccessful()&&response.body()!=null){
-                    //luu thong tin vao dien thoai
-                    LocalDataManager.saveUsernameName(context,newUsername,newName);
-                    CallSaveImageAPI();
-                }
-                else{
-                    String errorString;
-                    ApiResponse apiResponse;
-                    try {
-                        errorString=response.errorBody().string();
-                        Gson gson=new Gson();
-                        apiResponse=gson.fromJson(errorString, ApiResponse.class);
-                        DialogManager.showDialogError(context,apiResponse);
-
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
+        APIManager.callEditInfo(
+                LocalDataManager.getEmail(this)
+                ,new EditInfoReq(newUsername,newName)
+                ,new APICallBack() {
+                    @Override
+                    public void onSuccess(Response<UserResponse> response) {
+                        LocalDataManager.saveUsernameName(context,newUsername,newName);
+                        CallSaveImageAPI();
                     }
-                }
-            }
 
-            @Override
-            public void onFailure(Call<ApiResponse> call, Throwable t) {
-                Log.e("API Error", "Failure: " + t.getMessage());
-            }
-        });
+                    @Override
+                    public void onError(UserResponse errorResponse) {
+                        DialogManager.showDialogError(context, errorResponse);
+                    }
+
+                    @Override
+                    public void onFailure(Throwable t) {
+                        Log.e("API Error", "Failure: " + t.getMessage());
+                        throw new RuntimeException(t);
+                    }
+                });
     }
     public void CallSaveImageAPI() {
         byte[] imageBytes = getImageBytesFromImageView();
@@ -195,36 +183,25 @@ public class EditUserActivity extends AppCompatActivity {
         }
         // Tạo RequestBody cho email và task
         RequestBody emailReq = RequestBody.create(MediaType.parse("text/plain"), email);
-        APIInterface apiServices=RetrofitServices.getApiService();
-        Call<ApiResponse> call = apiServices.callSaveImage(emailReq,imagePart);
-
-        // Gửi yêu cầu
-        call.enqueue(new Callback<ApiResponse>() {
-            @Override
-            public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
-                if(response.isSuccessful()&&response.body()!=null){
-                    LocalDataManager.saveImageBytesToSharedPreferences(context,imageBytes);
-                    DialogManager.showDialogOkeThenFinish(context,getString(R.string.str_save_successfully));
-                }
-                else{
-                    String errorString;
-                    ApiResponse apiResponse;
-                    try {
-                        errorString=response.errorBody().string();
-                        Gson gson=new Gson();
-                        apiResponse=gson.fromJson(errorString, ApiResponse.class);
-                        DialogManager.showDialogError(context,apiResponse);
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
+        APIManager.callSaveImage(emailReq,imagePart
+                ,new APICallBack() {
+                    @Override
+                    public void onSuccess(Response<UserResponse> response) {
+                        LocalDataManager.saveImageBytesToSharedPreferences(context,imageBytes);
+                        DialogManager.showDialogOkeThenFinish(context,getString(R.string.str_save_successfully));
                     }
-                }
-            }
 
-            @Override
-            public void onFailure(Call<ApiResponse> call, Throwable t) {
-                Log.e("API Error", "Failure: " + t.getMessage());
-            }
-        });
+                    @Override
+                    public void onError(UserResponse errorResponse) {
+                        DialogManager.showDialogError(context, errorResponse);
+                    }
+
+                    @Override
+                    public void onFailure(Throwable t) {
+                        Log.e("API Error", "Failure: " + t.getMessage());
+                        throw new RuntimeException(t);
+                    }
+                });
     }
     public void CallGetImageAPI() {
         String email= LocalDataManager.getEmail(context);
@@ -232,44 +209,33 @@ public class EditUserActivity extends AppCompatActivity {
             DialogManager.showDialogErrorString(context,getString(R.string.str_email_not_found));
             return;
         }
-        EmailReq emailReq=new EmailReq(email);
-        APIInterface apiServices=RetrofitServices.getApiService();
-        Call<ApiResponse> call = apiServices.callFindImage(emailReq);
-        // Gửi yêu cầu
-        call.enqueue(new Callback<ApiResponse>() {
-            @Override
-            public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
-                if(response.isSuccessful()&&response.body()!=null){
-                    // Kiểm tra nếu có hình ảnh
-                    List<User> data = response.body().getData();
-                    if (data != null && !data.isEmpty()) {
-                        String imageBase64 = data.get(0).getImage();
-                        if (imageBase64 != null) {
-                            // Giải mã Base64 thành byte[]
-                            byte[] decodedBytes = Base64.decode(imageBase64, Base64.DEFAULT);
-                            LocalDataManager.saveImageBytesToSharedPreferences(context,decodedBytes);
+
+        APIManager.callFindImage(new EmailReq(email)
+                ,new APICallBack() {
+                    @Override
+                    public void onSuccess(Response<UserResponse> response) {
+                        List<User> data = response.body().getData();
+                        if (data != null && !data.isEmpty()) {
+                            String imageBase64 = data.get(0).getImage();
+                            if (imageBase64 != null) {
+                                // Giải mã Base64 thành byte[]
+                                byte[] decodedBytes = Base64.decode(imageBase64, Base64.DEFAULT);
+                                LocalDataManager.saveImageBytesToSharedPreferences(context,decodedBytes);
+                            }
                         }
                     }
-                }
-                else{
-                    String errorString;
-                    ApiResponse apiResponse;
-                    try {
-                        errorString=response.errorBody().string();
-                        Gson gson=new Gson();
-                        apiResponse=gson.fromJson(errorString, ApiResponse.class);
-                        DialogManager.showDialogError(context,apiResponse);
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
-                    }
-                }
-            }
 
-            @Override
-            public void onFailure(Call<ApiResponse> call, Throwable t) {
-                Log.e("API Error", "Failure: " + t.getMessage());
-            }
-        });
+                    @Override
+                    public void onError(UserResponse errorResponse) {
+                        DialogManager.showDialogError(context, errorResponse);
+                    }
+
+                    @Override
+                    public void onFailure(Throwable t) {
+                        Log.e("API Error", "Failure: " + t.getMessage());
+                        throw new RuntimeException(t);
+                    }
+                });
     }
 
 

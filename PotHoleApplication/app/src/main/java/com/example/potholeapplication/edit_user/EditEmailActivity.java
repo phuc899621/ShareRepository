@@ -13,13 +13,17 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.potholeapplication.R;
+import com.example.potholeapplication.Retrofit2.APICallBack;
+import com.example.potholeapplication.class_pothole.manager.APIManager;
 import com.example.potholeapplication.class_pothole.manager.DialogManager;
 import com.example.potholeapplication.class_pothole.manager.LocaleManager;
 import com.example.potholeapplication.Retrofit2.RetrofitServices;
-import com.example.potholeapplication.class_pothole.response.ApiResponse;
+import com.example.potholeapplication.class_pothole.response.UserResponse;
 import com.example.potholeapplication.class_pothole.request.EmailReq;
 import com.example.potholeapplication.databinding.ActivityEditEmailBinding;
 import com.example.potholeapplication.Retrofit2.APIInterface;
+import com.example.potholeapplication.user_auth.forgot_password.ForgotPasswordActivity;
+import com.example.potholeapplication.user_auth.forgot_password.ForgotPasswordVerificationActivity;
 import com.google.gson.Gson;
 
 import java.io.IOException;
@@ -72,35 +76,25 @@ public class EditEmailActivity extends AppCompatActivity {
             DialogManager.showDialogErrorString(context,getString(R.string.str_please_enter_your_new_email));
             return;
         }
-        EmailReq emailReq=new EmailReq(newEmail);
-        APIInterface apiService = RetrofitServices.getApiService();
-        Call<ApiResponse> call = apiService.callFindEmailNonExists(emailReq);
-        call.enqueue(new Callback<ApiResponse>() {
-            @Override
-            public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
-                if(response.isSuccessful()&&response.body()!=null){
-                    Intent intent=new Intent(EditEmailActivity.this, EditEmailVerificationActivity.class);
-                    intent.putExtra("email",newEmail);
-                    startActivity(intent);
-                }
-                else{
-                    String errorString;
-                    ApiResponse apiResponse;
-                    try {
-                        errorString=response.errorBody().string();
-                        Gson gson=new Gson();
-                        apiResponse=gson.fromJson(errorString, ApiResponse.class);
-                        DialogManager.showDialogError(context,apiResponse);
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
+        APIManager.callFindEmailNonExists(new EmailReq(newEmail)
+                ,new APICallBack() {
+                    @Override
+                    public void onSuccess(Response<UserResponse> response) {
+                        Intent intent=new Intent(EditEmailActivity.this, EditEmailVerificationActivity.class);
+                        intent.putExtra("email",newEmail);
+                        startActivity(intent);
                     }
-                }
-            }
 
-            @Override
-            public void onFailure(Call<ApiResponse> call, Throwable t) {
-                Log.e("API Error", "Failure: " + t.getMessage());
-            }
-        });
+                    @Override
+                    public void onError(UserResponse errorResponse) {
+                        DialogManager.showDialogError(context, errorResponse);
+                    }
+
+                    @Override
+                    public void onFailure(Throwable t) {
+                        Log.e("API Error", "Failure: " + t.getMessage());
+                        throw new RuntimeException(t);
+                    }
+                });
     }
 }

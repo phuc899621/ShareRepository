@@ -13,11 +13,13 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.potholeapplication.R;
+import com.example.potholeapplication.Retrofit2.APICallBack;
+import com.example.potholeapplication.class_pothole.manager.APIManager;
 import com.example.potholeapplication.class_pothole.manager.DialogManager;
 import com.example.potholeapplication.class_pothole.manager.LocaleManager;
 import com.example.potholeapplication.class_pothole.request.RegisterReq;
 import com.example.potholeapplication.Retrofit2.RetrofitServices;
-import com.example.potholeapplication.class_pothole.response.ApiResponse;
+import com.example.potholeapplication.class_pothole.response.UserResponse;
 import com.example.potholeapplication.class_pothole.request.UserVerificationReq;
 import com.example.potholeapplication.databinding.ActivitySignupBinding;
 import com.example.potholeapplication.Retrofit2.APIInterface;
@@ -71,37 +73,27 @@ public class SignupActivity extends AppCompatActivity {
             DialogManager.showDialogErrorString(context,getString(R.string.str_password_does_not_match));
             return;
         }
-        //tao doi tuong chua email va username de call api kiem tra
-        UserVerificationReq userVerificationReq=new UserVerificationReq(username,email);
         //call api kiem tra username va email co ton tai chua
-        Call<ApiResponse> call = apiService.callVerifyBeforeRegister(userVerificationReq);
-        call.enqueue(new Callback<ApiResponse>() {
+        APIManager.callVerifyBeforeRegister(new UserVerificationReq(username,email)
+                , new APICallBack() {
             @Override
-            public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
-
-                if(response.isSuccessful()&&response.body()!=null){
-                    //Verify email
-                    RegisterReq registerReq=new RegisterReq(username,name,email,password);
-                    NavigateToEmailVerification(registerReq);
-                }
-                else{
-                    String errorString;
-                    ApiResponse apiResponse;
-                    try {
-                        errorString=response.errorBody().string();
-                        Gson gson=new Gson();
-                        apiResponse=gson.fromJson(errorString, ApiResponse.class);
-                        DialogManager.showDialogError(context,apiResponse);
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
-                    }
-                }
+            public void onSuccess(Response<UserResponse> response) {
+                RegisterReq registerReq=new RegisterReq(username,name,email,password);
+                NavigateToEmailVerification(registerReq);
             }
+
             @Override
-            public void onFailure(Call<ApiResponse> call, Throwable t) {
+            public void onError(UserResponse errorResponse) {
+                DialogManager.showDialogError(context, errorResponse);
+            }
+
+            @Override
+            public void onFailure(Throwable t) {
                 Log.e("API Error", "Failure: " + t.getMessage());
+                throw new RuntimeException(t);
             }
         });
+
     }
     public void NavigateToEmailVerification(RegisterReq registerReq){
         Intent intent = new Intent(SignupActivity.this, VerificationActivity.class);

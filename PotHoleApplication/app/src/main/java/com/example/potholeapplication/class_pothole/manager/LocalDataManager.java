@@ -57,6 +57,7 @@ public class LocalDataManager {
         editor.putString("name",name);
         editor.apply();
     }
+
     public static Bitmap getImageBitmapFromSharePreferences(Context context){
         byte[] imageBytes=getImageBytesFromSharedPreferences(context);
         return BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length);
@@ -67,6 +68,18 @@ public class LocalDataManager {
                 "user_info",MODE_PRIVATE
         );
         return sharedPreferences.getString("email","");
+    }
+    public static String getUsername(Context context){
+        SharedPreferences sharedPreferences=context.getSharedPreferences(
+                "user_info",MODE_PRIVATE
+        );
+        return sharedPreferences.getString("username","");
+    }
+    public static String getName(Context context){
+        SharedPreferences sharedPreferences=context.getSharedPreferences(
+                "user_info",MODE_PRIVATE
+        );
+        return sharedPreferences.getString("name","");
     }
     public  static void saveEmail(Context context,String email){
         SharedPreferences sharedPreferences=context.getSharedPreferences(

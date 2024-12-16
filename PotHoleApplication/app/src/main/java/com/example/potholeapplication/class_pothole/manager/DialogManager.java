@@ -13,10 +13,11 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.potholeapplication.R;
+import com.example.potholeapplication.Retrofit2.APICallBack;
 import com.example.potholeapplication.Retrofit2.RetrofitServices;
 import com.example.potholeapplication.SplashScreenActivity;
 import com.example.potholeapplication.class_pothole.request.AddPotholeReq;
-import com.example.potholeapplication.class_pothole.response.ApiResponse;
+import com.example.potholeapplication.class_pothole.response.UserResponse;
 import com.example.potholeapplication.class_pothole.response.LocationClass;
 import com.example.potholeapplication.Retrofit2.APIInterface;
 import com.google.android.material.button.MaterialButton;
@@ -62,12 +63,12 @@ public class DialogManager {
     }
 
     //tạo dialog lỗi, in ra lôi từ sever trả ve
-    public static void showDialogError(Context context, ApiResponse apiResponse){
+    public static void showDialogError(Context context, UserResponse userResponse){
         Dialog dialog=createDialog(context,R.layout.custom_dialog_error,true);
 
         Button btnConfirm=dialog.findViewById(R.id.btnConfirm);
         TextView tvErrorTitle=dialog.findViewById(R.id.tvTitle);
-        switch (apiResponse.getMessage().trim()){
+        switch (userResponse.getMessage().trim()){
             case "Server error":
                 tvErrorTitle.setText(R.string.str_server_error);
                 break;
@@ -251,34 +252,25 @@ public class DialogManager {
             }
         });
     }
-    public static void callSavePotholeAPI(Context context, AddPotholeReq addPotholeReq){
+    private static void callSavePotholeAPI(Context context, AddPotholeReq addPotholeReq){
 
-        APIInterface apiService = RetrofitServices.getApiService();
-        Call<ApiResponse> call = apiService.callAddPothole(addPotholeReq);
-        call.enqueue(new Callback<ApiResponse>() {
-            @Override
-            public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
-                if(response.isSuccessful()&&response.body()!=null){
+        APIManager.callAddPothole(addPotholeReq
+                ,new APICallBack() {
+                    @Override
+                    public void onSuccess(Response<UserResponse> response) {
 
-                }
-                else{
-                    String errorString;
-                    ApiResponse apiResponse;
-                    try {
-                        errorString=response.errorBody().string();
-                        Gson gson=new Gson();
-                        apiResponse=gson.fromJson(errorString, ApiResponse.class);
-                        DialogManager.showDialogError(context,apiResponse);
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
                     }
-                }
-            }
 
-            @Override
-            public void onFailure(Call<ApiResponse> call, Throwable t) {
-                Log.e("API Error", "Failure: " + t.getMessage());
-            }
-        });
+                    @Override
+                    public void onError(UserResponse errorResponse) {
+                        DialogManager.showDialogError(context, errorResponse);
+                    }
+
+                    @Override
+                    public void onFailure(Throwable t) {
+                        Log.e("API Error", "Failure: " + t.getMessage());
+                        throw new RuntimeException(t);
+                    }
+                });
     }
 }

@@ -13,13 +13,17 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.potholeapplication.R;
+import com.example.potholeapplication.Retrofit2.APICallBack;
+import com.example.potholeapplication.class_pothole.manager.APIManager;
 import com.example.potholeapplication.class_pothole.manager.DialogManager;
 import com.example.potholeapplication.class_pothole.manager.LocaleManager;
 import com.example.potholeapplication.class_pothole.request.EmailReq;
 import com.example.potholeapplication.Retrofit2.RetrofitServices;
-import com.example.potholeapplication.class_pothole.response.ApiResponse;
+import com.example.potholeapplication.class_pothole.response.UserResponse;
 import com.example.potholeapplication.databinding.ActivityForgotPasswordBinding;
 import com.example.potholeapplication.Retrofit2.APIInterface;
+import com.example.potholeapplication.user_auth.signup.VerificationActivity;
+import com.example.potholeapplication.user_auth.signup.VerificationSuccessActivity;
 import com.google.gson.Gson;
 
 import java.io.IOException;
@@ -82,37 +86,27 @@ public class ForgotPasswordActivity extends AppCompatActivity {
         }
 
         // Call API kiem tra email
-        APIInterface apiService = RetrofitServices.getApiService();
-        EmailReq emailReq=new EmailReq(email);
-        Call<ApiResponse> call = apiService.callFindEmail(emailReq);
-        call.enqueue(new Callback<ApiResponse>() {
-            @Override
-            public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
-                if(response.isSuccessful()&&response.body()!=null){
-                    Intent intent=new Intent(ForgotPasswordActivity.this,
-                            ForgotPasswordVerificationActivity.class);
-                    intent.putExtra("email",email);
-                    startActivity(intent);
-                }
-                else{
-                    String errorString;
-                    ApiResponse apiResponse;
-                    try {
-                        errorString=response.errorBody().string();
-                        Gson gson=new Gson();
-                        apiResponse=gson.fromJson(errorString, ApiResponse.class);
-                        DialogManager.showDialogError(context,apiResponse);
-
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
+        APIManager.callFindEmail(new EmailReq(email)
+                ,new APICallBack() {
+                    @Override
+                    public void onSuccess(Response<UserResponse> response) {
+                        Intent intent=new Intent(ForgotPasswordActivity.this,
+                                ForgotPasswordVerificationActivity.class);
+                        intent.putExtra("email",email);
+                        startActivity(intent);
                     }
-                }
-            }
-            @Override
-            public void onFailure(Call<ApiResponse> call, Throwable t) {
-                Log.e("API Error", "Failure: " + t.getMessage());
-            }
-        });
+
+                    @Override
+                    public void onError(UserResponse errorResponse) {
+                        DialogManager.showDialogError(context, errorResponse);
+                    }
+
+                    @Override
+                    public void onFailure(Throwable t) {
+                        Log.e("API Error", "Failure: " + t.getMessage());
+                        throw new RuntimeException(t);
+                    }
+                });
 
     }
 

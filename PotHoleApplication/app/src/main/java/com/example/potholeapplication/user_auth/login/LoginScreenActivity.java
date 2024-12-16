@@ -24,7 +24,7 @@ import com.example.potholeapplication.class_pothole.request.EmailReq;
 import com.example.potholeapplication.class_pothole.request.LoginReq;
 import com.example.potholeapplication.Retrofit2.RetrofitServices;
 import com.example.potholeapplication.class_pothole.response.User;
-import com.example.potholeapplication.class_pothole.response.ApiResponse;
+import com.example.potholeapplication.class_pothole.response.UserResponse;
 import com.example.potholeapplication.databinding.ActivityLoginScreenBinding;
 import com.example.potholeapplication.Retrofit2.APIInterface;
 import com.example.potholeapplication.user_auth.forgot_password.ForgotPasswordActivity;
@@ -71,17 +71,15 @@ public class LoginScreenActivity extends AppCompatActivity {
             DialogManager.showDialogErrorString(context,getString(R.string.str_please_enter_username_and_password));
             return;
         }
-
-        LoginReq loginReq =new LoginReq(username,password);
-        APIManager.callLogin(loginReq, new APICallBack() {
+        APIManager.callLogin(new LoginReq(username,password), new APICallBack() {
             @Override
-            public void onSuccess(Response<ApiResponse> response) {
+            public void onSuccess(Response<UserResponse> response) {
                 LocalDataManager.saveUserToSharePreferences(context,response.body().getData());
                 CallGetImageAPI();
             }
 
             @Override
-            public void onError(ApiResponse errorResponse) {
+            public void onError(UserResponse errorResponse) {
                 DialogManager.showDialogError(context,errorResponse);
 
             }
@@ -110,10 +108,10 @@ public class LoginScreenActivity extends AppCompatActivity {
         }
         EmailReq emailReq=new EmailReq(email);
         APIInterface apiServices= RetrofitServices.getApiService();
-        Call<ApiResponse> call = apiServices.callFindImage(emailReq);
-        call.enqueue(new Callback<ApiResponse>() {
+        Call<UserResponse> call = apiServices.callFindImage(emailReq);
+        call.enqueue(new Callback<UserResponse>() {
             @Override
-            public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
+            public void onResponse(Call<UserResponse> call, Response<UserResponse> response) {
                 if(response.isSuccessful()&&response.body()!=null){
                     List<User> data = response.body().getData();
                     if (data != null && !data.isEmpty()) {
@@ -135,12 +133,12 @@ public class LoginScreenActivity extends AppCompatActivity {
                 }
                 else{
                     String errorString;
-                    ApiResponse apiResponse;
+                    UserResponse userResponse;
                     try {
                         errorString=response.errorBody().string();
                         Gson gson=new Gson();
-                        apiResponse=gson.fromJson(errorString, ApiResponse.class);
-                        DialogManager.showDialogError(context,apiResponse);
+                        userResponse =gson.fromJson(errorString, UserResponse.class);
+                        DialogManager.showDialogError(context, userResponse);
                     } catch (IOException e) {
                         throw new RuntimeException(e);
                     }
@@ -148,7 +146,7 @@ public class LoginScreenActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<ApiResponse> call, Throwable t) {
+            public void onFailure(Call<UserResponse> call, Throwable t) {
                 Log.e("API Error", "Failure1: " + t.getMessage());
             }
         });
@@ -166,12 +164,12 @@ public class LoginScreenActivity extends AppCompatActivity {
         // Tạo RequestBody cho email và task
         RequestBody emailReq = RequestBody.create(MediaType.parse("text/plain"), email);
         APIInterface apiServices=RetrofitServices.getApiService();
-        Call<ApiResponse> call = apiServices.callSaveImage(emailReq,imagePart);
+        Call<UserResponse> call = apiServices.callSaveImage(emailReq,imagePart);
 
         // Gửi yêu cầu
-        call.enqueue(new Callback<ApiResponse>() {
+        call.enqueue(new Callback<UserResponse>() {
             @Override
-            public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
+            public void onResponse(Call<UserResponse> call, Response<UserResponse> response) {
                 if(response.isSuccessful()&&response.body()!=null){
                     LocalDataManager.saveImageBytesToSharedPreferences(context,imageBytes);
                     DialogManager.showDialogOkeNavigation(context,getString(R.string.str_login_successful),
@@ -179,19 +177,19 @@ public class LoginScreenActivity extends AppCompatActivity {
                 }
                 else{
                     String errorString;
-                    ApiResponse apiResponse;
+                    UserResponse userResponse;
                     try {
                         errorString=response.errorBody().string();
                         Gson gson=new Gson();
-                        apiResponse=gson.fromJson(errorString, ApiResponse.class);
-                        DialogManager.showDialogError(context,apiResponse);
+                        userResponse =gson.fromJson(errorString, UserResponse.class);
+                        DialogManager.showDialogError(context, userResponse);
                     } catch (IOException e) {
                         throw new RuntimeException(e);
                     }
                 }
             }
             @Override
-            public void onFailure(Call<ApiResponse> call, Throwable t) {
+            public void onFailure(Call<UserResponse> call, Throwable t) {
                 Log.e("API Error", "Failure3: " + t.getMessage());
             }
         });

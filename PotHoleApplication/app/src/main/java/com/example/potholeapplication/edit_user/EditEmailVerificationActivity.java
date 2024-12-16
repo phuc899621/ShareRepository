@@ -13,8 +13,10 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.potholeapplication.R;
+import com.example.potholeapplication.Retrofit2.APICallBack;
+import com.example.potholeapplication.class_pothole.manager.APIManager;
 import com.example.potholeapplication.class_pothole.manager.LocaleManager;
-import com.example.potholeapplication.class_pothole.response.ApiResponse;
+import com.example.potholeapplication.class_pothole.response.UserResponse;
 import com.example.potholeapplication.class_pothole.manager.DialogManager;
 import com.example.potholeapplication.class_pothole.manager.LocalDataManager;
 import com.example.potholeapplication.Retrofit2.RetrofitServices;
@@ -62,66 +64,46 @@ public class EditEmailVerificationActivity extends AppCompatActivity {
         newEmail= intent.getStringExtra("email");
     }
     public void callSendCodeApi(){
-        APIInterface apiService = RetrofitServices.getApiService();
-        EmailReq emailReq=new EmailReq(newEmail);
-        Call<ApiResponse> call = apiService.callEmailCode(emailReq);
-        call.enqueue(new Callback<ApiResponse>() {
-            @Override
-            public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
-
-                if(response.isSuccessful()&&response.body()!=null){
-                    code=response.body().getMessage().toString().trim();
-                }
-                else{
-                    String errorString;
-                    ApiResponse apiResponse;
-                    try {
-                        errorString=response.errorBody().string();
-                        Gson gson=new Gson();
-                        apiResponse=gson.fromJson(errorString, ApiResponse.class);
-                        DialogManager.showDialogError(context,apiResponse);
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
+        APIManager.callEmailCode(new EmailReq(newEmail)
+                ,new APICallBack() {
+                    @Override
+                    public void onSuccess(Response<UserResponse> response) {
+                        code=response.body().getMessage().toString().trim();
                     }
-                }
-            }
-            @Override
-            public void onFailure(Call<ApiResponse> call, Throwable t) {
-                Log.e("API Error", "Failure: " + t.getMessage());
-            }
-        });
+
+                    @Override
+                    public void onError(UserResponse errorResponse) {
+                        DialogManager.showDialogError(context, errorResponse);
+                    }
+
+                    @Override
+                    public void onFailure(Throwable t) {
+                        Log.e("API Error", "Failure: " + t.getMessage());
+                        throw new RuntimeException(t);
+                    }
+                });
     }
     public void callEditEmailApi(){
-        APIInterface apiService = RetrofitServices.getApiService();
-        EmailReq emailReq=new EmailReq(newEmail);
-        Call<ApiResponse> call = apiService.callEditEmail(oldEmail,emailReq);
-        call.enqueue(new Callback<ApiResponse>() {
-            @Override
-            public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
-
-                if(response.isSuccessful()&&response.body()!=null){
-                    LocalDataManager.saveEmail(context,newEmail);
-                    DialogManager.showDialogOkeNavigationClear(context,
-                            getString(R.string.str_change_email_successfully), EditUserActivity.class);
-                }
-                else{
-                    String errorString;
-                    ApiResponse apiResponse;
-                    try {
-                        errorString=response.errorBody().string();
-                        Gson gson=new Gson();
-                        apiResponse=gson.fromJson(errorString, ApiResponse.class);
-                        DialogManager.showDialogError(context,apiResponse);
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
+        APIManager.callEditEmail(oldEmail,new EmailReq(newEmail)
+                ,new APICallBack() {
+                    @Override
+                    public void onSuccess(Response<UserResponse> response) {
+                        LocalDataManager.saveEmail(context,newEmail);
+                        DialogManager.showDialogOkeNavigationClear(context,
+                                getString(R.string.str_change_email_successfully), EditUserActivity.class);
                     }
-                }
-            }
-            @Override
-            public void onFailure(Call<ApiResponse> call, Throwable t) {
-                Log.e("API Error", "Failure: " + t.getMessage());
-            }
-        });
+
+                    @Override
+                    public void onError(UserResponse errorResponse) {
+                        DialogManager.showDialogError(context, errorResponse);
+                    }
+
+                    @Override
+                    public void onFailure(Throwable t) {
+                        Log.e("API Error", "Failure: " + t.getMessage());
+                        throw new RuntimeException(t);
+                    }
+                });
     }
 
     public void setClickEvent(){

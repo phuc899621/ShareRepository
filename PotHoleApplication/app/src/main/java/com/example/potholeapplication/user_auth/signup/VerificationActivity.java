@@ -13,12 +13,15 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.potholeapplication.R;
+import com.example.potholeapplication.Retrofit2.APICallBack;
+import com.example.potholeapplication.class_pothole.manager.APIManager;
 import com.example.potholeapplication.class_pothole.manager.DialogManager;
 import com.example.potholeapplication.class_pothole.manager.LocaleManager;
 import com.example.potholeapplication.class_pothole.request.EmailReq;
 import com.example.potholeapplication.class_pothole.request.RegisterReq;
 import com.example.potholeapplication.Retrofit2.RetrofitServices;
-import com.example.potholeapplication.class_pothole.response.ApiResponse;
+import com.example.potholeapplication.class_pothole.request.UserVerificationReq;
+import com.example.potholeapplication.class_pothole.response.UserResponse;
 import com.example.potholeapplication.databinding.ActivityVerificationBinding;
 import com.example.potholeapplication.Retrofit2.APIInterface;
 import com.google.gson.Gson;
@@ -65,78 +68,57 @@ public class VerificationActivity extends AppCompatActivity {
             return;
         }
 
-        EmailReq emailReq =new EmailReq(
-          bundle.getString("email")
-        );
-
         //call api gui mail, kem theo thong tin email can gui
-        APIInterface apiService = RetrofitServices.getApiService();
-        Call<ApiResponse> call = apiService.callRegisterCode(emailReq);
-        call.enqueue(new Callback<ApiResponse>() {
-            @Override
-            public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
-                if(response.isSuccessful()&&response.body()!=null){
-                    //luu lai code de so sanh voi code nguoi dung nhap vao
-                    code=response.body().getMessage().trim();
-                }
-                else{
-                    String errorString;
-                    ApiResponse apiResponse;
-                    try {
-                        errorString=response.errorBody().string();
-                        Gson gson=new Gson();
-                        apiResponse=gson.fromJson(errorString, ApiResponse.class);
-                        DialogManager.showDialogError(context,apiResponse);
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
+        APIManager.callRegisterCode(
+                new EmailReq(bundle.getString("email"))
+                , new APICallBack() {
+                    @Override
+                    public void onSuccess(Response<UserResponse> response) {
+                        code=response.body().getMessage().trim();
                     }
-                }
-            }
-            @Override
-            public void onFailure(Call<ApiResponse> call, Throwable t) {
-                Log.e("API Error", "Failure: " + t.getMessage());
-            }
-        });
+
+                    @Override
+                    public void onError(UserResponse errorResponse) {
+                        DialogManager.showDialogError(context, errorResponse);
+                    }
+
+                    @Override
+                    public void onFailure(Throwable t) {
+                        Log.e("API Error", "Failure: " + t.getMessage());
+                        throw new RuntimeException(t);
+                    }
+                });
     }
     public void callAPIAddUser(){
         if (bundle == null) {
             DialogManager.showDialogErrorString(context,getString(R.string.str_null_bundle));
             return;
         }
-        APIInterface apiService = RetrofitServices.getApiService();
         RegisterReq registerReq =new RegisterReq(
                 bundle.getString("username"),bundle.getString("name"),
                 bundle.getString("email"),bundle.getString("password")
         );
         // Call API login
-        Call<ApiResponse> call = apiService.callRegister(registerReq);
-        call.enqueue(new Callback<ApiResponse>() {
-            @Override
-            public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
-
-                if(response.isSuccessful()&&response.body()!=null){
-                    Intent intent=new Intent(VerificationActivity.this, VerificationSuccessActivity.class);
-                    startActivity(intent);
-                    finish();
-                }
-                else{
-                    String errorString;
-                    ApiResponse apiResponse;
-                    try {
-                        errorString=response.errorBody().string();
-                        Gson gson=new Gson();
-                        apiResponse=gson.fromJson(errorString, ApiResponse.class);
-                        DialogManager.showDialogError(context,apiResponse);
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
+        APIManager.callRegister(registerReq
+                ,new APICallBack() {
+                    @Override
+                    public void onSuccess(Response<UserResponse> response) {
+                        Intent intent=new Intent(VerificationActivity.this, VerificationSuccessActivity.class);
+                        startActivity(intent);
+                        finish();
                     }
-                }
-            }
-            @Override
-            public void onFailure(Call<ApiResponse> call, Throwable t) {
-                Log.e("API Error", "Failure: " + t.getMessage());
-            }
-        });
+
+                    @Override
+                    public void onError(UserResponse errorResponse) {
+                        DialogManager.showDialogError(context, errorResponse);
+                    }
+
+                    @Override
+                    public void onFailure(Throwable t) {
+                        Log.e("API Error", "Failure: " + t.getMessage());
+                        throw new RuntimeException(t);
+                    }
+                });
     }
     public void setClickEvent(){
         binding.btnBack.setOnClickListener(new View.OnClickListener() {

@@ -12,8 +12,11 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.potholeapplication.R;
+import com.example.potholeapplication.Retrofit2.APICallBack;
+import com.example.potholeapplication.class_pothole.manager.APIManager;
 import com.example.potholeapplication.class_pothole.manager.LocaleManager;
-import com.example.potholeapplication.class_pothole.response.ApiResponse;
+import com.example.potholeapplication.class_pothole.request.EmailReq;
+import com.example.potholeapplication.class_pothole.response.UserResponse;
 import com.example.potholeapplication.class_pothole.manager.DialogManager;
 import com.example.potholeapplication.class_pothole.manager.LocalDataManager;
 import com.example.potholeapplication.Retrofit2.RetrofitServices;
@@ -63,35 +66,26 @@ public class EditPasswordActivity extends AppCompatActivity {
             DialogManager.showDialogErrorString(context,getString(R.string.str_password_does_not_match));
             return;
         }
-
-        EditPasswordReq editPasswordReq=new EditPasswordReq(email,oldPassword,newPassword);
-        APIInterface apiService = RetrofitServices.getApiService();
-        Call<ApiResponse> call = apiService.callChangePassword(editPasswordReq);
-        call.enqueue(new Callback<ApiResponse>() {
-            @Override
-            public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
-
-                if(response.isSuccessful()&&response.body()!=null){
-                    DialogManager.showDialogOkeThenFinish(context,getString(R.string.str_change_password_successful));
-                }
-                else{
-                    String errorString;
-                    ApiResponse apiResponse;
-                    try {
-                        errorString=response.errorBody().string();
-                        Gson gson=new Gson();
-                        apiResponse=gson.fromJson(errorString, ApiResponse.class);
-                        DialogManager.showDialogError(context,apiResponse);
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
+        APIManager.callChangePassword(
+                new EditPasswordReq(email,oldPassword,newPassword)
+                ,new APICallBack() {
+                    @Override
+                    public void onSuccess(Response<UserResponse> response) {
+                        DialogManager.showDialogOkeThenFinish(context,getString(R.string.str_change_password_successful));
                     }
-                }
-            }
-            @Override
-            public void onFailure(Call<ApiResponse> call, Throwable t) {
-                Log.e("API Error", "Failure: " + t.getMessage());
-            }
-        });
+
+                    @Override
+                    public void onError(UserResponse errorResponse) {
+                        DialogManager.showDialogError(context, errorResponse);
+                    }
+
+                    @Override
+                    public void onFailure(Throwable t) {
+                        Log.e("API Error", "Failure: " + t.getMessage());
+                        throw new RuntimeException(t);
+                    }
+                });
+
     }
     public void setClickEvent(){
         binding.btnBack.setOnClickListener(new View.OnClickListener() {
