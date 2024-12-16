@@ -17,6 +17,18 @@ import java.io.ByteArrayOutputStream;
 import java.util.List;
 
 public class LocalDataManager {
+
+    /*File: user_info
+    __image
+    __name
+    __username
+    __email
+    __login [true/false]
+    File: language
+    __language [vi/en]
+    File: realtime_detection
+    __enable [true/false]
+    */
     public static byte[] getImageBytesFromSharedPreferences(Context context) {
         SharedPreferences sharedPreferences=context.getSharedPreferences("user_info", MODE_PRIVATE);
         String base64Image = sharedPreferences.getString("image", null);
