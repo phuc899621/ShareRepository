@@ -74,7 +74,7 @@ public class LoginScreenActivity extends AppCompatActivity {
         UserAPIManager.callLogin(new LoginReq(username,password), new UserAPICallBack() {
             @Override
             public void onSuccess(Response<UserResponse> response) {
-                LocalDataManager.saveUserToSharePreferences(context,response.body().getData());
+                LocalDataManager.saveUser(context,response.body().getData());
                 CallGetImageAPI();
             }
 
@@ -119,12 +119,12 @@ public class LoginScreenActivity extends AppCompatActivity {
                         if (!imageBase64.isEmpty()) {
                             //neu co thi luu va den homescreen
                             byte[] decodedBytes = Base64.decode(imageBase64, Base64.DEFAULT);
-                            LocalDataManager.saveImageBytesToSharedPreferences(context,decodedBytes);
+                            LocalDataManager.saveImageBytes(context,decodedBytes);
                             DialogManager.showDialogOkeNavigation(context,getString(R.string.str_login_successful),
                                     HomeScreenActivity.class);
                         } else {
                             //neu chua co thi lay anh mac dinh
-                            LocalDataManager.saveImageBytesToSharedPreferences(context,
+                            LocalDataManager.saveImageBytes(context,
                                     LocalDataManager.drawableToByteArray(context,R.drawable.default_user)
                             );
                             CallSaveImageAPI(LocalDataManager.drawableToByteArray(context,R.drawable.default_user));
@@ -171,7 +171,7 @@ public class LoginScreenActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<UserResponse> call, Response<UserResponse> response) {
                 if(response.isSuccessful()&&response.body()!=null){
-                    LocalDataManager.saveImageBytesToSharedPreferences(context,imageBytes);
+                    LocalDataManager.saveImageBytes(context,imageBytes);
                     DialogManager.showDialogOkeNavigation(context,getString(R.string.str_login_successful),
                             HomeScreenActivity.class);
                 }

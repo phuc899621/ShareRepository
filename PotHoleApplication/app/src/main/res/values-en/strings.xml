@@ -85,4 +85,9 @@
     <string name="str_medium">Medium</string>
     <string name="str_small">Small</string>
     <string name="pothole_count_by_size">Pothole Count By Size</string>
+    <string name="str_pothole_classification_by_severity">Pothole Classification by severity</string>
+    <string name="str_large_pothole">Large Pothole</string>
+    <string name="str_medium_pothole">Medium Pothole</string>
+    <string name="str_small_pothole">Small Pothole</string>
+    <string name="str_please_check_your_internet_connection">Please check your internet connection</string>
 </resources>

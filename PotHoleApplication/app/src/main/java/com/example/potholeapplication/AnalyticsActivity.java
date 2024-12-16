@@ -91,7 +91,6 @@ public class AnalyticsActivity extends AppCompatActivity {
                         setBarEntriesOne(false,null);
                         setBarEntriesTwo(false,null);
                         setBarChart();
-                        throw new RuntimeException(t);
 
                     }
                 }

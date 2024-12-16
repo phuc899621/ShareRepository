@@ -7,9 +7,6 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.util.DisplayMetrics;
-import android.util.Log;
-
-import com.example.potholeapplication.SplashScreenActivity;
 
 import java.util.Locale;
 
@@ -20,10 +17,10 @@ public class LocaleManager {
         Resources resources = context.getResources();
         Configuration config = resources.getConfiguration();
         config.setLocale(locale);
-        LocalDataManager.saveLanguagePreferences(context,language);
+        LocalDataManager.saveLanguage(context,language);
     }
     public static Context updateLanguage(Context context){
-        String language= LocalDataManager.getLanguagePreferences(context);
+        String language= LocalDataManager.getLanguage(context);
         Locale locale=new Locale(language);
         Locale.setDefault(locale);
         Resources resources = context.getResources();

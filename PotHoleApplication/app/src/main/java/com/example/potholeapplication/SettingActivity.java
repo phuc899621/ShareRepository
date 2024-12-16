@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.CompoundButton;
 
@@ -13,16 +14,23 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.potholeapplication.Retrofit2.SubinfoAPICallBack;
 import com.example.potholeapplication.class_pothole.manager.DialogManager;
 import com.example.potholeapplication.class_pothole.manager.LocalDataManager;
 import com.example.potholeapplication.class_pothole.manager.LocaleManager;
+import com.example.potholeapplication.class_pothole.manager.SubinfoAPIManager;
+import com.example.potholeapplication.class_pothole.request.EmailReq;
+import com.example.potholeapplication.class_pothole.response.SubinfoResponse;
 import com.example.potholeapplication.databinding.ActivitySettingBinding;
 import com.example.potholeapplication.edit_user.EditUserActivity;
 import com.example.potholeapplication.pothole_service.SensorService;
 
+import retrofit2.Response;
+
 public class SettingActivity extends AppCompatActivity {
     ActivitySettingBinding binding;
     Context context;
+    boolean isAPIReturn=false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,12 +51,51 @@ public class SettingActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        callGetSubinfoAPI();
+        if(isAPIReturn){
+            binding.tvTotalReport.setText(LocalDataManager.getTotalReport(context)+"");
+            binding.tvPoints.setText(LocalDataManager.getTotalReport(context)*10+"");
+            isAPIReturn=false;
+        }
         setData();
         setSwitchRealtime();
     }
+    public void callGetSubinfoAPI(){
+        SubinfoAPIManager.callGetSubinfo(
+                new EmailReq(LocalDataManager.getEmail(this)),
+                new SubinfoAPICallBack() {
+                    @Override
+                    public void onSuccess(Response<SubinfoResponse> response) {
+                        LocalDataManager.saveSubinfo(
+                                context,
+                                response.body().getData().get(0).getTotalDistances(),
+                                response.body().getData().get(0).getTotalReport(),
+                                response.body().getData().get(0).getTotalFixedPothole()
+                        );
+                        binding.tvTotalReport.setText(LocalDataManager.getTotalReport(context)+"");
+                        binding.tvPoints.setText(LocalDataManager.getTotalReport(context)*10+"");
+                        isAPIReturn=true;
+                    }
+
+                    @Override
+                    public void onError(SubinfoResponse errorResponse) {
+                        binding.tvTotalReport.setText(LocalDataManager.getTotalReport(context)+"");
+                        binding.tvPoints.setText(LocalDataManager.getTotalReport(context)*10+"");
+                        isAPIReturn=true;
+                    }
+
+                    @Override
+                    public void onFailure(Throwable t) {
+                        binding.tvTotalReport.setText(LocalDataManager.getTotalReport(context)+"");
+                        binding.tvPoints.setText(LocalDataManager.getTotalReport(context)*10+"");
+                        Log.e("API Error", "Failure: " + t.getMessage());
+                    }
+                }
+        );
+    }
     public void setData(){
-        binding.tvUsername.setText(LocalDataManager.getNameFromSharePreferences(context));
-        binding.imaPicture.setImageBitmap(LocalDataManager.getImageBitmapFromSharePreferences(context));
+        binding.tvUsername.setText(LocalDataManager.getName(context));
+        binding.imaPicture.setImageBitmap(LocalDataManager.getImageBitmap(context));
     }
     public void setSwitchRealtime(){
         boolean isCheck= LocalDataManager.getEnableRealTimeDetection(this);
@@ -80,12 +127,7 @@ public class SettingActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //xoa cac activity khác, quay lại nhu cũ
-                SharedPreferences sharedPreferences=getSharedPreferences(
-                        "user_info",MODE_PRIVATE
-                );
-                SharedPreferences.Editor editor=sharedPreferences.edit();
-                editor.putBoolean("login",false);
-                editor.apply();
+                LocalDataManager.saveLogin(context,false);
                 Intent intent = new Intent(SettingActivity.this, SplashScreenActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);

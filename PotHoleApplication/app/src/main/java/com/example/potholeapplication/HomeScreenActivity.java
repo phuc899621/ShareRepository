@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -16,16 +17,23 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.potholeapplication.Retrofit2.SubinfoAPICallBack;
 import com.example.potholeapplication.class_pothole.manager.DialogManager;
 import com.example.potholeapplication.class_pothole.manager.LocalDataManager;
 import com.example.potholeapplication.class_pothole.manager.LocaleManager;
+import com.example.potholeapplication.class_pothole.manager.SubinfoAPIManager;
+import com.example.potholeapplication.class_pothole.request.EmailReq;
+import com.example.potholeapplication.class_pothole.response.SubinfoResponse;
 import com.example.potholeapplication.databinding.ActivityHomeScreenBinding;
 import com.github.mikephil.charting.charts.LineChart;
 
+import retrofit2.Response;
+
 public class HomeScreenActivity extends AppCompatActivity {
-    LineChart lineChart;
     Context context;
     ActivityHomeScreenBinding binding;
+    boolean isAPIReturn=false;//false neu lay api khong thanh cong
+    boolean isResume; //kiem tra trang thai activity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,12 +53,26 @@ public class HomeScreenActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        callGetSubinfoAPI();
+        if(isAPIReturn){
+            binding.tvTotalDistances.setText(LocalDataManager.getTotalDistances(context)+"");
+            binding.tvFixedPothole.setText(LocalDataManager.getTotalFixedPothole(context)+"");
+            binding.tvTotalReport.setText(LocalDataManager.getTotalReport(context)+"");
+            isAPIReturn=false;
+        }
+        isResume=true;
 
     }
     @Override
     protected void onStart() {
         super.onStart();
         setDisplay();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        isResume=false;
     }
 
     @Override
@@ -67,7 +89,7 @@ public class HomeScreenActivity extends AppCompatActivity {
                 double longitude = intent.getDoubleExtra("longitude", 0);
                 String severity= intent.getStringExtra("severity");
                 Toast.makeText(context, severity, Toast.LENGTH_SHORT).show();
-                if(!DialogManager.isIsDialogShowing()) {
+                if(!DialogManager.isIsDialogShowing() && isResume) {
                     DialogManager.showDialogSavePothole(context,
                             longitude, latitude, severity);
                 }
@@ -104,44 +126,49 @@ public class HomeScreenActivity extends AppCompatActivity {
         });
     }
     public void setDisplay(){
-        SharedPreferences sharedPreferences=getSharedPreferences(
-                "user_info",MODE_PRIVATE
-        );
-        String name= sharedPreferences.getString("name","");
-        binding.tvName.setText(name);
-        binding.imaUserIcon.setImageBitmap(LocalDataManager.getImageBitmapFromSharePreferences(context));
-    }
-//    public void chartData(){
-//        lineChart = findViewById(R.id.lineChart);
-//        ArrayList<Entry> entries = new ArrayList<>();
-//        entries.add(new Entry(0, 5));
-//        entries.add(new Entry(1, 10));
-//        entries.add(new Entry(2, 7));
-//        entries.add(new Entry(3, 12));
-//        entries.add(new Entry(4, 6));
-//        entries.add(new Entry(5, 6));
-//        entries.add(new Entry(6, 6));
-//
-//        LineDataSet lineDataSet = new LineDataSet(entries, "Performance");
-//        lineDataSet.setMode(LineDataSet.Mode.CUBIC_BEZIER);
-//        lineDataSet.setCubicIntensity(0.2f);
-//        lineDataSet.setLineWidth(2f);
-//        lineDataSet.setColor(getResources().getColor(R.color.purple));
-//        lineDataSet.setDrawFilled(true);
-//        lineDataSet.setFillColor(R.color.purple);
-//        lineDataSet.setFillAlpha(80);
-//
-//
-//        lineChart.getXAxis().setDrawGridLines(false);
-//        lineChart.animateX(1000);
-//        final String[] daysOfWeek = new String[]{"Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"};
-//
-//
-//        lineChart.getDescription().setEnabled(false);
-//        lineChart.getXAxis().setPosition(XAxis.XAxisPosition.BOTTOM);
-//        lineChart.getAxisRight().setEnabled(false);
-//        lineChart.invalidate(); // Refresh biểu đồ
-//    }
+        binding.tvName.setText(LocalDataManager.getName(this));
+        binding.imaUserIcon.setImageBitmap(LocalDataManager.getImageBitmap(context));
 
+    }
+    public void callGetSubinfoAPI(){
+        SubinfoAPIManager.callGetSubinfo(
+                new EmailReq(LocalDataManager.getEmail(this)),
+                new SubinfoAPICallBack() {
+                    @Override
+                    public void onSuccess(Response<SubinfoResponse> response) {
+                        LocalDataManager.saveSubinfo(
+                                context,
+                                response.body().getData().get(0).getTotalDistances(),
+                                response.body().getData().get(0).getTotalReport(),
+                                response.body().getData().get(0).getTotalFixedPothole()
+                        );
+                        binding.tvTotalDistances.setText(LocalDataManager.getTotalDistances(context)+"");
+                        binding.tvFixedPothole.setText(LocalDataManager.getTotalFixedPothole(context)+"");
+                        binding.tvTotalReport.setText(LocalDataManager.getTotalReport(context)+"");
+                        isAPIReturn=true;
+                    }
+
+                    @Override
+                    public void onError(SubinfoResponse errorResponse) {
+                        LocalDataManager.saveSubinfo(context,0,0,0);
+                        binding.tvTotalDistances.setText(LocalDataManager.getTotalDistances(context)+"");
+                        binding.tvFixedPothole.setText(LocalDataManager.getTotalFixedPothole(context)+"");
+                        binding.tvTotalReport.setText(LocalDataManager.getTotalReport(context)+"");
+                        isAPIReturn=true;
+                    }
+
+                    @Override
+                    public void onFailure(Throwable t) {
+                        LocalDataManager.saveSubinfo(context,0,0,0);
+                        binding.tvTotalDistances.setText(LocalDataManager.getTotalDistances(context)+"");
+                        binding.tvFixedPothole.setText(LocalDataManager.getTotalFixedPothole(context)+"");
+                        binding.tvTotalReport.setText(LocalDataManager.getTotalReport(context)+"");
+                        Log.e("API Error", "Failure: " + t.getMessage());
+                        DialogManager.showDialogErrorString(context,
+                                getString(R.string.str_please_check_your_internet_connection));
+                    }
+                }
+        );
+    }
 
 }

@@ -177,7 +177,7 @@ public class SensorService extends Service {
                 networkInfo.getType() == ConnectivityManager.TYPE_WIFI;
     }
     private void updateDistance() {
-            Location currentLocation = gpsListener.lastLocation;
+        Location currentLocation = gpsListener.lastLocation;
         Log.d("DISTANCE_TRACKING", "Distance: " + currentLocation + " meters");
             if (currentLocation != null && lastLocation != null) {
                 float distance = lastLocation.distanceTo(currentLocation);

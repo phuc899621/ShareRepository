@@ -72,7 +72,7 @@ public class EditUserActivity extends AppCompatActivity {
         super.attachBaseContext(LocaleManager.updateLanguage(newBase));
     }
     public void setImageInfo(){
-        binding.imaUser.setImageBitmap(LocalDataManager.getImageBitmapFromSharePreferences(context));
+        binding.imaUser.setImageBitmap(LocalDataManager.getImageBitmap(context));
     }
 
     public void setClickEvent() {
@@ -181,7 +181,7 @@ public class EditUserActivity extends AppCompatActivity {
                 ,new UserAPICallBack() {
                     @Override
                     public void onSuccess(Response<UserResponse> response) {
-                        LocalDataManager.saveImageBytesToSharedPreferences(context,imageBytes);
+                        LocalDataManager.saveImageBytes(context,imageBytes);
                         DialogManager.showDialogOkeThenFinish(context,getString(R.string.str_save_successfully));
                     }
 
@@ -214,7 +214,7 @@ public class EditUserActivity extends AppCompatActivity {
                             if (imageBase64 != null) {
                                 // Giải mã Base64 thành byte[]
                                 byte[] decodedBytes = Base64.decode(imageBase64, Base64.DEFAULT);
-                                LocalDataManager.saveImageBytesToSharedPreferences(context,decodedBytes);
+                                LocalDataManager.saveImageBytes(context,decodedBytes);
                             }
                         }
                     }

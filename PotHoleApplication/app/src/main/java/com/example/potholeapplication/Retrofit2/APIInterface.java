@@ -9,6 +9,7 @@ import com.example.potholeapplication.class_pothole.request.LoginReq;
 import com.example.potholeapplication.class_pothole.request.RegisterReq;
 import com.example.potholeapplication.class_pothole.response.CountResponse;
 import com.example.potholeapplication.class_pothole.response.SeverityResponse;
+import com.example.potholeapplication.class_pothole.response.SubinfoResponse;
 import com.example.potholeapplication.class_pothole.response.UserResponse;
 import com.example.potholeapplication.class_pothole.request.ResetPasswordReq;
 import com.example.potholeapplication.class_pothole.request.UserVerificationReq;
@@ -70,6 +71,8 @@ public interface APIInterface {
     @GET("api/pothole/find/severity")//goi lay so luong pothole theo kích thước
     Call<SeverityResponse> callGetPotholeBySeverity();
 
-    //--------------------API
+    //--------------------API cho subinfo
+    @POST("api/pothole/subinfo")//goi api tra ve subinfo
+    Call<SubinfoResponse> callGetSubinfo(@Body EmailReq emailReq);
 
 }
