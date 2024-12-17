@@ -127,4 +127,5 @@
     <string name="str_medium_pothole">Medium Pothole</string>
     <string name="str_small_pothole">Small Pothole</string>
     <string name="str_please_check_your_internet_connection">Please check your internet connection</string>
+    <string name="str_cannot_save_pothole_due_to_poor_connection">Cannot save pothole due to poor connection</string>
 </resources>

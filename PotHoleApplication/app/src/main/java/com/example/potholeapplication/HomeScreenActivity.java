@@ -136,9 +136,10 @@ public class HomeScreenActivity extends AppCompatActivity {
                 new SubinfoAPICallBack() {
                     @Override
                     public void onSuccess(Response<SubinfoResponse> response) {
+
                         LocalDataManager.saveSubinfo(
                                 context,
-                                response.body().getData().get(0).getTotalDistances(),
+                                Math.round(response.body().getData().get(0).getTotalDistances()*100f)/100f,
                                 response.body().getData().get(0).getTotalReport(),
                                 response.body().getData().get(0).getTotalFixedPothole()
                         );

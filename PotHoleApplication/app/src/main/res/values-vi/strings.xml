@@ -91,4 +91,5 @@
     <string name="str_medium_pothole">Ổ gà vừa</string>
     <string name="str_small_pothole">Ổ gà nhỏ</string>
     <string name="str_please_check_your_internet_connection">Vui lòng kiểm tra kết nối mạng của bạn</string>
+    <string name="str_cannot_save_pothole_due_to_poor_connection">Không thể lưu do kết nối yếu</string>
 </resources>

@@ -6,6 +6,7 @@ import com.example.potholeapplication.Retrofit2.RetrofitServices;
 import com.example.potholeapplication.Retrofit2.SubinfoAPICallBack;
 import com.example.potholeapplication.class_pothole.request.DayReq;
 import com.example.potholeapplication.class_pothole.request.EmailReq;
+import com.example.potholeapplication.class_pothole.request.SaveDistanceReq;
 import com.example.potholeapplication.class_pothole.response.CountResponse;
 import com.example.potholeapplication.class_pothole.response.SubinfoResponse;
 import com.google.gson.Gson;
@@ -55,5 +56,10 @@ public class SubinfoAPIManager {
         getApiInterface();
         Call<SubinfoResponse> call = apiInterface.callGetSubinfo(emailReq);
         setSubinfoAPIReturn(call, subinfoAPICallBack);
+    }
+    public static void callSaveDistances(SaveDistanceReq saveDistanceReq,SubinfoAPICallBack subinfoAPICallBack){
+        getApiInterface();
+        Call<SubinfoResponse> call=apiInterface.callSaveDistances(saveDistanceReq);
+        setSubinfoAPIReturn(call,subinfoAPICallBack);
     }
 }

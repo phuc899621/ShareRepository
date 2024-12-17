@@ -7,6 +7,7 @@ import com.example.potholeapplication.class_pothole.request.EditPasswordReq;
 import com.example.potholeapplication.class_pothole.request.EmailReq;
 import com.example.potholeapplication.class_pothole.request.LoginReq;
 import com.example.potholeapplication.class_pothole.request.RegisterReq;
+import com.example.potholeapplication.class_pothole.request.SaveDistanceReq;
 import com.example.potholeapplication.class_pothole.response.CountResponse;
 import com.example.potholeapplication.class_pothole.response.SeverityResponse;
 import com.example.potholeapplication.class_pothole.response.SubinfoResponse;
@@ -74,5 +75,7 @@ public interface APIInterface {
     //--------------------API cho subinfo
     @POST("api/pothole/subinfo")//goi api tra ve subinfo
     Call<SubinfoResponse> callGetSubinfo(@Body EmailReq emailReq);
+    @POST("api/pothole/save/distance")//luu quang duong di chuyen duoc khi bat pothole detection
+    Call<SubinfoResponse> callSaveDistances(@Body SaveDistanceReq saveDistanceReq);
 
 }

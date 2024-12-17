@@ -263,7 +263,8 @@ public class DialogManager {
                     @Override
                     public void onFailure(Throwable t) {
                         Log.e("API Error", "Failure: " + t.getMessage());
-                        throw new RuntimeException(t);
+                        DialogManager.showDialogErrorString(context,context.getString(R.string.str_cannot_save_pothole_due_to_poor_connection));
+                        
                     }
                 });
     }

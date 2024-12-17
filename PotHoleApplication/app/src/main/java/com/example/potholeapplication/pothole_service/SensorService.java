@@ -10,8 +10,6 @@ import android.hardware.Sensor;
 import android.hardware.SensorManager;
 import android.location.Location;
 import android.location.LocationManager;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
@@ -20,6 +18,17 @@ import android.os.Vibrator;
 import android.util.Log;
 
 import androidx.core.app.ActivityCompat;
+
+import com.example.potholeapplication.Retrofit2.APIInterface;
+import com.example.potholeapplication.Retrofit2.SubinfoAPICallBack;
+import com.example.potholeapplication.class_pothole.manager.LocalDataManager;
+import com.example.potholeapplication.class_pothole.manager.NetworkManager;
+import com.example.potholeapplication.class_pothole.manager.SubinfoAPIManager;
+import com.example.potholeapplication.class_pothole.request.EmailReq;
+import com.example.potholeapplication.class_pothole.request.SaveDistanceReq;
+import com.example.potholeapplication.class_pothole.response.SubinfoResponse;
+
+import retrofit2.Response;
 
 public class SensorService extends Service {
 
@@ -32,15 +41,39 @@ public class SensorService extends Service {
     private GPSListener gpsListener;
     private Handler handler;
     private Location lastLocation;
-    private double totalDistance = 0;
+    private float addingDistance = 0;
     Context context;
+    NetworkManager networkManager;
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         return START_NOT_STICKY;
 
     }
+    public void saveTotalDistanceToAPI(float data){
+        if(!networkManager.isNetworkAvailable()){
+            return;
+        }
+        SubinfoAPIManager.callSaveDistances(
+                new SaveDistanceReq(LocalDataManager.getEmail(context), data),
+                new SubinfoAPICallBack() {
+                    @Override
+                    public void onSuccess(Response<SubinfoResponse> response) {
 
+                    }
+
+                    @Override
+                    public void onError(SubinfoResponse errorResponse) {
+
+                    }
+
+                    @Override
+                    public void onFailure(Throwable t) {
+
+                    }
+                }
+        );
+    }
     @SuppressLint({"ForegroundServiceType", "ServiceCast"})
     @Override
     public void onCreate() {
@@ -48,13 +81,37 @@ public class SensorService extends Service {
         // Khởi tạo các đối tượng SensorManager và LocationManager
         sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
         locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+        networkManager=new NetworkManager(this);
+        LocalDataManager.saveTotalDistances(this,0);
+        networkManager.startMonitoring(new NetworkManager.NetworkStatusListener() {
+            @Override
+            public void onConnected() {
+                float data=LocalDataManager.getTotalDistances(context)+
+                        (Math.round(((addingDistance)*100)/100f)/1000f);
+                Log.d("DISTANCE_TRACKING2", "Distance: " + data + " kilometers"+addingDistance);
+                addingDistance=0;
+                LocalDataManager.saveTotalDistances(context,
+                        data);
+                saveTotalDistanceToAPI(data);
+                Log.d("WIFI","ISCONNECTED");
+            }
 
+            @Override
+            public void onDisconnected() {
+                float data=LocalDataManager.getTotalDistances(context)+
+                        (Math.round(((addingDistance)*100)/100f)/1000f);
+                Log.d("DISTANCE_TRACKING2", "Distance: " + data + " kilometers"+addingDistance);
+                addingDistance=0;
+                LocalDataManager.saveTotalDistances(context,data);
+                Log.d("WIFI","NO WIFI");
+
+            }
+        });
         // Khởi tạo listener
         accelerometerListener = new AccelerometerListener();
         gpsListener = new GPSListener(this);
         context=this;
         accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION);
-
         // Đăng ký listener cho cảm biến gia tốc
         sensorManager.registerListener(accelerometerListener, accelerometer, SensorManager.SENSOR_DELAY_NORMAL);
 
@@ -64,7 +121,7 @@ public class SensorService extends Service {
         // Tạo một Handler để xử lý các hành động định kỳ
         handler = new Handler();
         startPotholeDetection();
-        startDistanceTracking();
+        //startDistanceTracking();
 
     }
     private void requestLocationPermission() {
@@ -137,8 +194,15 @@ public class SensorService extends Service {
         super.onDestroy();
         sensorManager.unregisterListener(accelerometerListener);
         locationManager.removeUpdates(gpsListener);
-    }
+        float data=LocalDataManager.getTotalDistances(context)+
+                (Math.round(((addingDistance)*100)/100f)/1000f);
+        addingDistance=0;
+        LocalDataManager.saveTotalDistances(context,
+                data);
+        saveTotalDistanceToAPI(data);
+        networkManager.stopMonitoring();
 
+    }
     @Override
     public IBinder onBind(Intent intent) {
         // TODO: Return the communication channel to the service.
@@ -170,30 +234,19 @@ public class SensorService extends Service {
             }
         }, 5000);
     }
-    private boolean isConnectedToWifi() {
-        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo networkInfo = cm.getActiveNetworkInfo();
-        return networkInfo != null && networkInfo.isConnected() &&
-                networkInfo.getType() == ConnectivityManager.TYPE_WIFI;
-    }
     private void updateDistance() {
         Location currentLocation = gpsListener.lastLocation;
         Log.d("DISTANCE_TRACKING", "Distance: " + currentLocation + " meters");
-            if (currentLocation != null && lastLocation != null) {
+            if (currentLocation != null && lastLocation != null && lastLocation.distanceTo(currentLocation)>1) {
                 float distance = lastLocation.distanceTo(currentLocation);
-                totalDistance += distance;
-                Log.d("DISTANCE_TRACKING", "Distance: " + distance + " meters");
-
-                // Lưu dữ liệu vào cơ sở dữ liệu hoặc file tại đây
-                if (isConnectedToWifi()) {
-                    saveDistanceToStorage(totalDistance);
-                }
-                else Log.e("WIFI", "No wifi");
+                addingDistance += distance;
+                float data=LocalDataManager.getTotalDistances(context)+
+                        (Math.round(((addingDistance)*100)/100f)/1000f);
+                Log.d("DISTANCE_TRACKING", "Distance: " + distance + " meters"+addingDistance);
+                LocalDataManager.saveTotalDistances(this, data);
+                addingDistance=0;
             }
             lastLocation = currentLocation;
-    }
-    private void saveDistanceToStorage(double distance) {
-        Log.d("DATA_STORAGE", "Distance saved: " + distance + " meters");
     }
 
 
