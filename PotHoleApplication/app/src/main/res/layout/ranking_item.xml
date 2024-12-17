@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+
+    >
+    <LinearLayout
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_margin="5dp"
+        android:background="@color/ranking"
+        >
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="3"
+            android:gravity="center"
+            android:textColor="@color/dark_purple"
+            />
+    </LinearLayout>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:id="@+id/tvName"
+        android:text="wewerewrw"
+        android:gravity="center"
+        android:layout_marginHorizontal="5dp"
+        android:textSize="16sp"
+        android:textColor="@color/dark_purple"
+
+        />
+    <LinearLayout
+        android:layout_width="50dp"
+        android:layout_height="30dp"
+
+        android:background="@drawable/corner_ranking"
+        android:layout_margin="5dp"
+        >
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+
+            android:text="300"
+            android:gravity="center"
+            android:layout_marginHorizontal="5dp"
+            android:textSize="12sp"
+            android:textColor="@color/dark_purple"
+
+            />
+    </LinearLayout>
+
+</LinearLayout>
