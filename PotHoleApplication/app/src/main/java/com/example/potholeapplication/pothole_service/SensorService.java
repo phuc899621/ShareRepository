@@ -158,6 +158,7 @@ public class SensorService extends Service {
             Log.e("Location", "Error requesting location updates: " + e.getMessage());
         }
     }
+
     private void startPotholeDetection() {
         Runnable runnable = new Runnable() {
             @Override

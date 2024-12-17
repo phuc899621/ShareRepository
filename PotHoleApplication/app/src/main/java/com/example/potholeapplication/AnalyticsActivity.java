@@ -36,6 +36,7 @@ import retrofit2.Response;
 public class AnalyticsActivity extends AppCompatActivity {
 
     ActivityAnalyticsBinding binding;
+    
     BarDataSet barDataSet1, barDataSet2;
     // ArrayList for storing entries
     ArrayList<BarEntry> barEntriesOne,barEntriesTwo;
