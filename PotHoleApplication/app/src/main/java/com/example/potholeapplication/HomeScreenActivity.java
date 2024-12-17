@@ -124,6 +124,13 @@ public class HomeScreenActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+        binding.rankinglayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=new Intent(HomeScreenActivity.this,RankingActivity.class);
+                startActivity(intent);
+            }
+        });
     }
     public void setDisplay(){
         binding.tvName.setText(LocalDataManager.getName(this));

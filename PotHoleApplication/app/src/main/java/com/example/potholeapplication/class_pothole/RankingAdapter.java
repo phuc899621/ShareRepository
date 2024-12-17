@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class RankingAdapter extends RecyclerView.Adapter<RankingAdapter.ViewHolder>{
-    List<String> Data =new ArrayList<>();
+    List<String> Data;
 
     public RankingAdapter(List<String> data) {
         Data = data;
