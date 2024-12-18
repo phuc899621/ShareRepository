@@ -173,7 +173,7 @@ public class SensorService extends Service {
     }
     private void checkForPotholes() {
         double lastLinear = accelerometerListener.lastLinear;
-        if (lastLinear > 7) {
+        if (lastLinear > 10) {
             double latitude = gpsListener.latitude;
             double longitude = gpsListener.longitude;
             Intent intent = new Intent("com.example.SHOW_DIALOG");

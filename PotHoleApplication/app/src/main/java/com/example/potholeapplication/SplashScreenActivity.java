@@ -9,9 +9,11 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.graphics.Insets;
@@ -40,11 +42,14 @@ public class SplashScreenActivity extends AppCompatActivity {
             return insets;
         });
         setClickEvent();
+        Log.d("Permission",LocalDataManager.getEnableRealTimeDetection(this)+"");
+        requestLocationPermission();
         registerReceiver(potholeReceiver, new IntentFilter("REQUEST_LOCATION_PERMISSION"));
 
     }
     public void checkRealtimePothole(){
         Intent serviceIntent = new Intent(this, SensorService.class);
+        Log.d("Permission",LocalDataManager.getEnableRealTimeDetection(this)+"");
         if(LocalDataManager.getEnableRealTimeDetection(this)){
             startService(serviceIntent);
         }else{
@@ -94,6 +99,22 @@ public class SplashScreenActivity extends AppCompatActivity {
                     1);
         } else {
             checkRealtimePothole();
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == 1) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // Quyền đã được cấp
+                checkRealtimePothole();
+                Log.d("Permission", "Quyền truy cập oke.");
+
+            } else {
+                // Quyền bị từ chối
+                Log.d("Permission", "Quyền truy cập vị trí bị từ chối. Không thể phát hiện ổ gà.");
+            }
         }
     }
 }

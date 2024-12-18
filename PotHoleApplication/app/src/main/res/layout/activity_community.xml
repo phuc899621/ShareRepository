@@ -12,7 +12,7 @@
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:src="@drawable/ic_back"
-        app:layout_constraintTop_toTopOf="10dp"
+        app:layout_constraintTop_toTopOf="@id/tvCommunitiesHeader"
         app:layout_constraintBottom_toBottomOf="@id/tvCommunitiesHeader"
         app:layout_constraintStart_toStartOf="parent"
         android:layout_marginStart="10dp" />
@@ -22,7 +22,7 @@
         android:layout_width="35dp"
         android:layout_height="35dp"
         android:src="@drawable/ic_add"
-        app:layout_constraintTop_toTopOf="8dp"
+        app:layout_constraintTop_toTopOf="@id/tvCommunitiesHeader"
         app:layout_constraintBottom_toBottomOf="@id/tvCommunitiesHeader"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginEnd="20dp" />

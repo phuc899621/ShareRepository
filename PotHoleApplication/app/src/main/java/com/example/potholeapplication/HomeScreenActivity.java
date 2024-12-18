@@ -65,6 +65,7 @@ public class HomeScreenActivity extends AppCompatActivity {
         }
         isResume=true;
 
+
     }
     @Override
     protected void onStart() {
