@@ -128,9 +128,10 @@ public class SensorService extends Service {
         if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED) {
             // Nếu quyền chưa được cấp, yêu cầu cấp quyền
-            ActivityCompat.requestPermissions((Activity) context,
-                    new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},
-                    1); // 1 là mã yêu cầu quyền
+            Log.e("Permission", "Error No permission");
+            Intent intent = new Intent("REQUEST_LOCATION_PERMISSION");
+            sendBroadcast(intent);
+
         } else {
             // Nếu quyền đã được cấp, bắt đầu yêu cầu vị trí
             startLocationUpdates();
@@ -172,7 +173,7 @@ public class SensorService extends Service {
     }
     private void checkForPotholes() {
         double lastLinear = accelerometerListener.lastLinear;
-        if (lastLinear > 10) {
+        if (lastLinear > 7) {
             double latitude = gpsListener.latitude;
             double longitude = gpsListener.longitude;
             Intent intent = new Intent("com.example.SHOW_DIALOG");
@@ -185,8 +186,8 @@ public class SensorService extends Service {
         }
     }
     private String getPotholeSeverity(double lastLinear){
-        if(lastLinear>30) return "large";
-        if(lastLinear>20) return "medium";
+        if(lastLinear>20) return "large";
+        if(lastLinear>15) return "medium";
         return "small";
     }
 

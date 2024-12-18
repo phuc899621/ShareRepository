@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -13,6 +14,7 @@ import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -25,6 +27,7 @@ import com.example.potholeapplication.class_pothole.manager.SubinfoAPIManager;
 import com.example.potholeapplication.class_pothole.request.EmailReq;
 import com.example.potholeapplication.class_pothole.response.SubinfoResponse;
 import com.example.potholeapplication.databinding.ActivityHomeScreenBinding;
+import com.example.potholeapplication.pothole_service.SensorService;
 import com.github.mikephil.charting.charts.LineChart;
 
 import retrofit2.Response;
@@ -96,6 +99,7 @@ public class HomeScreenActivity extends AppCompatActivity {
             }
         }
     };
+
     @SuppressLint("UnspecifiedRegisterReceiverFlag")
     public void setReceivePotholeAlert(){
         IntentFilter filter = new IntentFilter("com.example.SHOW_DIALOG");
