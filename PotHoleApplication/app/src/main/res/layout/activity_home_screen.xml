@@ -108,7 +108,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:scaleType="centerCrop"
-                android:src="@drawable/custom_data_pothole_report" />
+                android:src="@drawable/custom_data_pothole_report"
+                android:tint="@color/medium_dark_purple"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -150,7 +151,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:scaleType="centerCrop"
-                android:src="@drawable/custom_distance_travel" />
+                android:src="@drawable/custom_distance_travel"
+                android:tint="@color/medium_dark_purple"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -197,7 +199,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:scaleType="centerCrop"
-                android:src="@drawable/custom_fixed_potholes" />
+                android:src="@drawable/custom_fixed_potholes"
+                android:tint="@color/medium_dark_purple"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -258,13 +261,13 @@
                 android:id="@+id/analyticslayout"
                 app:cardCornerRadius="20dp"
                 app:strokeWidth="5dp"
-                app:strokeColor="@color/blue"
+                app:strokeColor="@color/white"
                 android:layout_weight="1"
                 >
                 <com.google.android.material.imageview.ShapeableImageView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:src="@color/blue"/>
+                    android:src="@color/medium_dark_purple"/>
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -275,7 +278,7 @@
                         android:src="@drawable/analystics"
                         android:scaleType="centerCrop"
                         android:layout_weight="1"
-                        android:layout_gravity="center"/>
+                        android:layout_gravity="center" />
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
@@ -298,13 +301,13 @@
                 android:id="@+id/maplayout"
                 app:cardCornerRadius="20dp"
                 app:strokeWidth="5dp"
-                app:strokeColor="@color/blue"
+                app:strokeColor="@color/white"
                 android:layout_weight="1"
                 >
                 <com.google.android.material.imageview.ShapeableImageView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:src="@color/blue"/>
+                    android:src="@color/medium_dark_purple"/>
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -346,13 +349,13 @@
                 android:id="@+id/communitylayout"
                 app:cardCornerRadius="20dp"
                 app:strokeWidth="5dp"
-                app:strokeColor="@color/blue"
+                app:strokeColor="@color/white"
                 android:layout_weight="1"
                 >
                 <com.google.android.material.imageview.ShapeableImageView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:src="@color/blue"/>
+                    android:src="@color/medium_dark_purple"/>
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -386,13 +389,13 @@
                 android:id="@+id/rankinglayout"
                 app:cardCornerRadius="20dp"
                 app:strokeWidth="5dp"
-                app:strokeColor="@color/blue"
+                app:strokeColor="@color/white"
                 android:layout_weight="1"
                 >
                 <com.google.android.material.imageview.ShapeableImageView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:src="@color/blue"/>
+                    android:src="@color/medium_dark_purple"/>
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
