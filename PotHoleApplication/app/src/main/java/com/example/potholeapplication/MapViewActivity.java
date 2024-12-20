@@ -4,6 +4,8 @@ import static com.mapbox.maps.plugin.gestures.GesturesUtils.addOnMoveListener;
 import static com.mapbox.maps.plugin.gestures.GesturesUtils.getGestures;
 import static com.mapbox.maps.plugin.locationcomponent.LocationComponentUtils.getLocationComponent;
 
+import static java.lang.System.in;
+
 import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -11,11 +13,19 @@ import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Rect;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 
@@ -31,8 +41,13 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.lifecycle.DefaultLifecycleObserver;
 import androidx.lifecycle.LifecycleOwner;
 
+import com.example.potholeapplication.Retrofit2.PotholeAPICallBack;
 import com.example.potholeapplication.class_pothole.manager.LocaleManager;
+import com.example.potholeapplication.class_pothole.manager.PotholeAPIManager;
+import com.example.potholeapplication.class_pothole.other.Pothole;
+import com.example.potholeapplication.class_pothole.response.PotholeResponse;
 import com.example.potholeapplication.databinding.ActivityMapViewBinding;
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.mapbox.android.core.permissions.PermissionsManager;
 import com.mapbox.android.gestures.MoveGestureDetector;
 import com.mapbox.api.directions.v5.DirectionsCriteria;
@@ -100,6 +115,7 @@ import kotlin.coroutines.Continuation;
 import kotlin.coroutines.CoroutineContext;
 import kotlin.coroutines.EmptyCoroutineContext;
 import kotlin.jvm.functions.Function1;
+import retrofit2.Response;
 
 public class MapViewActivity extends AppCompatActivity {
     //------------------Khởi tạo bieến cơ bản-------------------
@@ -107,12 +123,14 @@ public class MapViewActivity extends AppCompatActivity {
     Context context;
     Point currentPoint;//luu tru vi tri hien tai
     boolean isFirstTime = true;//lan dau mo ung dung map
-    boolean ignoreNextQueryUpdate = false, isOnTracking = false, isListening = false,isOnRouting=false;
-
+    boolean ignoreNextQueryUpdate = false, isOnTracking = false,
+            isListening = false,isOnRouting=false
+            ,isExpanded=false;
+    List<Pothole> potholes;
 
     //-------------Biến tọađộ,camera,icon-----------------------
     Point thisLocation;
-    Bitmap iconImage;
+    Bitmap iconImage,iconPotholeLarge,iconPotholeSmall,iconPotholeMedium;
     CameraOptions cameraForBearing, cameraForLocation, cameraForPosition;
     PointAnnotationManager pointAnnotationManager;
 
@@ -281,16 +299,19 @@ public class MapViewActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         EdgeToEdge.enable(this);
         binding = ActivityMapViewBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+            int navigationBarHeight = insets.getInsets(
+                    WindowInsetsCompat.Type.navigationBars()
+            ).bottom;
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, navigationBarHeight);
             return insets;
         });
         context=this;
-
         init();
         if (checkLocationPermissions()) {
             setupLocationTracking();
@@ -362,15 +383,31 @@ public class MapViewActivity extends AppCompatActivity {
         context = this;
         setupIcon();
         setClickListener();
+        callGetPothole();
         binding.fabLocationTracking.setBackgroundTintList(
                 ColorStateList.valueOf(ContextCompat.getColor(context, R.color.pink)));
         binding.fabUserTracking.setBackgroundTintList(
                 ColorStateList.valueOf(ContextCompat.getColor(context, R.color.pink)));
-        binding.fabReport.setBackgroundTintList(
-                ColorStateList.valueOf(ContextCompat.getColor(context, R.color.pink)));
+
     }
     public void setupIcon(){
         iconImage = BitmapFactory.decodeResource(getResources(), R.drawable.ic_puck);
+        iconPotholeLarge = createBitmapFromDrawable(R.drawable.ic_pothole_large);
+        iconPotholeMedium = createBitmapFromDrawable(R.drawable.ic_pothole_medium);
+        iconPotholeSmall = createBitmapFromDrawable(R.drawable.ic_pothole_small);;
+    }
+    public Bitmap createBitmapFromDrawable(int drawableID){
+        Drawable drawable = ContextCompat.getDrawable(this, drawableID);
+        Bitmap bitmap = Bitmap.createBitmap(
+                drawable.getIntrinsicWidth(),
+                drawable.getIntrinsicHeight(),
+                Bitmap.Config.ARGB_8888
+        );
+
+        // Áp dụng kích thước và vẽ vào Bitmap
+        drawable.setBounds(0, 0, bitmap.getWidth(), bitmap.getHeight());
+        drawable.draw(new Canvas(bitmap));
+        return bitmap;
     }
     public void setClickListener() {
         binding.btnBack.setOnClickListener(new View.OnClickListener() {
@@ -382,27 +419,13 @@ public class MapViewActivity extends AppCompatActivity {
         binding.fabLocationTracking.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                /*if (!isOnTracking) {
-                    binding.SearchViewLayout.setVisibility(View.GONE);
-                    binding.fromViewLayout.setVisibility(View.VISIBLE);
-                    binding.toViewLayout.setVisibility(View.VISIBLE);
-                    binding.btnCurrentLocation.setVisibility(View.VISIBLE);
-                    binding.fabLocationTracking.setBackgroundTintList(
-                            ColorStateList.valueOf(ContextCompat.getColor(context, R.color.green)));
-                    binding.searchView.setText("");
-                    isOnTracking = true;
-                } else {
-                    binding.SearchViewLayout.setVisibility(View.VISIBLE);
-                    binding.fromViewLayout.setVisibility(View.GONE);
-                    binding.toViewLayout.setVisibility(View.GONE);
-                    binding.btnCurrentLocation.setVisibility(View.GONE);
-                    binding.fabLocationTracking.setBackgroundTintList(
-                            ColorStateList.valueOf(ContextCompat.getColor(context, R.color.pink)));
-                    binding.fromView.setText("");
-                    binding.toView.setText("");
-                    isOnTracking = false;
-                }*/
-                Toast.makeText(context,"Please choose destination for routing",Toast.LENGTH_SHORT).show();
+                if(isOnRouting){
+                    clearRoute();
+                    isOnRouting=false;
+                }else{
+                    fetchRoute(thisLocation);
+                    isOnRouting=true;
+                }
             }
         });
     }
@@ -502,6 +525,7 @@ public class MapViewActivity extends AppCompatActivity {
                         result.onValue(new Expected.Action<PlaceAutocompleteResult>() {
                             @Override
                             public void run(@NonNull PlaceAutocompleteResult input) {
+                                hideKeyboard(binding.searchView);
                                 ignoreNextQueryUpdate = true;
 
                                 //gan marker ngay vi tri do
@@ -577,6 +601,12 @@ public class MapViewActivity extends AppCompatActivity {
         });
 
     }
+    private void hideKeyboard(View view) {
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        if (imm != null) {
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
+    }
     private void enableLocationComponent() {
         // Kích hoạt logic để hiển thị vị trí trên bản đồ
         Toast.makeText(this, "Kích hoạt hiển thị vị trí người dùng", Toast.LENGTH_SHORT).show();
@@ -625,19 +655,20 @@ public class MapViewActivity extends AppCompatActivity {
                                 .withDraggable(false); // có cho phép kéo marker không
                         pointAnnotationManager.create(pointAnnotationOptions);
                         isOnRouting=false;
+                        thisLocation=point;
                         //su kien click de tracking
-                        binding.fabLocationTracking.setOnClickListener(new View.OnClickListener() {
+                        /*binding.fabLocationTracking.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
                                 if(isOnRouting){
                                     clearRoute();
                                     isOnRouting=false;
                                 }else{
-                                    fetchRoute(point);
+                                    fetchRoute(thisLocation);
                                     isOnRouting=true;
                                 }
                             }
-                        });
+                        });*/
 
 
                         // Tùy chọn: Di chuyển camera đến điểm được click
@@ -818,6 +849,73 @@ public class MapViewActivity extends AppCompatActivity {
                 cameraForLocation,
                 new MapAnimationOptions.Builder().duration(2000).build());
         getMapboxMap().setCamera(cameraForLocation);
+    }
+
+    //---------------call get pothole-----------
+    public void callGetPothole(){
+        PotholeAPIManager.callGetPothole(new PotholeAPICallBack() {
+            @Override
+            public void onSuccess(Response<PotholeResponse> response) {
+                setupIcon();
+                potholes=response.body().getData();
+                updatePotholeMarker();
+            }
+
+            @Override
+            public void onError(PotholeResponse errorResponse) {
+                Log.d("GetPothole","error");
+
+
+            }
+
+            @Override
+            public void onFailure(Throwable t) {
+                Log.d("GetPothole","error");
+            }
+        });
+
+    }
+    PointAnnotationManager potholeAnnotationManager;
+    public void updatePotholeMarker(){
+        AnnotationPlugin annotationPlugin = getAnnotations(binding.mapView);
+        potholeAnnotationManager = (PointAnnotationManager) annotationPlugin.createAnnotationManager(
+                AnnotationType.PointAnnotation, null
+        );
+        potholeAnnotationManager.deleteAll();
+        Log.d("LOG",iconPotholeSmall+"");
+        for(int i=0;i<potholes.size();i++){
+            switch(potholes.get(i).getSeverity()){
+                case "small":{
+                    PointAnnotationOptions pointAnnotationOptions = new PointAnnotationOptions()
+                            .withTextAnchor(TextAnchor.CENTER)
+                            .withIconImage(iconPotholeSmall)
+                            .withPoint(Point.fromLngLat(potholes.get(i).getLocationClass().getCoordinates().get(0),
+                                    potholes.get(i).getLocationClass().getCoordinates().get(1)));
+                    potholeAnnotationManager.create(pointAnnotationOptions);
+                    break;
+                }
+                case "medium":{
+                    PointAnnotationOptions pointAnnotationOptions = new PointAnnotationOptions()
+                            .withTextAnchor(TextAnchor.CENTER)
+                            .withIconImage(iconPotholeMedium)
+                            .withPoint(Point.fromLngLat(potholes.get(i).getLocationClass().getCoordinates().get(0),
+                                    potholes.get(i).getLocationClass().getCoordinates().get(1)));
+                    potholeAnnotationManager.create(pointAnnotationOptions);
+                    break;
+                }
+                case "large":{
+                    PointAnnotationOptions pointAnnotationOptions = new PointAnnotationOptions()
+                            .withTextAnchor(TextAnchor.CENTER)
+                            .withIconImage(iconPotholeLarge)
+                            .withPoint(Point.fromLngLat(potholes.get(i).getLocationClass().getCoordinates().get(0),
+                                    potholes.get(i).getLocationClass().getCoordinates().get(1)));
+                    potholeAnnotationManager.create(pointAnnotationOptions);
+                    break;
+                }
+            }
+
+        }
+
     }
 
 

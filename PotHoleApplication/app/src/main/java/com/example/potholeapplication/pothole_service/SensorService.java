@@ -20,12 +20,15 @@ import android.util.Log;
 import androidx.core.app.ActivityCompat;
 
 import com.example.potholeapplication.Retrofit2.APIInterface;
+import com.example.potholeapplication.Retrofit2.PotholeAPICallBack;
 import com.example.potholeapplication.Retrofit2.SubinfoAPICallBack;
 import com.example.potholeapplication.class_pothole.manager.LocalDataManager;
 import com.example.potholeapplication.class_pothole.manager.NetworkManager;
+import com.example.potholeapplication.class_pothole.manager.PotholeAPIManager;
 import com.example.potholeapplication.class_pothole.manager.SubinfoAPIManager;
 import com.example.potholeapplication.class_pothole.request.EmailReq;
 import com.example.potholeapplication.class_pothole.request.SaveDistanceReq;
+import com.example.potholeapplication.class_pothole.response.PotholeResponse;
 import com.example.potholeapplication.class_pothole.response.SubinfoResponse;
 
 import retrofit2.Response;
@@ -74,6 +77,26 @@ public class SensorService extends Service {
                 }
         );
     }
+    public void callGetListPothole(){
+        PotholeAPIManager.callGetPothole(new PotholeAPICallBack() {
+            @Override
+            public void onSuccess(Response<PotholeResponse> response) {
+                Log.d("GetPothole",response.body().getData().get(0).getLocationClass().getCoordinates()+"");
+            }
+
+            @Override
+            public void onError(PotholeResponse errorResponse) {
+                Log.d("GetPothole","error");
+
+
+            }
+
+            @Override
+            public void onFailure(Throwable t) {
+                Log.d("GetPothole","error");
+            }
+        });
+    }
     @SuppressLint({"ForegroundServiceType", "ServiceCast"})
     @Override
     public void onCreate() {
@@ -83,6 +106,7 @@ public class SensorService extends Service {
         locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
         networkManager=new NetworkManager(this);
         LocalDataManager.saveTotalDistances(this,0);
+        callGetListPothole();
         networkManager.startMonitoring(new NetworkManager.NetworkStatusListener() {
             @Override
             public void onConnected() {

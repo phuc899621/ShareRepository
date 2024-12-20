@@ -78,6 +78,7 @@
             android:exported="false" />
         <activity
             android:name=".MapViewActivity"
+            android:windowSoftInputMode="adjustResize"
             android:exported="false" />
         <activity
             android:name=".HomeScreenActivity"

@@ -9,6 +9,7 @@ import com.example.potholeapplication.class_pothole.request.LoginReq;
 import com.example.potholeapplication.class_pothole.request.RegisterReq;
 import com.example.potholeapplication.class_pothole.request.SaveDistanceReq;
 import com.example.potholeapplication.class_pothole.response.CountResponse;
+import com.example.potholeapplication.class_pothole.response.PotholeResponse;
 import com.example.potholeapplication.class_pothole.response.SeverityResponse;
 import com.example.potholeapplication.class_pothole.response.SubinfoResponse;
 import com.example.potholeapplication.class_pothole.response.UserResponse;
@@ -63,9 +64,11 @@ public interface APIInterface {
     Call<UserResponse> callSaveImage(@Part("email")RequestBody email, @Part MultipartBody.Part image);
     @POST("api/find/image")//lay image
     Call<UserResponse> callFindImage(@Body EmailReq emailReq);
-    //--------------------API lưu pothole-------------------
+    //--------------------API pothole-------------------
     @POST("api/pothole/add")//luu pothole
     Call<UserResponse> callAddPothole(@Body AddPotholeReq addPotholeReq);
+    @GET("api/pothole/")//lay danh sach pothole
+    Call<PotholeResponse> callGetPothole();
     //--------------------API cho analystic-----------------------
     @POST("api/pothole/find/year")//goi so luong pothole/fixed pothole theo tung thang
     Call<CountResponse> callGetPotholeCountByMonth(@Body DayReq dayReq);
