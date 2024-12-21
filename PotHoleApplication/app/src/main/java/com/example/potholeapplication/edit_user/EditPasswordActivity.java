@@ -12,10 +12,11 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.potholeapplication.R;
-import com.example.potholeapplication.Retrofit2.UserAPICallBack;
-import com.example.potholeapplication.class_pothole.manager.UserAPIManager;
+import com.example.potholeapplication.Retrofit2.APICallBack;
+import com.example.potholeapplication.class_pothole.manager.APIManager;
 import com.example.potholeapplication.class_pothole.manager.LocaleManager;
-import com.example.potholeapplication.class_pothole.response.UserResponse;
+import com.example.potholeapplication.class_pothole.other.User;
+import com.example.potholeapplication.class_pothole.response.APIResponse;
 import com.example.potholeapplication.class_pothole.manager.DialogManager;
 import com.example.potholeapplication.class_pothole.manager.LocalDataManager;
 import com.example.potholeapplication.class_pothole.request.EditPasswordReq;
@@ -58,16 +59,16 @@ public class EditPasswordActivity extends AppCompatActivity {
             DialogManager.showDialogErrorString(context,getString(R.string.str_password_does_not_match));
             return;
         }
-        UserAPIManager.callChangePassword(
+        APIManager.callChangePassword(
                 new EditPasswordReq(email,oldPassword,newPassword)
-                ,new UserAPICallBack() {
+                ,new APICallBack<APIResponse<User>>() {
                     @Override
-                    public void onSuccess(Response<UserResponse> response) {
+                    public void onSuccess(Response<APIResponse<User>> response) {
                         DialogManager.showDialogOkeThenFinish(context,getString(R.string.str_change_password_successful));
                     }
 
                     @Override
-                    public void onError(UserResponse errorResponse) {
+                    public void onError(APIResponse<User> errorResponse) {
                         DialogManager.showDialogError(context, errorResponse);
                     }
 

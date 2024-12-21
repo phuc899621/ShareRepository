@@ -3,26 +3,26 @@ package com.example.potholeapplication.class_pothole.response;
 import com.example.potholeapplication.class_pothole.other.User;
 import com.google.gson.annotations.SerializedName;
 
-import java.util.ArrayList;
 import java.util.List;
 
-public class UserResponse {
+public class APIResponse<T> {
     @SerializedName("success")
-    private boolean success=false;
+    private boolean success;
     @SerializedName("message")
-    private String Message;
+    private String message;
     @SerializedName("data")
-    private List<User> data;
-    public UserResponse() {
-        this.success = false;
-        this.Message = "";
-        this.data = new ArrayList<>();
+    private List<T> data;
+    private final Class<T> type;
+
+    public Class<T> getType() {
+        return type;
     }
 
-    public UserResponse(boolean success, String message, List<User> data) {
+    public APIResponse(boolean success, String message, List<T> data, Class<T> type) {
         this.success = success;
-        Message = message;
+        this.message = message;
         this.data = data;
+        this.type=type;
     }
 
     public boolean isSuccess() {
@@ -34,18 +34,18 @@ public class UserResponse {
     }
 
     public String getMessage() {
-        return Message;
+        return message;
     }
 
     public void setMessage(String message) {
-        Message = message;
+        this.message = message;
     }
 
-    public List<User> getData() {
+    public List<T> getData() {
         return data;
     }
 
-    public void setData(List<User> data) {
+    public void setData(List<T> data) {
         this.data = data;
     }
 }

@@ -13,12 +13,13 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.potholeapplication.R;
-import com.example.potholeapplication.Retrofit2.UserAPICallBack;
-import com.example.potholeapplication.class_pothole.manager.UserAPIManager;
+import com.example.potholeapplication.Retrofit2.APICallBack;
+import com.example.potholeapplication.class_pothole.manager.APIManager;
 import com.example.potholeapplication.class_pothole.manager.DialogManager;
 import com.example.potholeapplication.class_pothole.manager.LocaleManager;
+import com.example.potholeapplication.class_pothole.other.User;
 import com.example.potholeapplication.class_pothole.request.EmailReq;
-import com.example.potholeapplication.class_pothole.response.UserResponse;
+import com.example.potholeapplication.class_pothole.response.APIResponse;
 import com.example.potholeapplication.databinding.ActivityForgotPasswordBinding;
 
 import retrofit2.Response;
@@ -77,10 +78,10 @@ public class ForgotPasswordActivity extends AppCompatActivity {
         }
 
         // Call API kiem tra email
-        UserAPIManager.callFindEmail(new EmailReq(email)
-                ,new UserAPICallBack() {
+        APIManager.callFindEmail(new EmailReq(email)
+                ,new APICallBack<APIResponse<User>>() {
                     @Override
-                    public void onSuccess(Response<UserResponse> response) {
+                    public void onSuccess(Response<APIResponse<User>> response) {
                         Intent intent=new Intent(ForgotPasswordActivity.this,
                                 ForgotPasswordVerificationActivity.class);
                         intent.putExtra("email",email);
@@ -88,7 +89,7 @@ public class ForgotPasswordActivity extends AppCompatActivity {
                     }
 
                     @Override
-                    public void onError(UserResponse errorResponse) {
+                    public void onError(APIResponse<User> errorResponse) {
                         DialogManager.showDialogError(context, errorResponse);
                     }
 

@@ -3,11 +3,8 @@ package com.example.potholeapplication.class_pothole.manager;
 import com.example.potholeapplication.Retrofit2.APIInterface;
 import com.example.potholeapplication.Retrofit2.CountAPICallBack;
 import com.example.potholeapplication.Retrofit2.RetrofitServices;
-import com.example.potholeapplication.Retrofit2.UserAPICallBack;
 import com.example.potholeapplication.class_pothole.request.DayReq;
-import com.example.potholeapplication.class_pothole.request.LoginReq;
 import com.example.potholeapplication.class_pothole.response.CountResponse;
-import com.example.potholeapplication.class_pothole.response.UserResponse;
 import com.google.gson.Gson;
 
 import java.io.IOException;

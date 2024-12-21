@@ -13,10 +13,11 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.potholeapplication.R;
-import com.example.potholeapplication.Retrofit2.UserAPICallBack;
+import com.example.potholeapplication.Retrofit2.APICallBack;
 import com.example.potholeapplication.SplashScreenActivity;
+import com.example.potholeapplication.class_pothole.other.User;
 import com.example.potholeapplication.class_pothole.request.AddPotholeReq;
-import com.example.potholeapplication.class_pothole.response.UserResponse;
+import com.example.potholeapplication.class_pothole.response.APIResponse;
 import com.example.potholeapplication.class_pothole.other.LocationClass;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.card.MaterialCardView;
@@ -57,12 +58,11 @@ public class DialogManager {
     }
 
     //tạo dialog lỗi, in ra lôi từ sever trả ve
-    public static void showDialogError(Context context, UserResponse userResponse){
+    public static <T> void showDialogError(Context context, APIResponse<T> apiResponse){
         Dialog dialog=createDialog(context,R.layout.custom_dialog_error,true);
-
         Button btnConfirm=dialog.findViewById(R.id.btnConfirm);
         TextView tvErrorTitle=dialog.findViewById(R.id.tvTitle);
-        switch (userResponse.getMessage().trim()){
+        switch (apiResponse.getMessage().trim()){
             case "Server error":
                 tvErrorTitle.setText(R.string.str_server_error);
                 break;
@@ -248,15 +248,15 @@ public class DialogManager {
     }
     private static void callSavePotholeAPI(Context context, AddPotholeReq addPotholeReq){
 
-        UserAPIManager.callAddPothole(addPotholeReq
-                ,new UserAPICallBack() {
+        APIManager.callAddPothole(addPotholeReq
+                ,new APICallBack<APIResponse<User>>() {
                     @Override
-                    public void onSuccess(Response<UserResponse> response) {
+                    public void onSuccess(Response<APIResponse<User>> response) {
 
                     }
 
                     @Override
-                    public void onError(UserResponse errorResponse) {
+                    public void onError(APIResponse<User> errorResponse) {
                         DialogManager.showDialogError(context, errorResponse);
                     }
 

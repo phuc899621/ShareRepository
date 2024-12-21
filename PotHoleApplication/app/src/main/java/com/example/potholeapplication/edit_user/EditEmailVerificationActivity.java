@@ -13,10 +13,11 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.potholeapplication.R;
-import com.example.potholeapplication.Retrofit2.UserAPICallBack;
-import com.example.potholeapplication.class_pothole.manager.UserAPIManager;
+import com.example.potholeapplication.Retrofit2.APICallBack;
+import com.example.potholeapplication.class_pothole.manager.APIManager;
 import com.example.potholeapplication.class_pothole.manager.LocaleManager;
-import com.example.potholeapplication.class_pothole.response.UserResponse;
+import com.example.potholeapplication.class_pothole.other.User;
+import com.example.potholeapplication.class_pothole.response.APIResponse;
 import com.example.potholeapplication.class_pothole.manager.DialogManager;
 import com.example.potholeapplication.class_pothole.manager.LocalDataManager;
 import com.example.potholeapplication.class_pothole.request.EmailReq;
@@ -57,15 +58,15 @@ public class EditEmailVerificationActivity extends AppCompatActivity {
         newEmail= intent.getStringExtra("email");
     }
     public void callSendCodeApi(){
-        UserAPIManager.callEmailCode(new EmailReq(newEmail)
-                ,new UserAPICallBack() {
+        APIManager.callEmailCode(new EmailReq(newEmail)
+                ,new APICallBack<APIResponse<User>>() {
                     @Override
-                    public void onSuccess(Response<UserResponse> response) {
+                    public void onSuccess(Response<APIResponse<User>> response) {
                         code=response.body().getMessage().toString().trim();
                     }
 
                     @Override
-                    public void onError(UserResponse errorResponse) {
+                    public void onError(APIResponse<User> errorResponse) {
                         DialogManager.showDialogError(context, errorResponse);
                     }
 
@@ -77,17 +78,17 @@ public class EditEmailVerificationActivity extends AppCompatActivity {
                 });
     }
     public void callEditEmailApi(){
-        UserAPIManager.callEditEmail(oldEmail,new EmailReq(newEmail)
-                ,new UserAPICallBack() {
+        APIManager.callEditEmail(oldEmail,new EmailReq(newEmail)
+                ,new APICallBack<APIResponse<User>>() {
                     @Override
-                    public void onSuccess(Response<UserResponse> response) {
+                    public void onSuccess(Response<APIResponse<User>> response) {
                         LocalDataManager.saveEmail(context,newEmail);
                         DialogManager.showDialogOkeNavigationClear(context,
                                 getString(R.string.str_change_email_successfully), EditUserActivity.class);
                     }
 
                     @Override
-                    public void onError(UserResponse errorResponse) {
+                    public void onError(APIResponse<User> errorResponse) {
                         DialogManager.showDialogError(context, errorResponse);
                     }
 

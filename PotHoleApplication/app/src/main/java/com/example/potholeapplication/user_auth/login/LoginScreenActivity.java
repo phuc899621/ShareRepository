@@ -15,30 +15,24 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.potholeapplication.HomeScreenActivity;
 import com.example.potholeapplication.R;
-import com.example.potholeapplication.Retrofit2.UserAPICallBack;
-import com.example.potholeapplication.class_pothole.manager.UserAPIManager;
+import com.example.potholeapplication.Retrofit2.APICallBack;
+import com.example.potholeapplication.class_pothole.manager.APIManager;
 import com.example.potholeapplication.class_pothole.manager.DialogManager;
 import com.example.potholeapplication.class_pothole.manager.LocalDataManager;
 import com.example.potholeapplication.class_pothole.manager.LocaleManager;
 import com.example.potholeapplication.class_pothole.request.EmailReq;
 import com.example.potholeapplication.class_pothole.request.LoginReq;
-import com.example.potholeapplication.Retrofit2.RetrofitServices;
 import com.example.potholeapplication.class_pothole.other.User;
-import com.example.potholeapplication.class_pothole.response.UserResponse;
+import com.example.potholeapplication.class_pothole.response.APIResponse;
 import com.example.potholeapplication.databinding.ActivityLoginScreenBinding;
-import com.example.potholeapplication.Retrofit2.APIInterface;
 import com.example.potholeapplication.user_auth.forgot_password.ForgotPasswordActivity;
 import com.example.potholeapplication.user_auth.signup.SignupActivity;
-import com.google.gson.Gson;
 
-import java.io.IOException;
 import java.util.List;
 
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
-import retrofit2.Call;
-import retrofit2.Callback;
 import retrofit2.Response;
 
 public class LoginScreenActivity extends AppCompatActivity {
@@ -71,15 +65,15 @@ public class LoginScreenActivity extends AppCompatActivity {
             DialogManager.showDialogErrorString(context,getString(R.string.str_please_enter_username_and_password));
             return;
         }
-        UserAPIManager.callLogin(new LoginReq(username,password), new UserAPICallBack() {
+        APIManager.callLogin(new LoginReq(username,password), new APICallBack<APIResponse<User>>() {
             @Override
-            public void onSuccess(Response<UserResponse> response) {
+            public void onSuccess(Response<APIResponse<User>> response) {
                 LocalDataManager.saveUser(context,response.body().getData());
                 CallGetImageAPI();
             }
 
             @Override
-            public void onError(UserResponse errorResponse) {
+            public void onError(APIResponse<User> errorResponse) {
                 DialogManager.showDialogError(context,errorResponse);
 
             }
@@ -106,52 +100,40 @@ public class LoginScreenActivity extends AppCompatActivity {
             DialogManager.showDialogErrorString(context,getString(R.string.str_email_not_found));
             return;
         }
-        EmailReq emailReq=new EmailReq(email);
-        APIInterface apiServices= RetrofitServices.getApiService();
-        Call<UserResponse> call = apiServices.callFindImage(emailReq);
-        call.enqueue(new Callback<UserResponse>() {
+        APIManager.callFindImage(new EmailReq(email), new APICallBack<APIResponse<User>>() {
             @Override
-            public void onResponse(Call<UserResponse> call, Response<UserResponse> response) {
-                if(response.isSuccessful()&&response.body()!=null){
-                    List<User> data = response.body().getData();
-                    if (data != null && !data.isEmpty()) {
-                        String imageBase64 = data.get(0).getImage();
-                        if (!imageBase64.isEmpty()) {
-                            //neu co thi luu va den homescreen
-                            byte[] decodedBytes = Base64.decode(imageBase64, Base64.DEFAULT);
-                            LocalDataManager.saveImageBytes(context,decodedBytes);
-                            DialogManager.showDialogOkeNavigation(context,getString(R.string.str_login_successful),
-                                    HomeScreenActivity.class);
-                        } else {
-                            //neu chua co thi lay anh mac dinh
-                            LocalDataManager.saveImageBytes(context,
-                                    LocalDataManager.drawableToByteArray(context,R.drawable.default_user)
-                            );
-                            CallSaveImageAPI(LocalDataManager.drawableToByteArray(context,R.drawable.default_user));
-                        }
-                    }
-                }
-                else{
-                    String errorString;
-                    UserResponse userResponse;
-                    try {
-                        errorString=response.errorBody().string();
-                        Gson gson=new Gson();
-                        userResponse =gson.fromJson(errorString, UserResponse.class);
-                        DialogManager.showDialogError(context, userResponse);
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
+            public void onSuccess(Response<APIResponse<User>> response) {
+                List<User> data = response.body().getData();
+                if (data != null && !data.isEmpty()) {
+                    String imageBase64 = data.get(0).getImage();
+                    if (!imageBase64.isEmpty()) {
+                        //neu co thi luu va den homescreen
+                        byte[] decodedBytes = Base64.decode(imageBase64, Base64.DEFAULT);
+                        LocalDataManager.saveImageBytes(context,decodedBytes);
+                        DialogManager.showDialogOkeNavigation(context,getString(R.string.str_login_successful),
+                                HomeScreenActivity.class);
+                    } else {
+                        //neu chua co thi lay anh mac dinh
+                        LocalDataManager.saveImageBytes(context,
+                                LocalDataManager.drawableToByteArray(context,R.drawable.default_user)
+                        );
+                        CallSaveImageAPI(LocalDataManager.drawableToByteArray(context,R.drawable.default_user));
                     }
                 }
             }
 
             @Override
-            public void onFailure(Call<UserResponse> call, Throwable t) {
-                Log.e("API Error", "Failure1: " + t.getMessage());
+            public void onError(APIResponse<User> errorResponse) {
+                DialogManager.showDialogError(context, errorResponse);
+            }
+
+            @Override
+            public void onFailure(Throwable t) {
+                Log.e("API Error", "Failure: " + t.getMessage());
+                throw new RuntimeException(t);
             }
         });
     }
-
     //Luu anh mac dinh len server neu chua co
     public void CallSaveImageAPI(byte[] imageBytes) {
         RequestBody requestBody = RequestBody.create(MediaType.parse("image/jpeg"), imageBytes);
@@ -163,34 +145,23 @@ public class LoginScreenActivity extends AppCompatActivity {
         }
         // Tạo RequestBody cho email và task
         RequestBody emailReq = RequestBody.create(MediaType.parse("text/plain"), email);
-        APIInterface apiServices=RetrofitServices.getApiService();
-        Call<UserResponse> call = apiServices.callSaveImage(emailReq,imagePart);
-
-        // Gửi yêu cầu
-        call.enqueue(new Callback<UserResponse>() {
+        APIManager.callSaveImage(emailReq, imagePart, new APICallBack<APIResponse<User>>() {
             @Override
-            public void onResponse(Call<UserResponse> call, Response<UserResponse> response) {
-                if(response.isSuccessful()&&response.body()!=null){
-                    LocalDataManager.saveImageBytes(context,imageBytes);
-                    DialogManager.showDialogOkeNavigation(context,getString(R.string.str_login_successful),
-                            HomeScreenActivity.class);
-                }
-                else{
-                    String errorString;
-                    UserResponse userResponse;
-                    try {
-                        errorString=response.errorBody().string();
-                        Gson gson=new Gson();
-                        userResponse =gson.fromJson(errorString, UserResponse.class);
-                        DialogManager.showDialogError(context, userResponse);
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
-                    }
-                }
+            public void onSuccess(Response<APIResponse<User>> response) {
+                LocalDataManager.saveImageBytes(context,imageBytes);
+                DialogManager.showDialogOkeNavigation(context,getString(R.string.str_login_successful),
+                        HomeScreenActivity.class);
             }
+
             @Override
-            public void onFailure(Call<UserResponse> call, Throwable t) {
-                Log.e("API Error", "Failure3: " + t.getMessage());
+            public void onError(APIResponse<User> errorResponse) {
+                DialogManager.showDialogError(context, errorResponse);
+            }
+
+            @Override
+            public void onFailure(Throwable t) {
+                Log.e("API Error", "Failure: " + t.getMessage());
+                throw new RuntimeException(t);
             }
         });
     }

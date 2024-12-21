@@ -13,11 +13,12 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.potholeapplication.R;
-import com.example.potholeapplication.Retrofit2.UserAPICallBack;
-import com.example.potholeapplication.class_pothole.manager.UserAPIManager;
+import com.example.potholeapplication.Retrofit2.APICallBack;
+import com.example.potholeapplication.class_pothole.manager.APIManager;
 import com.example.potholeapplication.class_pothole.manager.DialogManager;
 import com.example.potholeapplication.class_pothole.manager.LocaleManager;
-import com.example.potholeapplication.class_pothole.response.UserResponse;
+import com.example.potholeapplication.class_pothole.other.User;
+import com.example.potholeapplication.class_pothole.response.APIResponse;
 import com.example.potholeapplication.class_pothole.request.ResetPasswordReq;
 import com.example.potholeapplication.databinding.ActivityResetPasswordBinding;
 
@@ -78,15 +79,15 @@ public class ResetPasswordActivity extends AppCompatActivity {
             DialogManager.showDialogErrorString(this,getString(R.string.str_password_does_not_match));
             return;
         }
-        UserAPIManager.callResetPassword(new ResetPasswordReq(emailForResetPassword,password)
-                ,new UserAPICallBack() {
+        APIManager.callResetPassword(new ResetPasswordReq(emailForResetPassword,password)
+                ,new APICallBack<APIResponse<User>>() {
                     @Override
-                    public void onSuccess(Response<UserResponse> response) {
+                    public void onSuccess(Response<APIResponse<User>> response) {
                         Intent intent=new Intent(ResetPasswordActivity.this,
                                 ResetPasswordSuccessActivity.class);
                         startActivity(intent);                    }
                     @Override
-                    public void onError(UserResponse errorResponse) {
+                    public void onError(APIResponse<User> errorResponse) {
                         DialogManager.showDialogError(context, errorResponse);
                     }
                     @Override

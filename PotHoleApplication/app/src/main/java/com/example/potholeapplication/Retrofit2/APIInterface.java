@@ -1,5 +1,6 @@
 package com.example.potholeapplication.Retrofit2;
 
+import com.example.potholeapplication.class_pothole.other.User;
 import com.example.potholeapplication.class_pothole.request.AddPotholeReq;
 import com.example.potholeapplication.class_pothole.request.DayReq;
 import com.example.potholeapplication.class_pothole.request.EditInfoReq;
@@ -8,11 +9,11 @@ import com.example.potholeapplication.class_pothole.request.EmailReq;
 import com.example.potholeapplication.class_pothole.request.LoginReq;
 import com.example.potholeapplication.class_pothole.request.RegisterReq;
 import com.example.potholeapplication.class_pothole.request.SaveDistanceReq;
+import com.example.potholeapplication.class_pothole.response.APIResponse;
 import com.example.potholeapplication.class_pothole.response.CountResponse;
 import com.example.potholeapplication.class_pothole.response.PotholeResponse;
 import com.example.potholeapplication.class_pothole.response.SeverityResponse;
 import com.example.potholeapplication.class_pothole.response.SubinfoResponse;
-import com.example.potholeapplication.class_pothole.response.UserResponse;
 import com.example.potholeapplication.class_pothole.request.ResetPasswordReq;
 import com.example.potholeapplication.class_pothole.request.UserVerificationReq;
 
@@ -30,43 +31,43 @@ import retrofit2.http.Path;
 public interface APIInterface {
     //-----------------------API danh cho dang nhap-----------------------
     @POST("api/auth/login")//dang nhap
-    Call<UserResponse> callLogin(@Body LoginReq loginReq);
+    Call<APIResponse<User>> callLogin(@Body LoginReq loginReq);
     //-----------------------API danh cho dang ki-----------------------------
     @POST("api/find/register/non")//kiem tra username va email co ton tai chua
-    Call<UserResponse> callVerifyBeforeRegister(@Body UserVerificationReq userVerificationReq);
+    Call<APIResponse<User>> callVerifyBeforeRegister(@Body UserVerificationReq userVerificationReq);
     @POST("api/code/register")//gui code
-    Call<UserResponse> callRegisterCode(@Body EmailReq emailReq);
+    Call<APIResponse<User>> callRegisterCode(@Body EmailReq emailReq);
     @POST("api/auth/register")//dang ky
-    Call<UserResponse> callRegister(@Body RegisterReq registerReq);
+    Call<APIResponse<User>> callRegister(@Body RegisterReq registerReq);
     //----------------------API cho forgot password------------------------
     @POST("api/find/email")//kiem tra email co trong csdl ko
-    Call<UserResponse> callFindEmail(@Body EmailReq emailReq);
+    Call<APIResponse<User>> callFindEmail(@Body EmailReq emailReq);
     @POST("api/code/password")//gui code
-    Call<UserResponse> callResetPassCode(@Body EmailReq emailReq);
+    Call<APIResponse<User>> callResetPassCode(@Body EmailReq emailReq);
     @PUT("api/edit/password")//reset password
-    Call<UserResponse> callResetPassword(@Body ResetPasswordReq resetPasswordReq);
+    Call<APIResponse<User>> callResetPassword(@Body ResetPasswordReq resetPasswordReq);
     //------------------------API cho edit email-------------
     @POST("api/find/email/non")//kiem tra email da ton tai trong csdl
-    Call<UserResponse> callFindEmailNonExists(@Body EmailReq emailReq);
+    Call<APIResponse<User>> callFindEmailNonExists(@Body EmailReq emailReq);
     @POST("api/code/email")//gui code email
-    Call<UserResponse> callEmailCode(@Body EmailReq emailReq);
+    Call<APIResponse<User>> callEmailCode(@Body EmailReq emailReq);
     @PUT("api/edit/email/{email}")//edit email
-    Call<UserResponse> callEditEmail(@Path("email") String email, @Body EmailReq emailReq);
+    Call<APIResponse<User>> callEditEmail(@Path("email") String email, @Body EmailReq emailReq);
     //---------------------API cho edit username va name--------
     @PUT("api/edit/info/{email}")//edit username va name
-    Call<UserResponse> callEditInfo(@Path("email") String email, @Body EditInfoReq editInfoReq);
+    Call<APIResponse<User>> callEditInfo(@Path("email") String email, @Body EditInfoReq editInfoReq);
     //---------------------API cho edit password---------------------
     @PUT("api/edit/password/change")//edit password
-    Call<UserResponse> callChangePassword(@Body EditPasswordReq editPasswordReq);
+    Call<APIResponse<User>> callChangePassword(@Body EditPasswordReq editPasswordReq);
     //---------------------API lấy hinh anh-----------------------
     @Multipart
     @PUT("api/edit/image")//save image
-    Call<UserResponse> callSaveImage(@Part("email")RequestBody email, @Part MultipartBody.Part image);
+    Call<APIResponse<User>> callSaveImage(@Part("email")RequestBody email, @Part MultipartBody.Part image);
     @POST("api/find/image")//lay image
-    Call<UserResponse> callFindImage(@Body EmailReq emailReq);
+    Call<APIResponse<User>> callFindImage(@Body EmailReq emailReq);
     //--------------------API pothole-------------------
     @POST("api/pothole/add")//luu pothole
-    Call<UserResponse> callAddPothole(@Body AddPotholeReq addPotholeReq);
+    Call<APIResponse<User>> callAddPothole(@Body AddPotholeReq addPotholeReq);
     @GET("api/pothole/")//lay danh sach pothole
     Call<PotholeResponse> callGetPothole();
     //--------------------API cho analystic-----------------------

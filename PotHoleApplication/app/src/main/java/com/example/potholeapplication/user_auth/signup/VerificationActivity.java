@@ -13,13 +13,14 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.potholeapplication.R;
-import com.example.potholeapplication.Retrofit2.UserAPICallBack;
-import com.example.potholeapplication.class_pothole.manager.UserAPIManager;
+import com.example.potholeapplication.Retrofit2.APICallBack;
+import com.example.potholeapplication.class_pothole.manager.APIManager;
 import com.example.potholeapplication.class_pothole.manager.DialogManager;
 import com.example.potholeapplication.class_pothole.manager.LocaleManager;
+import com.example.potholeapplication.class_pothole.other.User;
 import com.example.potholeapplication.class_pothole.request.EmailReq;
 import com.example.potholeapplication.class_pothole.request.RegisterReq;
-import com.example.potholeapplication.class_pothole.response.UserResponse;
+import com.example.potholeapplication.class_pothole.response.APIResponse;
 import com.example.potholeapplication.databinding.ActivityVerificationBinding;
 
 import retrofit2.Response;
@@ -61,16 +62,16 @@ public class VerificationActivity extends AppCompatActivity {
         }
 
         //call api gui mail, kem theo thong tin email can gui
-        UserAPIManager.callRegisterCode(
+        APIManager.callRegisterCode(
                 new EmailReq(bundle.getString("email"))
-                , new UserAPICallBack() {
+                , new APICallBack<APIResponse<User>>() {
                     @Override
-                    public void onSuccess(Response<UserResponse> response) {
+                    public void onSuccess(Response<APIResponse<User>> response) {
                         code=response.body().getMessage().trim();
                     }
 
                     @Override
-                    public void onError(UserResponse errorResponse) {
+                    public void onError(APIResponse<User> errorResponse) {
                         DialogManager.showDialogError(context, errorResponse);
                     }
 
@@ -91,17 +92,17 @@ public class VerificationActivity extends AppCompatActivity {
                 bundle.getString("email"),bundle.getString("password")
         );
         // Call API login
-        UserAPIManager.callRegister(registerReq
-                ,new UserAPICallBack() {
+        APIManager.callRegister(registerReq
+                ,new APICallBack<APIResponse<User>>() {
                     @Override
-                    public void onSuccess(Response<UserResponse> response) {
+                    public void onSuccess(Response<APIResponse<User>> response) {
                         Intent intent=new Intent(VerificationActivity.this, VerificationSuccessActivity.class);
                         startActivity(intent);
                         finish();
                     }
 
                     @Override
-                    public void onError(UserResponse errorResponse) {
+                    public void onError(APIResponse<User> errorResponse) {
                         DialogManager.showDialogError(context, errorResponse);
                     }
 

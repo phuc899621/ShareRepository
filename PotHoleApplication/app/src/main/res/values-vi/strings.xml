@@ -17,7 +17,7 @@
     <string name="str_login">Đăng nhập</string>
     <string name="str_unknown">Không tồn tại</string>
     <string name="str_create_an_account">Đăng ký</string>
-    <string name="str_edit_user_profile">Cài đặt thông tin người dùng</string>
+    <string name="str_edit_user_profile">Cài đặt người dùng</string>
     <string name="str_your_username">Tên đăng nhập</string>
     <string name="str_name">Họ và tên</string>
     <string name="str_save">Lưu</string>

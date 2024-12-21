@@ -19,14 +19,14 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.potholeapplication.R;
-import com.example.potholeapplication.Retrofit2.UserAPICallBack;
-import com.example.potholeapplication.class_pothole.manager.UserAPIManager;
+import com.example.potholeapplication.Retrofit2.APICallBack;
+import com.example.potholeapplication.class_pothole.manager.APIManager;
 import com.example.potholeapplication.class_pothole.manager.DialogManager;
 import com.example.potholeapplication.class_pothole.manager.LocalDataManager;
 import com.example.potholeapplication.class_pothole.manager.LocaleManager;
 import com.example.potholeapplication.class_pothole.other.User;
 import com.example.potholeapplication.class_pothole.request.EditInfoReq;
-import com.example.potholeapplication.class_pothole.response.UserResponse;
+import com.example.potholeapplication.class_pothole.response.APIResponse;
 import com.example.potholeapplication.class_pothole.request.EmailReq;
 import com.example.potholeapplication.databinding.ActivityEditUserBinding;
 
@@ -144,18 +144,18 @@ public class EditUserActivity extends AppCompatActivity {
             DialogManager.showDialogErrorString(context,getString(R.string.str_enter_name_and_username));
             return;
         }
-        UserAPIManager.callEditInfo(
+        APIManager.callEditInfo(
                 LocalDataManager.getEmail(this)
                 ,new EditInfoReq(newUsername,newName)
-                ,new UserAPICallBack() {
+                ,new APICallBack<APIResponse<User>>() {
                     @Override
-                    public void onSuccess(Response<UserResponse> response) {
+                    public void onSuccess(Response<APIResponse<User>> response) {
                         LocalDataManager.saveUsernameName(context,newUsername,newName);
                         CallSaveImageAPI();
                     }
 
                     @Override
-                    public void onError(UserResponse errorResponse) {
+                    public void onError(APIResponse<User> errorResponse) {
                         DialogManager.showDialogError(context, errorResponse);
                     }
 
@@ -177,16 +177,16 @@ public class EditUserActivity extends AppCompatActivity {
         }
         // Tạo RequestBody cho email và task
         RequestBody emailReq = RequestBody.create(MediaType.parse("text/plain"), email);
-        UserAPIManager.callSaveImage(emailReq,imagePart
-                ,new UserAPICallBack() {
+        APIManager.callSaveImage(emailReq,imagePart
+                ,new APICallBack<APIResponse<User>>() {
                     @Override
-                    public void onSuccess(Response<UserResponse> response) {
+                    public void onSuccess(Response<APIResponse<User>> response) {
                         LocalDataManager.saveImageBytes(context,imageBytes);
                         DialogManager.showDialogOkeThenFinish(context,getString(R.string.str_save_successfully));
                     }
 
                     @Override
-                    public void onError(UserResponse errorResponse) {
+                    public void onError(APIResponse<User> errorResponse) {
                         DialogManager.showDialogError(context, errorResponse);
                     }
 
@@ -204,10 +204,10 @@ public class EditUserActivity extends AppCompatActivity {
             return;
         }
 
-        UserAPIManager.callFindImage(new EmailReq(email)
-                ,new UserAPICallBack() {
+        APIManager.callFindImage(new EmailReq(email)
+                ,new APICallBack<APIResponse<User>>() {
                     @Override
-                    public void onSuccess(Response<UserResponse> response) {
+                    public void onSuccess(Response<APIResponse<User>> response) {
                         List<User> data = response.body().getData();
                         if (data != null && !data.isEmpty()) {
                             String imageBase64 = data.get(0).getImage();
@@ -220,7 +220,7 @@ public class EditUserActivity extends AppCompatActivity {
                     }
 
                     @Override
-                    public void onError(UserResponse errorResponse) {
+                    public void onError(APIResponse<User> errorResponse) {
                         DialogManager.showDialogError(context, errorResponse);
                     }
 
