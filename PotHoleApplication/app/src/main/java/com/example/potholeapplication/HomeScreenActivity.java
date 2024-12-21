@@ -176,7 +176,7 @@ public class HomeScreenActivity extends AppCompatActivity {
                 intent.putExtra("connected", false);
                 sendBroadcast(intent);
                 snackBar=Snackbar.make(binding.main,R.string.str_network_unavailable,Snackbar.LENGTH_LONG);
-                snackBar.show();
+                //snackBar.show();
 
             }
         });
