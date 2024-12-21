@@ -5,8 +5,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -14,21 +12,21 @@ import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import com.example.potholeapplication.Retrofit2.SubinfoAPICallBack;
+import com.example.potholeapplication.Retrofit2.APICallBack;
+import com.example.potholeapplication.class_pothole.manager.APIManager;
 import com.example.potholeapplication.class_pothole.manager.DialogManager;
 import com.example.potholeapplication.class_pothole.manager.LocalDataManager;
 import com.example.potholeapplication.class_pothole.manager.LocaleManager;
-import com.example.potholeapplication.class_pothole.manager.SubinfoAPIManager;
+import com.example.potholeapplication.class_pothole.manager.NetworkManager;
+import com.example.potholeapplication.class_pothole.other.Subinfo;
 import com.example.potholeapplication.class_pothole.request.EmailReq;
-import com.example.potholeapplication.class_pothole.response.SubinfoResponse;
+import com.example.potholeapplication.class_pothole.response.APIResponse;
 import com.example.potholeapplication.databinding.ActivityHomeScreenBinding;
-import com.example.potholeapplication.pothole_service.SensorService;
-import com.github.mikephil.charting.charts.LineChart;
+import com.google.android.material.snackbar.Snackbar;
 
 import retrofit2.Response;
 
@@ -37,6 +35,9 @@ public class HomeScreenActivity extends AppCompatActivity {
     ActivityHomeScreenBinding binding;
     boolean isAPIReturn=false;//false neu lay api khong thanh cong
     boolean isResume; //kiem tra trang thai activity
+    NetworkManager networkManager;
+
+    Snackbar snackBar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,11 +52,12 @@ public class HomeScreenActivity extends AppCompatActivity {
         context=this;
         setClickEvent();
         setDisplay();
-        setReceivePotholeAlert();
     }
     @Override
     protected void onResume() {
         super.onResume();
+        setReceivePotholeAlert();
+        setNetworkMonitor();
         callGetSubinfoAPI();
         if(isAPIReturn){
             binding.tvTotalDistances.setText(LocalDataManager.getTotalDistances(context)+"");
@@ -76,12 +78,60 @@ public class HomeScreenActivity extends AppCompatActivity {
     @Override
     protected void onStop() {
         super.onStop();
+        unregisterReceiver(potholeReceiver);
         isResume=false;
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        networkManager.stopMonitoring();
     }
 
     @Override
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(LocaleManager.updateLanguage(newBase));
+    }
+    //hien thi thong bao khi network mat ket noi hoac ket noi lai
+    private void setNetworkMonitor() {
+        networkManager=new NetworkManager(this);
+        if(networkManager.isNetworkAvailable()){
+            Intent intent = new Intent("com.example.NETWORK");
+            intent.putExtra("connected", true);
+            sendBroadcast(intent);
+            snackBar=Snackbar.make(binding.main,R.string.str_network_available,Snackbar.LENGTH_LONG);
+            snackBar.show();
+        }
+        else {
+            Intent intent = new Intent("com.example.NETWORK");
+            intent.putExtra("connected", false);
+            sendBroadcast(intent);
+            snackBar=Snackbar.make(binding.main,R.string.str_network_unavailable,Snackbar.LENGTH_LONG);
+            snackBar.show();
+
+        }
+        networkManager.startMonitoring(new NetworkManager.NetworkStatusListener() {
+            @Override
+            public void onConnected() {
+                Intent intent = new Intent("com.example.NETWORK");
+                intent.putExtra("connected", true);
+                sendBroadcast(intent);
+                snackBar=Snackbar.make(binding.main,R.string.str_network_available,Snackbar.LENGTH_LONG);
+                snackBar.show();
+            }
+
+            @Override
+            public void onDisconnected() {
+                Intent intent = new Intent("com.example.NETWORK");
+                intent.putExtra("connected", false);
+                sendBroadcast(intent);
+                snackBar=Snackbar.make(binding.main,R.string.str_network_unavailable,Snackbar.LENGTH_LONG);
+                snackBar.show();
+
+            }
+        });
+
+
     }
 
     //nhan thong bao ve pothole tu services
@@ -143,11 +193,11 @@ public class HomeScreenActivity extends AppCompatActivity {
 
     }
     public void callGetSubinfoAPI(){
-        SubinfoAPIManager.callGetSubinfo(
+        APIManager.callGetSubinfo(
                 new EmailReq(LocalDataManager.getEmail(this)),
-                new SubinfoAPICallBack() {
+                new APICallBack<APIResponse<Subinfo>>() {
                     @Override
-                    public void onSuccess(Response<SubinfoResponse> response) {
+                    public void onSuccess(Response<APIResponse<Subinfo>> response) {
 
                         LocalDataManager.saveSubinfo(
                                 context,
@@ -162,7 +212,7 @@ public class HomeScreenActivity extends AppCompatActivity {
                     }
 
                     @Override
-                    public void onError(SubinfoResponse errorResponse) {
+                    public void onError(APIResponse<Subinfo> errorResponse) {
                         LocalDataManager.saveSubinfo(context,0,0,0);
                         binding.tvTotalDistances.setText(LocalDataManager.getTotalDistances(context)+"");
                         binding.tvFixedPothole.setText(LocalDataManager.getTotalFixedPothole(context)+"");

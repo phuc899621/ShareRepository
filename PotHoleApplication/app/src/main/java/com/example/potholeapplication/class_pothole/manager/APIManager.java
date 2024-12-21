@@ -3,14 +3,20 @@ package com.example.potholeapplication.class_pothole.manager;
 import com.example.potholeapplication.Retrofit2.APICallBack;
 import com.example.potholeapplication.Retrofit2.APIInterface;
 import com.example.potholeapplication.Retrofit2.RetrofitServices;
+import com.example.potholeapplication.class_pothole.other.Pothole;
+import com.example.potholeapplication.class_pothole.other.PotholeCountByMonth;
+import com.example.potholeapplication.class_pothole.other.SeverityCount;
+import com.example.potholeapplication.class_pothole.other.Subinfo;
 import com.example.potholeapplication.class_pothole.other.User;
 import com.example.potholeapplication.class_pothole.request.AddPotholeReq;
+import com.example.potholeapplication.class_pothole.request.DayReq;
 import com.example.potholeapplication.class_pothole.request.EditInfoReq;
 import com.example.potholeapplication.class_pothole.request.EditPasswordReq;
 import com.example.potholeapplication.class_pothole.request.EmailReq;
 import com.example.potholeapplication.class_pothole.request.LoginReq;
 import com.example.potholeapplication.class_pothole.request.RegisterReq;
 import com.example.potholeapplication.class_pothole.request.ResetPasswordReq;
+import com.example.potholeapplication.class_pothole.request.SaveDistanceReq;
 import com.example.potholeapplication.class_pothole.request.UserVerificationReq;
 import com.example.potholeapplication.class_pothole.response.APIResponse;
 import com.google.gson.Gson;
@@ -157,5 +163,39 @@ public class APIManager {
         Call<APIResponse<User>> call = apiInterface.callAddPothole(addPotholeReq);
         Type type = new TypeToken<APIResponse<User>>() {}.getType();
         setAPIReturn(type,call, userApiCallBack);
+    }
+    public static void callGetPothole(APICallBack<APIResponse<Pothole>> potholeAPICallBack){
+        getApiInterface();
+        Call<APIResponse<Pothole>> call = apiInterface.callGetPothole();
+        Type type = new TypeToken<APIResponse<Pothole>>() {}.getType();
+        setAPIReturn(type,call, potholeAPICallBack);
+    }
+    //--------------------API cho analystic-----------------------
+
+    public static void callGetPotholeCountByMonth(
+            DayReq dayReq, APICallBack<APIResponse<PotholeCountByMonth>> countAPICallBack){
+        getApiInterface();
+        Call<APIResponse<PotholeCountByMonth>> call = apiInterface.callGetPotholeCountByMonth(dayReq);
+        Type type = new TypeToken<APIResponse<PotholeCountByMonth>>() {}.getType();
+        setAPIReturn(type,call, countAPICallBack);
+    }
+    public static void callGetPotholeBySeverity(APICallBack<APIResponse<SeverityCount>> severityAPICallBack){
+        getApiInterface();
+        Call<APIResponse<SeverityCount>> call = apiInterface.callGetPotholeBySeverity();
+        Type type = new TypeToken<APIResponse<SeverityCount>>() {}.getType();
+        setAPIReturn(type,call, severityAPICallBack);
+    }
+    //--------------------API cho subinfo--------------------------
+    public static void callGetSubinfo(EmailReq emailReq, APICallBack<APIResponse<Subinfo>> subinfoAPICallBack){
+        getApiInterface();
+        Call<APIResponse<Subinfo>> call = apiInterface.callGetSubinfo(emailReq);
+        Type type = new TypeToken<APIResponse<Subinfo>>() {}.getType();
+        setAPIReturn(type,call, subinfoAPICallBack);
+    }
+    public static void callSaveDistances(SaveDistanceReq saveDistanceReq, APICallBack<APIResponse<Subinfo>> subinfoAPICallBack){
+        getApiInterface();
+        Call<APIResponse<Subinfo>> call=apiInterface.callSaveDistances(saveDistanceReq);
+        Type type = new TypeToken<APIResponse<Subinfo>>() {}.getType();
+        setAPIReturn(type,call,subinfoAPICallBack);
     }
 }

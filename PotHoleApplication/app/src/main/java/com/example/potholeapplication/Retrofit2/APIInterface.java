@@ -1,5 +1,9 @@
 package com.example.potholeapplication.Retrofit2;
 
+import com.example.potholeapplication.class_pothole.other.Pothole;
+import com.example.potholeapplication.class_pothole.other.PotholeCountByMonth;
+import com.example.potholeapplication.class_pothole.other.SeverityCount;
+import com.example.potholeapplication.class_pothole.other.Subinfo;
 import com.example.potholeapplication.class_pothole.other.User;
 import com.example.potholeapplication.class_pothole.request.AddPotholeReq;
 import com.example.potholeapplication.class_pothole.request.DayReq;
@@ -10,10 +14,6 @@ import com.example.potholeapplication.class_pothole.request.LoginReq;
 import com.example.potholeapplication.class_pothole.request.RegisterReq;
 import com.example.potholeapplication.class_pothole.request.SaveDistanceReq;
 import com.example.potholeapplication.class_pothole.response.APIResponse;
-import com.example.potholeapplication.class_pothole.response.CountResponse;
-import com.example.potholeapplication.class_pothole.response.PotholeResponse;
-import com.example.potholeapplication.class_pothole.response.SeverityResponse;
-import com.example.potholeapplication.class_pothole.response.SubinfoResponse;
 import com.example.potholeapplication.class_pothole.request.ResetPasswordReq;
 import com.example.potholeapplication.class_pothole.request.UserVerificationReq;
 
@@ -69,17 +69,17 @@ public interface APIInterface {
     @POST("api/pothole/add")//luu pothole
     Call<APIResponse<User>> callAddPothole(@Body AddPotholeReq addPotholeReq);
     @GET("api/pothole/")//lay danh sach pothole
-    Call<PotholeResponse> callGetPothole();
+    Call<APIResponse<Pothole>> callGetPothole();
     //--------------------API cho analystic-----------------------
     @POST("api/pothole/find/year")//goi so luong pothole/fixed pothole theo tung thang
-    Call<CountResponse> callGetPotholeCountByMonth(@Body DayReq dayReq);
+    Call<APIResponse<PotholeCountByMonth>> callGetPotholeCountByMonth(@Body DayReq dayReq);
     @GET("api/pothole/find/severity")//goi lay so luong pothole theo kích thước
-    Call<SeverityResponse> callGetPotholeBySeverity();
+    Call<APIResponse<SeverityCount>> callGetPotholeBySeverity();
 
     //--------------------API cho subinfo
     @POST("api/pothole/subinfo")//goi api tra ve subinfo
-    Call<SubinfoResponse> callGetSubinfo(@Body EmailReq emailReq);
+    Call<APIResponse<Subinfo>> callGetSubinfo(@Body EmailReq emailReq);
     @POST("api/pothole/save/distance")//luu quang duong di chuyen duoc khi bat pothole detection
-    Call<SubinfoResponse> callSaveDistances(@Body SaveDistanceReq saveDistanceReq);
+    Call<APIResponse<Subinfo>> callSaveDistances(@Body SaveDistanceReq saveDistanceReq);
 
 }

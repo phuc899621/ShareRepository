@@ -1,4 +1,4 @@
-package com.example.potholeapplication.class_pothole.response;
+package com.example.potholeapplication.class_pothole;
 
 import android.view.LayoutInflater;
 import android.view.View;

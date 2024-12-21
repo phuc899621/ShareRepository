@@ -9,15 +9,13 @@ import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.potholeapplication.Retrofit2.CountAPICallBack;
-import com.example.potholeapplication.Retrofit2.SeverityAPICallBack;
-import com.example.potholeapplication.class_pothole.manager.CountAPIManager;
+import com.example.potholeapplication.Retrofit2.APICallBack;
+import com.example.potholeapplication.class_pothole.manager.APIManager;
 import com.example.potholeapplication.class_pothole.manager.DialogManager;
-import com.example.potholeapplication.class_pothole.manager.SeverityAPIManager;
 import com.example.potholeapplication.class_pothole.other.PotholeCountByMonth;
+import com.example.potholeapplication.class_pothole.other.SeverityCount;
 import com.example.potholeapplication.class_pothole.request.DayReq;
-import com.example.potholeapplication.class_pothole.response.CountResponse;
-import com.example.potholeapplication.class_pothole.response.SeverityResponse;
+import com.example.potholeapplication.class_pothole.response.APIResponse;
 import com.example.potholeapplication.databinding.ActivityAnalyticsBinding;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.data.BarData;
@@ -69,18 +67,18 @@ public class AnalyticsActivity extends AppCompatActivity {
     public void callAPIGetPotholeCountByMonth(){
         Calendar calendar=Calendar.getInstance();
         DayReq dayReq=new DayReq(calendar.get(Calendar.MONTH)-1,calendar.get(Calendar.YEAR));
-        CountAPIManager.callGetPotholeCountByMonth(
+        APIManager.callGetPotholeCountByMonth(
                 dayReq,
-                new CountAPICallBack() {
+                new APICallBack<APIResponse<PotholeCountByMonth>>() {
                     @Override
-                    public void onSuccess(Response<CountResponse> response) {
+                    public void onSuccess(Response<APIResponse<PotholeCountByMonth>> response) {
                         setBarEntriesOne(true,response.body());
                         setBarEntriesTwo(true,response.body());
                         setBarChart();
                     }
 
                     @Override
-                    public void onError(CountResponse errorResponse) {
+                    public void onError(APIResponse<PotholeCountByMonth> errorResponse) {
                         setBarEntriesOne(false,errorResponse);
                         setBarEntriesTwo(false,errorResponse);
                         setBarChart();
@@ -98,9 +96,9 @@ public class AnalyticsActivity extends AppCompatActivity {
         );
     }
     public void callAPIGetPotholeBySeverity(){
-        SeverityAPIManager.callGetPotholeBySeverity(new SeverityAPICallBack() {
+        APIManager.callGetPotholeBySeverity(new APICallBack<APIResponse<SeverityCount>>() {
             @Override
-            public void onSuccess(Response<SeverityResponse> response) {
+            public void onSuccess(Response<APIResponse<SeverityCount>> response) {
                 largeCount=response.body().getData().get(0).getLarge();
                 mediumCount=response.body().getData().get(0).getMedium();
                 smallCount=response.body().getData().get(0).getSmall();
@@ -110,7 +108,7 @@ public class AnalyticsActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onError(SeverityResponse errorResponse) {
+            public void onError(APIResponse<SeverityCount> errorResponse) {
                 largeCount=2;
                 mediumCount=2;
                 smallCount=2;
@@ -212,7 +210,7 @@ public class AnalyticsActivity extends AppCompatActivity {
 
 
     // ArrayList for the first set of bar entries
-    private void setBarEntriesOne(boolean isSuccess, CountResponse countResponse) {
+    private void setBarEntriesOne(boolean isSuccess, APIResponse<PotholeCountByMonth> apiResponse) {
         barEntriesOne = new ArrayList<>();
         if(!isSuccess){
             // Adding entries to the ArrayList for the first set
@@ -224,7 +222,7 @@ public class AnalyticsActivity extends AppCompatActivity {
             barEntriesOne.add(new BarEntry(6f, 0));
             return;
         }
-        List<PotholeCountByMonth> data=countResponse.getData();
+        List<PotholeCountByMonth> data=apiResponse.getData();
         barEntriesOne.add(new BarEntry(1f, data.get(0).getJan().getPothole()));
         barEntriesOne.add(new BarEntry(2f, data.get(0).getFeb().getPothole()));
         barEntriesOne.add(new BarEntry(3f, data.get(0).getMar().getPothole()));
@@ -242,7 +240,7 @@ public class AnalyticsActivity extends AppCompatActivity {
     }
 
     // ArrayList for the second set of bar entries
-    private void setBarEntriesTwo(boolean isSuccess, CountResponse countResponse) {
+    private void setBarEntriesTwo(boolean isSuccess, APIResponse<PotholeCountByMonth> apiResponse) {
         barEntriesTwo = new ArrayList<>();
         if(!isSuccess){
             // Adding entries to the ArrayList for the first set
@@ -254,7 +252,7 @@ public class AnalyticsActivity extends AppCompatActivity {
             barEntriesTwo.add(new BarEntry(6f, 0));
             return;
         }
-        List<PotholeCountByMonth> data=countResponse.getData();
+        List<PotholeCountByMonth> data=apiResponse.getData();
         barEntriesTwo.add(new BarEntry(1f, data.get(0).getJan().getFixed_pothole()));
         barEntriesTwo.add(new BarEntry(2f, data.get(0).getFeb().getFixed_pothole()));
         barEntriesTwo.add(new BarEntry(3f, data.get(0).getMar().getFixed_pothole()));

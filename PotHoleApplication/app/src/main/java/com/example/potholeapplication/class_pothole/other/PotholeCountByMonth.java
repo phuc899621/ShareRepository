@@ -1,6 +1,5 @@
 package com.example.potholeapplication.class_pothole.other;
 
-import com.example.potholeapplication.class_pothole.response.PotholeResponse;
 import com.google.gson.annotations.SerializedName;
 
 public class PotholeCountByMonth {

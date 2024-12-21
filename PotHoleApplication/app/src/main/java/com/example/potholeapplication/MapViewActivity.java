@@ -1,10 +1,7 @@
 package com.example.potholeapplication;
 import static com.mapbox.maps.plugin.annotation.AnnotationsUtils.getAnnotations;
-import static com.mapbox.maps.plugin.gestures.GesturesUtils.addOnMoveListener;
 import static com.mapbox.maps.plugin.gestures.GesturesUtils.getGestures;
 import static com.mapbox.maps.plugin.locationcomponent.LocationComponentUtils.getLocationComponent;
-
-import static java.lang.System.in;
 
 import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
@@ -14,18 +11,13 @@ import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.Rect;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.LinearLayout;
 import android.widget.Toast;
 
 
@@ -41,14 +33,12 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.lifecycle.DefaultLifecycleObserver;
 import androidx.lifecycle.LifecycleOwner;
 
-import com.example.potholeapplication.Retrofit2.PotholeAPICallBack;
+import com.example.potholeapplication.Retrofit2.APICallBack;
+import com.example.potholeapplication.class_pothole.manager.APIManager;
 import com.example.potholeapplication.class_pothole.manager.LocaleManager;
-import com.example.potholeapplication.class_pothole.manager.PotholeAPIManager;
 import com.example.potholeapplication.class_pothole.other.Pothole;
-import com.example.potholeapplication.class_pothole.response.PotholeResponse;
+import com.example.potholeapplication.class_pothole.response.APIResponse;
 import com.example.potholeapplication.databinding.ActivityMapViewBinding;
-import com.google.android.material.bottomsheet.BottomSheetBehavior;
-import com.mapbox.android.core.permissions.PermissionsManager;
 import com.mapbox.android.gestures.MoveGestureDetector;
 import com.mapbox.api.directions.v5.DirectionsCriteria;
 import com.mapbox.api.directions.v5.models.Bearing;
@@ -76,14 +66,12 @@ import com.mapbox.navigation.base.options.NavigationOptions;
 import com.mapbox.navigation.base.route.NavigationRoute;
 import com.mapbox.navigation.base.route.NavigationRouterCallback;
 import com.mapbox.navigation.base.route.RouterFailure;
-import com.mapbox.navigation.base.route.RouterOrigin;
 import com.mapbox.navigation.base.trip.model.RouteProgress;
 import com.mapbox.navigation.core.MapboxNavigation;
 import com.mapbox.navigation.core.directions.session.RoutesObserver;
 import com.mapbox.navigation.core.directions.session.RoutesUpdatedResult;
 import com.mapbox.navigation.core.lifecycle.MapboxNavigationApp;
 import com.mapbox.navigation.core.lifecycle.MapboxNavigationObserver;
-import com.mapbox.navigation.core.lifecycle.RequireMapboxNavigation;
 import com.mapbox.navigation.core.trip.session.LocationMatcherResult;
 import com.mapbox.navigation.core.trip.session.LocationObserver;
 import com.mapbox.navigation.core.trip.session.RouteProgressObserver;
@@ -107,8 +95,6 @@ import com.mapbox.search.ui.view.SearchResultsView;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
-import java.util.UUID;
 
 import kotlin.Unit;
 import kotlin.coroutines.Continuation;
@@ -853,16 +839,16 @@ public class MapViewActivity extends AppCompatActivity {
 
     //---------------call get pothole-----------
     public void callGetPothole(){
-        PotholeAPIManager.callGetPothole(new PotholeAPICallBack() {
+        APIManager.callGetPothole(new APICallBack<APIResponse<Pothole>>() {
             @Override
-            public void onSuccess(Response<PotholeResponse> response) {
+            public void onSuccess(Response<APIResponse<Pothole>> response) {
                 setupIcon();
                 potholes=response.body().getData();
                 updatePotholeMarker();
             }
 
             @Override
-            public void onError(PotholeResponse errorResponse) {
+            public void onError(APIResponse<Pothole> errorResponse) {
                 Log.d("GetPothole","error");
 
 

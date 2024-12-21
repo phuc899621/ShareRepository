@@ -1,10 +1,11 @@
 package com.example.potholeapplication.pothole_service;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.app.Service;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
@@ -16,20 +17,22 @@ import android.os.IBinder;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.core.app.ActivityCompat;
 
-import com.example.potholeapplication.Retrofit2.APIInterface;
-import com.example.potholeapplication.Retrofit2.PotholeAPICallBack;
-import com.example.potholeapplication.Retrofit2.SubinfoAPICallBack;
+import com.example.potholeapplication.Retrofit2.APICallBack;
+import com.example.potholeapplication.class_pothole.manager.APIManager;
+import com.example.potholeapplication.class_pothole.manager.DialogManager;
 import com.example.potholeapplication.class_pothole.manager.LocalDataManager;
 import com.example.potholeapplication.class_pothole.manager.NetworkManager;
-import com.example.potholeapplication.class_pothole.manager.PotholeAPIManager;
-import com.example.potholeapplication.class_pothole.manager.SubinfoAPIManager;
-import com.example.potholeapplication.class_pothole.request.EmailReq;
+import com.example.potholeapplication.class_pothole.other.Pothole;
+import com.example.potholeapplication.class_pothole.other.Subinfo;
 import com.example.potholeapplication.class_pothole.request.SaveDistanceReq;
-import com.example.potholeapplication.class_pothole.response.PotholeResponse;
-import com.example.potholeapplication.class_pothole.response.SubinfoResponse;
+import com.example.potholeapplication.class_pothole.response.APIResponse;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import retrofit2.Response;
 
@@ -47,6 +50,7 @@ public class SensorService extends Service {
     private float addingDistance = 0;
     Context context;
     NetworkManager networkManager;
+    List<Pothole> potholes;
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
@@ -57,16 +61,16 @@ public class SensorService extends Service {
         if(!networkManager.isNetworkAvailable()){
             return;
         }
-        SubinfoAPIManager.callSaveDistances(
+        APIManager.callSaveDistances(
                 new SaveDistanceReq(LocalDataManager.getEmail(context), data),
-                new SubinfoAPICallBack() {
+                new APICallBack<APIResponse<Subinfo>>() {
                     @Override
-                    public void onSuccess(Response<SubinfoResponse> response) {
+                    public void onSuccess(Response<APIResponse<Subinfo>> response) {
 
                     }
 
                     @Override
-                    public void onError(SubinfoResponse errorResponse) {
+                    public void onError(APIResponse<Subinfo> errorResponse) {
 
                     }
 
@@ -78,15 +82,18 @@ public class SensorService extends Service {
         );
     }
     public void callGetListPothole(){
-        PotholeAPIManager.callGetPothole(new PotholeAPICallBack() {
+        APIManager.callGetPothole(new APICallBack<APIResponse<Pothole>>() {
             @Override
-            public void onSuccess(Response<PotholeResponse> response) {
-                Log.d("GetPothole",response.body().getData().get(0).getLocationClass().getCoordinates()+"");
+            public void onSuccess(Response<APIResponse<Pothole>> response) {
+                if (response.body() != null) {
+                    potholes=response.body().getData();
+                }else potholes=new ArrayList<>();
             }
 
             @Override
-            public void onError(PotholeResponse errorResponse) {
+            public void onError(APIResponse<Pothole> errorResponse) {
                 Log.d("GetPothole","error");
+                potholes=new ArrayList<>();
 
 
             }
@@ -94,6 +101,7 @@ public class SensorService extends Service {
             @Override
             public void onFailure(Throwable t) {
                 Log.d("GetPothole","error");
+                potholes=new ArrayList<>();
             }
         });
     }
@@ -104,10 +112,12 @@ public class SensorService extends Service {
         // Khởi tạo các đối tượng SensorManager và LocationManager
         sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
         locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+        handler = new Handler();
         networkManager=new NetworkManager(this);
         LocalDataManager.saveTotalDistances(this,0);
         callGetListPothole();
-        networkManager.startMonitoring(new NetworkManager.NetworkStatusListener() {
+        setupNetworkReceiver();
+        /*networkManager.startMonitoring(new NetworkManager.NetworkStatusListener() {
             @Override
             public void onConnected() {
                 float data=LocalDataManager.getTotalDistances(context)+
@@ -130,7 +140,7 @@ public class SensorService extends Service {
                 Log.d("WIFI","NO WIFI");
 
             }
-        });
+        });*/
         // Khởi tạo listener
         accelerometerListener = new AccelerometerListener();
         gpsListener = new GPSListener(this);
@@ -142,12 +152,31 @@ public class SensorService extends Service {
         // Đăng ký listener cho GPS
         requestLocationPermission();
 
-        // Tạo một Handler để xử lý các hành động định kỳ
-        handler = new Handler();
-        startPotholeDetection();
-        //startDistanceTracking();
-
     }
+
+    //broadcast receiver network
+    @SuppressLint("UnspecifiedRegisterReceiverFlag")
+    private void setupNetworkReceiver(){
+        IntentFilter filter = new IntentFilter("com.example.NETWORK");
+        registerReceiver(networkReceiver, filter);
+    }
+    private final BroadcastReceiver networkReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if ("com.example.NETWORK".equals(intent.getAction())) {
+                if(intent.getBooleanExtra("connected",false)){
+                    Log.d("NETWORK", "UNAVAILABLE");
+                }else {
+                    Log.d("NETWORK", "AVAILABLE");
+
+                }
+            }
+        }
+    };
+
+
+
+    //permission
     private void requestLocationPermission() {
         if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED) {
@@ -159,15 +188,20 @@ public class SensorService extends Service {
         } else {
             // Nếu quyền đã được cấp, bắt đầu yêu cầu vị trí
             startLocationUpdates();
+            startPotholeDetection();
+            startPotholeWarning();
         }
     }
+
+
+    //---location update
     private void startLocationUpdates() {
         try {
 
             // Đăng ký nhận updates từ GPS
             locationManager.requestLocationUpdates(
                     LocationManager.GPS_PROVIDER,
-                    1000, // minimum time interval between updates (ms)
+                    500, // minimum time interval between updates (ms)
                     1,    // minimum distance between updates (meters)
                     gpsListener
             );
@@ -175,7 +209,7 @@ public class SensorService extends Service {
             // Đăng ký nhận updates từ Network provider
             locationManager.requestLocationUpdates(
                     LocationManager.NETWORK_PROVIDER,
-                    1000,
+                    500,
                     1,
                     gpsListener
             );
@@ -190,7 +224,7 @@ public class SensorService extends Service {
             public void run() {
                 // Kiểm tra dữ liệu cảm biến và GPS
                 checkForPotholes();
-                handler.postDelayed(this, 1000);  // Quét lại sau mỗi giây
+                handler.postDelayed(this, 800);  // Quét lại sau mỗi giây
             }
         };
         handler.post(runnable);
@@ -214,6 +248,29 @@ public class SensorService extends Service {
         if(lastLinear>15) return "medium";
         return "small";
     }
+    private void startPotholeWarning() {
+        Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                // Kiểm tra dữ liệu cảm biến và GPS
+                if(potholes!=null) checkForNearByPothole();
+                handler.postDelayed(this, 1000);  // Quét lại sau mỗi giây
+            }
+        };
+        handler.post(runnable);
+    }
+    public void checkForNearByPothole(){
+        for(int i=0;i<potholes.size();i++){
+            Location potholeLocation = new Location("gps");
+            potholeLocation.setLatitude(potholes.get(i).getLocationClass().getCoordinates().get(1));
+            potholeLocation.setLongitude(potholes.get(i).getLocationClass().getCoordinates().get(0));
+            if(gpsListener.lastLocation.distanceTo(potholeLocation)<4) {
+                vibratePhone();
+                return;
+            }
+        }
+
+    }
 
     @Override
     public void onDestroy() {
@@ -227,6 +284,7 @@ public class SensorService extends Service {
                 data);
         saveTotalDistanceToAPI(data);
         networkManager.stopMonitoring();
+        handler.removeCallbacksAndMessages(null);
 
     }
     @Override
@@ -244,7 +302,6 @@ public class SensorService extends Service {
                 vibrator.vibrate(VibrationEffect.createOneShot(500, VibrationEffect.DEFAULT_AMPLITUDE));
             }
         } else {
-
             Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
             if (vibrator != null) {
                 vibrator.vibrate(500); // Rung trong 500ms

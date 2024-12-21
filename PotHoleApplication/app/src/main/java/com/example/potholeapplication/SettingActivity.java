@@ -2,7 +2,6 @@ package com.example.potholeapplication;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -14,13 +13,14 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import com.example.potholeapplication.Retrofit2.SubinfoAPICallBack;
+import com.example.potholeapplication.Retrofit2.APICallBack;
+import com.example.potholeapplication.class_pothole.manager.APIManager;
 import com.example.potholeapplication.class_pothole.manager.DialogManager;
 import com.example.potholeapplication.class_pothole.manager.LocalDataManager;
 import com.example.potholeapplication.class_pothole.manager.LocaleManager;
-import com.example.potholeapplication.class_pothole.manager.SubinfoAPIManager;
+import com.example.potholeapplication.class_pothole.other.Subinfo;
 import com.example.potholeapplication.class_pothole.request.EmailReq;
-import com.example.potholeapplication.class_pothole.response.SubinfoResponse;
+import com.example.potholeapplication.class_pothole.response.APIResponse;
 import com.example.potholeapplication.databinding.ActivitySettingBinding;
 import com.example.potholeapplication.edit_user.EditUserActivity;
 import com.example.potholeapplication.pothole_service.SensorService;
@@ -61,11 +61,11 @@ public class SettingActivity extends AppCompatActivity {
         setSwitchRealtime();
     }
     public void callGetSubinfoAPI(){
-        SubinfoAPIManager.callGetSubinfo(
+        APIManager.callGetSubinfo(
                 new EmailReq(LocalDataManager.getEmail(this)),
-                new SubinfoAPICallBack() {
+                new APICallBack<APIResponse<Subinfo>>() {
                     @Override
-                    public void onSuccess(Response<SubinfoResponse> response) {
+                    public void onSuccess(Response<APIResponse<Subinfo>> response) {
                         LocalDataManager.saveSubinfo(
                                 context,
                                 response.body().getData().get(0).getTotalDistances(),
@@ -78,7 +78,7 @@ public class SettingActivity extends AppCompatActivity {
                     }
 
                     @Override
-                    public void onError(SubinfoResponse errorResponse) {
+                    public void onError(APIResponse<Subinfo> errorResponse) {
                         binding.tvTotalReport.setText(LocalDataManager.getTotalReport(context)+"");
                         binding.tvPoints.setText(LocalDataManager.getTotalReport(context)*10+"");
                         isAPIReturn=true;

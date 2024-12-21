@@ -1,7 +1,5 @@
 package com.example.potholeapplication.Retrofit2;
 
-import com.example.potholeapplication.class_pothole.response.CountResponse;
-
 import retrofit2.Response;
 
 public interface APICallBack<T> {

@@ -12,17 +12,11 @@ public class APIResponse<T> {
     private String message;
     @SerializedName("data")
     private List<T> data;
-    private final Class<T> type;
 
-    public Class<T> getType() {
-        return type;
-    }
-
-    public APIResponse(boolean success, String message, List<T> data, Class<T> type) {
+    public APIResponse(boolean success, String message, List<T> data) {
         this.success = success;
         this.message = message;
         this.data = data;
-        this.type=type;
     }
 
     public boolean isSuccess() {
