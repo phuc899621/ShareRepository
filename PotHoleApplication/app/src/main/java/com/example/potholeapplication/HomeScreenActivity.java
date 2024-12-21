@@ -5,6 +5,8 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.hardware.Sensor;
+import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -26,6 +28,7 @@ import com.example.potholeapplication.class_pothole.other.Subinfo;
 import com.example.potholeapplication.class_pothole.request.EmailReq;
 import com.example.potholeapplication.class_pothole.response.APIResponse;
 import com.example.potholeapplication.databinding.ActivityHomeScreenBinding;
+import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
 
 import retrofit2.Response;
@@ -56,6 +59,7 @@ public class HomeScreenActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        checkAcceleronmeter();
         setReceivePotholeAlert();
         setNetworkMonitor();
         callGetSubinfoAPI();
@@ -92,6 +96,52 @@ public class HomeScreenActivity extends AppCompatActivity {
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(LocaleManager.updateLanguage(newBase));
     }
+    //kiem tra xem co acceleronmeter ko
+    public void checkAcceleronmeter(){
+        SensorManager sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+        Snackbar snackbar;
+        // Kiểm tra accelerometer
+        if (sensorManager != null) {
+            Sensor accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+            if (accelerometer != null) {
+                snackbar=Snackbar.make(binding.main,
+                        "Thiết bị có hỗ trợ Accelerometer", Snackbar.LENGTH_INDEFINITE);
+                snackbar.setAction("Đóng", new View.OnClickListener() {
+
+                    @Override
+                    public void onClick(View v) {
+                        snackbar.dismiss();
+                    }
+                });
+                snackbar.show();
+
+            } else {
+                snackbar=Snackbar.make(binding.main,
+                        "Thiết bị khong co hỗ trợ Accelerometer", Snackbar.LENGTH_INDEFINITE);
+                snackbar.setAction("Đóng", new View.OnClickListener() {
+
+                    @Override
+                    public void onClick(View v) {
+                        snackbar.dismiss();
+                    }
+                });
+                snackbar.show();
+
+            }
+        } else {
+            snackbar=Snackbar.make(binding.main,
+                    "Thiết bị khong the truy cap Sensor", Snackbar.LENGTH_INDEFINITE);
+            snackbar.setAction("Đóng", new View.OnClickListener() {
+
+                @Override
+                public void onClick(View v) {
+                    snackbar.dismiss();
+                }
+            });
+            snackbar.show();
+
+        }
+    }
     //hien thi thong bao khi network mat ket noi hoac ket noi lai
     private void setNetworkMonitor() {
         networkManager=new NetworkManager(this);
@@ -100,14 +150,14 @@ public class HomeScreenActivity extends AppCompatActivity {
             intent.putExtra("connected", true);
             sendBroadcast(intent);
             snackBar=Snackbar.make(binding.main,R.string.str_network_available,Snackbar.LENGTH_LONG);
-            snackBar.show();
+            //snackBar.show();
         }
         else {
             Intent intent = new Intent("com.example.NETWORK");
             intent.putExtra("connected", false);
             sendBroadcast(intent);
             snackBar=Snackbar.make(binding.main,R.string.str_network_unavailable,Snackbar.LENGTH_LONG);
-            snackBar.show();
+            //snackBar.show();
 
         }
         networkManager.startMonitoring(new NetworkManager.NetworkStatusListener() {
@@ -117,7 +167,7 @@ public class HomeScreenActivity extends AppCompatActivity {
                 intent.putExtra("connected", true);
                 sendBroadcast(intent);
                 snackBar=Snackbar.make(binding.main,R.string.str_network_available,Snackbar.LENGTH_LONG);
-                snackBar.show();
+                // snackBar.show();
             }
 
             @Override
