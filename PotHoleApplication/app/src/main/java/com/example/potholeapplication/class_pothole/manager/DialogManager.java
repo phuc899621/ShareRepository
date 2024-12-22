@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.example.potholeapplication.R;
 import com.example.potholeapplication.Retrofit2.APICallBack;
+import com.example.potholeapplication.Retrofit2.SavePotholeSatusCallBack;
 import com.example.potholeapplication.SplashScreenActivity;
 import com.example.potholeapplication.class_pothole.other.User;
 import com.example.potholeapplication.class_pothole.request.AddPotholeReq;
@@ -203,7 +204,7 @@ public class DialogManager {
         DialogManager.isDialogShowing = isDialogShowing;
     }
     public static void showDialogSavePothole(Context context,double longtitude,
-                                             double latitude,String severity){
+                                             double latitude,String severity,SavePotholeSatusCallBack callBack){
         Dialog dialog=createDialog(context,R.layout.custom_dialog_save_pothole,true);
 
         NetworkManager networkManager=new NetworkManager(context);
@@ -233,18 +234,37 @@ public class DialogManager {
                             Snackbar.LENGTH_LONG).show();
                     dialog.dismiss();
                     setIsDialogShowing(false);
-                    return;
+                    return ;
                 }
                 dialog.dismiss();
                 List<Double> coordinates=new ArrayList<>();
                 coordinates.add(longtitude);
                 coordinates.add(latitude);
 
-                callSavePotholeAPI(context, new AddPotholeReq(
+                APIManager.callAddPothole(new AddPotholeReq(
                         new LocationClass(coordinates),
                         LocalDataManager.getEmail(context),
-                        severity
-                ));
+                        severity)
+                        ,new APICallBack<APIResponse<User>>() {
+                            @Override
+                            public void onSuccess(Response<APIResponse<User>> response) {
+                                callBack.onComplete(true);
+                            }
+
+                            @Override
+                            public void onError(APIResponse<User> errorResponse) {
+                                DialogManager.showDialogError(context, errorResponse);
+                                callBack.onComplete(false);
+                            }
+
+                            @Override
+                            public void onFailure(Throwable t) {
+                                Log.e("API Error", "Failure: " + t.getMessage());
+                                callBack.onComplete(false);
+                                DialogManager.showDialogErrorString(context,context.getString(R.string.str_cannot_save_pothole_due_to_poor_connection));
+
+                            }
+                        });
                 setIsDialogShowing(false);
 
             }
@@ -253,6 +273,7 @@ public class DialogManager {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
+                callBack.onComplete(false);
                 setIsDialogShowing(false);
             }
         });
@@ -268,28 +289,5 @@ public class DialogManager {
                 activity.finish();
             }
         },2000);
-    }
-    private static void callSavePotholeAPI(Context context, AddPotholeReq addPotholeReq){
-
-        APIManager.callAddPothole(addPotholeReq
-                ,new APICallBack<APIResponse<User>>() {
-                    @Override
-                    public void onSuccess(Response<APIResponse<User>> response) {
-
-                    }
-
-                    @Override
-                    public void onError(APIResponse<User> errorResponse) {
-                        DialogManager.showDialogError(context, errorResponse);
-                    }
-
-                    @Override
-                    public void onFailure(Throwable t) {
-                        Log.e("API Error", "Failure: " + t.getMessage());
-                        DialogManager.showDialogErrorString(context,context.getString(R.string.str_cannot_save_pothole_due_to_poor_connection));
-                        
-                    }
-                });
-
     }
 }

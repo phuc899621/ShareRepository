@@ -5,7 +5,10 @@ import static com.mapbox.maps.plugin.locationcomponent.LocationComponentUtils.ge
 
 import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
@@ -34,8 +37,12 @@ import androidx.lifecycle.DefaultLifecycleObserver;
 import androidx.lifecycle.LifecycleOwner;
 
 import com.example.potholeapplication.Retrofit2.APICallBack;
+import com.example.potholeapplication.Retrofit2.SavePotholeSatusCallBack;
 import com.example.potholeapplication.class_pothole.manager.APIManager;
+import com.example.potholeapplication.class_pothole.manager.DialogManager;
+import com.example.potholeapplication.class_pothole.manager.LocalDataManager;
 import com.example.potholeapplication.class_pothole.manager.LocaleManager;
+import com.example.potholeapplication.class_pothole.manager.NetworkManager;
 import com.example.potholeapplication.class_pothole.other.Pothole;
 import com.example.potholeapplication.class_pothole.response.APIResponse;
 import com.example.potholeapplication.databinding.ActivityMapViewBinding;
@@ -113,7 +120,7 @@ public class MapViewActivity extends AppCompatActivity {
             isListening = false,isOnRouting=false
             ,isExpanded=false;
     List<Pothole> potholes;
-
+    NetworkManager networkManager;
     //-------------Biến tọađộ,camera,icon-----------------------
     Point thisLocation;
     Bitmap iconImage,iconPotholeLarge,iconPotholeSmall,iconPotholeMedium;
@@ -298,6 +305,7 @@ public class MapViewActivity extends AppCompatActivity {
             return insets;
         });
         context=this;
+        networkManager=new NetworkManager(this);
         init();
         if (checkLocationPermissions()) {
             setupLocationTracking();
@@ -308,6 +316,20 @@ public class MapViewActivity extends AppCompatActivity {
             requestLocationPermission();
         }
     }
+    @SuppressLint("UnspecifiedRegisterReceiverFlag")
+    @Override
+    protected void onResume() {
+        super.onResume();
+        registerReceiver(potholeReceiver, new IntentFilter("com.example.SHOW_DIALOG"));
+        callGetPothole();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        unregisterReceiver(potholeReceiver);
+    }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -369,13 +391,13 @@ public class MapViewActivity extends AppCompatActivity {
         context = this;
         setupIcon();
         setClickListener();
-        callGetPothole();
         binding.fabLocationTracking.setBackgroundTintList(
                 ColorStateList.valueOf(ContextCompat.getColor(context, R.color.pink)));
         binding.fabUserTracking.setBackgroundTintList(
                 ColorStateList.valueOf(ContextCompat.getColor(context, R.color.pink)));
 
     }
+
     public void setupIcon(){
         iconImage = BitmapFactory.decodeResource(getResources(), R.drawable.ic_puck);
         iconPotholeLarge = createBitmapFromDrawable(R.drawable.ic_pothole_large);
@@ -839,11 +861,17 @@ public class MapViewActivity extends AppCompatActivity {
 
     //---------------call get pothole-----------
     public void callGetPothole(){
+        if(!networkManager.isNetworkAvailable()){
+            Toast.makeText(this, "No internet connection", Toast.LENGTH_SHORT).show();
+            potholes= LocalDataManager.getPotholeList(context);
+            return;
+        }
         APIManager.callGetPothole(new APICallBack<APIResponse<Pothole>>() {
             @Override
             public void onSuccess(Response<APIResponse<Pothole>> response) {
                 setupIcon();
                 potholes=response.body().getData();
+                LocalDataManager.savePotholeList(context,potholes);
                 updatePotholeMarker();
             }
 
@@ -904,8 +932,28 @@ public class MapViewActivity extends AppCompatActivity {
 
     }
     //----------------------NETWORK--------------------------
-
-
+    private final BroadcastReceiver potholeReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if ("com.example.SHOW_DIALOG".equals(intent.getAction())) {
+                double latitude = intent.getDoubleExtra("latitude", 0);
+                double longitude = intent.getDoubleExtra("longitude", 0);
+                String severity= intent.getStringExtra("severity");
+                Toast.makeText(context, severity, Toast.LENGTH_SHORT).show();
+                if(!DialogManager.isIsDialogShowing()) {
+                    DialogManager.showDialogSavePothole(context,
+                            longitude, latitude, severity, new SavePotholeSatusCallBack() {
+                                @Override
+                                public void onComplete(boolean isSuccess) {
+                                    if (isSuccess) {
+                                        callGetPothole();
+                                    }
+                                }
+                            });
+                }
+            }
+        }
+    };
 
 
 

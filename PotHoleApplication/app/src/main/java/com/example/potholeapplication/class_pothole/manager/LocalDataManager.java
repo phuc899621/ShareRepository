@@ -11,9 +11,16 @@ import android.graphics.drawable.Drawable;
 import android.util.Base64;
 import android.util.Log;
 
+import com.example.potholeapplication.class_pothole.other.Pothole;
 import com.example.potholeapplication.class_pothole.other.User;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import org.json.JSONArray;
 
 import java.io.ByteArrayOutputStream;
+import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.List;
 
 public class LocalDataManager {
@@ -40,6 +47,7 @@ public class LocalDataManager {
     private static final String langPef="language";
     private static final String subinfoPef="subinfo";
     private static final String realtimePef="realtime_detection";
+    private static final String potholePef="pothole";
     public static byte[] getImageBytes(Context context) {
         SharedPreferences sharedPreferences=context.getSharedPreferences(userPef, MODE_PRIVATE);
         String base64Image = sharedPreferences.getString("image", null);
@@ -234,6 +242,29 @@ public class LocalDataManager {
                 subinfoPef, MODE_PRIVATE
         );
         return sharedPreferences.getInt("totalFixedPothole",0);
+    }
+    /*------------------------------------------------------------------------|
+    |--------------------------------pothole----------------------------------|
+    | ------------------------------------------------------------------------*/
+    public static void savePotholeList(Context context, List<Pothole> potholes) {
+        Gson gson = new Gson();
+        String json = gson.toJson(potholes);
+        // Lấy SharedPreferences
+        SharedPreferences sharedPreferences = context.getSharedPreferences(potholePef, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        // Chuyển JSONArray thành String
+        editor.putString("pothole", json);
+        editor.apply(); // Lưu vào SharedPreferences
+    }
+    public static List<Pothole> getPotholeList(Context context){
+        SharedPreferences sharedPreferences = context.getSharedPreferences(potholePef, Context.MODE_PRIVATE);
+        if(!sharedPreferences.contains("pothole")){
+            return new ArrayList<>();
+        }
+        String json=sharedPreferences.getString("pothole","");
+        Gson gson = new Gson();
+        Type type = new TypeToken<List<Pothole>>() {}.getType();
+        return gson.fromJson(json, type);
     }
 
 }

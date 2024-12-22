@@ -28,6 +28,7 @@ import com.example.potholeapplication.class_pothole.manager.LocalDataManager;
 import com.example.potholeapplication.class_pothole.manager.NetworkManager;
 import com.example.potholeapplication.class_pothole.other.Pothole;
 import com.example.potholeapplication.class_pothole.other.Subinfo;
+import com.example.potholeapplication.class_pothole.request.EmailReq;
 import com.example.potholeapplication.class_pothole.request.SaveDistanceReq;
 import com.example.potholeapplication.class_pothole.response.APIResponse;
 
@@ -46,6 +47,8 @@ public class SensorService extends Service {
     private AccelerometerListener accelerometerListener;
     private GPSListener gpsListener;
     private Handler handler;
+    private Handler saveDistanceHandler;
+
     private Location lastLocation;
     private float addingDistance = 0;
     Context context;
@@ -164,11 +167,8 @@ public class SensorService extends Service {
         @Override
         public void onReceive(Context context, Intent intent) {
             if ("com.example.NETWORK".equals(intent.getAction())) {
-                if(intent.getBooleanExtra("connected",false)){
-                    Log.d("NETWORK", "UNAVAILABLE");
-                }else {
-                    Log.d("NETWORK", "AVAILABLE");
-
+                if(intent.getBooleanExtra("connected",false)) {
+                    saveTotalDistanceToAPI(LocalDataManager.getTotalDistances(context));
                 }
             }
         }
@@ -190,7 +190,31 @@ public class SensorService extends Service {
             startLocationUpdates();
             startPotholeDetection();
             startPotholeWarning();
+            callAPIGetPotholeDistance();
         }
+    }
+    public void callAPIGetPotholeDistance(){
+        APIManager.callGetSubinfo(new EmailReq(LocalDataManager.getEmail(context)), new APICallBack<APIResponse<Subinfo>>() {
+            @Override
+            public void onSuccess(Response<APIResponse<Subinfo>> response) {
+                addingDistance=response.body().getData().get(0).getTotalDistances();
+                LocalDataManager.saveTotalDistances(context,addingDistance);
+                startDistanceTracking();
+                startHandlerSaveDistance();
+            }
+
+            @Override
+            public void onError(APIResponse<Subinfo> errorResponse) {
+                addingDistance=0;
+                LocalDataManager.saveTotalDistances(context,addingDistance);
+            }
+
+            @Override
+            public void onFailure(Throwable t) {
+                addingDistance=0;
+                LocalDataManager.saveTotalDistances(context,addingDistance);
+            }
+        });
     }
 
 
@@ -264,12 +288,22 @@ public class SensorService extends Service {
             Location potholeLocation = new Location("gps");
             potholeLocation.setLatitude(potholes.get(i).getLocationClass().getCoordinates().get(1));
             potholeLocation.setLongitude(potholes.get(i).getLocationClass().getCoordinates().get(0));
-            if(gpsListener.lastLocation.distanceTo(potholeLocation)<4) {
+            if(gpsListener.lastLocation.distanceTo(potholeLocation)<10) {
                 vibratePhone();
                 return;
             }
         }
 
+    }
+    public void startHandlerSaveDistance(){
+        Handler handler1=new Handler();
+        handler1.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                saveTotalDistanceToAPI(LocalDataManager.getTotalDistances(context));
+                handler1.postDelayed(this,20000);
+            }
+        },1000);
     }
 
     @Override
@@ -277,12 +311,7 @@ public class SensorService extends Service {
         super.onDestroy();
         sensorManager.unregisterListener(accelerometerListener);
         locationManager.removeUpdates(gpsListener);
-        float data=LocalDataManager.getTotalDistances(context)+
-                (Math.round(((addingDistance)*100)/100f)/1000f);
-        addingDistance=0;
-        LocalDataManager.saveTotalDistances(context,
-                data);
-        saveTotalDistanceToAPI(data);
+        saveTotalDistanceToAPI(LocalDataManager.getTotalDistances(context));
         networkManager.stopMonitoring();
         handler.removeCallbacksAndMessages(null);
 
@@ -319,15 +348,11 @@ public class SensorService extends Service {
     }
     private void updateDistance() {
         Location currentLocation = gpsListener.lastLocation;
-        Log.d("DISTANCE_TRACKING", "Distance: " + currentLocation + " meters");
-            if (currentLocation != null && lastLocation != null && lastLocation.distanceTo(currentLocation)>1) {
+            if (currentLocation != null && lastLocation != null && lastLocation.distanceTo(currentLocation)>20) {
                 float distance = lastLocation.distanceTo(currentLocation);
                 addingDistance += distance;
-                float data=LocalDataManager.getTotalDistances(context)+
-                        (Math.round(((addingDistance)*100)/100f)/1000f);
-                Log.d("DISTANCE_TRACKING", "Distance: " + distance + " meters"+addingDistance);
-                LocalDataManager.saveTotalDistances(this, data);
-                addingDistance=0;
+                LocalDataManager.saveTotalDistances(this, addingDistance);
+                Log.d("DISTANCE_TRACKING", "Distance: " + distance + " meters");
             }
             lastLocation = currentLocation;
     }

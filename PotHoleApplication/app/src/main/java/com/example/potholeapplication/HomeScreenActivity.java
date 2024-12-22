@@ -19,6 +19,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.potholeapplication.Retrofit2.APICallBack;
+import com.example.potholeapplication.Retrofit2.SavePotholeSatusCallBack;
 import com.example.potholeapplication.class_pothole.manager.APIManager;
 import com.example.potholeapplication.class_pothole.manager.DialogManager;
 import com.example.potholeapplication.class_pothole.manager.LocalDataManager;
@@ -195,7 +196,12 @@ public class HomeScreenActivity extends AppCompatActivity {
                 Toast.makeText(context, severity, Toast.LENGTH_SHORT).show();
                 if(!DialogManager.isIsDialogShowing() && isResume) {
                     DialogManager.showDialogSavePothole(context,
-                            longitude, latitude, severity);
+                            longitude, latitude, severity, new SavePotholeSatusCallBack() {
+                                @Override
+                                public void onComplete(boolean isSuccess) {
+
+                                }
+                            });
                 }
             }
         }
@@ -251,7 +257,8 @@ public class HomeScreenActivity extends AppCompatActivity {
         if(!networkManager.isNetworkAvailable()){
             snackBar=Snackbar.make(binding.main,R.string.str_network_unavailable,Snackbar.LENGTH_LONG);
             snackBar.show();
-            binding.tvTotalDistances.setText(LocalDataManager.getTotalDistances(context)+"");
+            float distance=LocalDataManager.getTotalDistances(context)/1000.0f;
+            binding.tvTotalDistances.setText(String.format("%.2f", distance));
             binding.tvFixedPothole.setText(LocalDataManager.getTotalFixedPothole(context)+"");
             binding.tvTotalReport.setText(LocalDataManager.getTotalReport(context)+"");
             return;
@@ -268,7 +275,8 @@ public class HomeScreenActivity extends AppCompatActivity {
                                 response.body().getData().get(0).getTotalReport(),
                                 response.body().getData().get(0).getTotalFixedPothole()
                         );
-                        binding.tvTotalDistances.setText(LocalDataManager.getTotalDistances(context)+"");
+                        float distance=LocalDataManager.getTotalDistances(context)/1000.0f;
+                        binding.tvTotalDistances.setText(String.format("%.2f", distance));
                         binding.tvFixedPothole.setText(LocalDataManager.getTotalFixedPothole(context)+"");
                         binding.tvTotalReport.setText(LocalDataManager.getTotalReport(context)+"");
                         isAPIReturn=true;
@@ -277,7 +285,8 @@ public class HomeScreenActivity extends AppCompatActivity {
                     @Override
                     public void onError(APIResponse<Subinfo> errorResponse) {
                         LocalDataManager.saveSubinfo(context,0,0,0);
-                        binding.tvTotalDistances.setText(LocalDataManager.getTotalDistances(context)+"");
+                        float distance=LocalDataManager.getTotalDistances(context)/1000.0f;
+                        binding.tvTotalDistances.setText(String.format("%.2f", distance));
                         binding.tvFixedPothole.setText(LocalDataManager.getTotalFixedPothole(context)+"");
                         binding.tvTotalReport.setText(LocalDataManager.getTotalReport(context)+"");
                         isAPIReturn=true;
@@ -286,7 +295,8 @@ public class HomeScreenActivity extends AppCompatActivity {
                     @Override
                     public void onFailure(Throwable t) {
                         LocalDataManager.saveSubinfo(context,0,0,0);
-                        binding.tvTotalDistances.setText(LocalDataManager.getTotalDistances(context)+"");
+                        float distance=LocalDataManager.getTotalDistances(context)/1000.0f;
+                        binding.tvTotalDistances.setText(String.format("%.2f", distance));
                         binding.tvFixedPothole.setText(LocalDataManager.getTotalFixedPothole(context)+"");
                         binding.tvTotalReport.setText(LocalDataManager.getTotalReport(context)+"");
                         Log.e("API Error", "Failure: " + t.getMessage());
