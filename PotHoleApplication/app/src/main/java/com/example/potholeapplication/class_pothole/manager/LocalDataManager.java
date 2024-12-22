@@ -217,6 +217,22 @@ public class LocalDataManager {
         editor.putInt("totalFixedPothole",totalFixedPothole);
         editor.apply();
     }
+    public static void saveUserRank(
+            Context context,int ranking
+    ){
+        SharedPreferences sharedPreferences = context.getSharedPreferences(
+                subinfoPef, MODE_PRIVATE
+        );
+        SharedPreferences.Editor editor=sharedPreferences.edit();
+        editor.putInt("rank",ranking);
+        editor.apply();
+    }
+    public static int getUserRank(Context context){
+        SharedPreferences sharedPreferences = context.getSharedPreferences(
+                subinfoPef, MODE_PRIVATE
+        );
+        return sharedPreferences.getInt("rank",0);
+    }
     public static void saveTotalDistances(Context context,float totalDistances){
         SharedPreferences sharedPreferences = context.getSharedPreferences(
                 subinfoPef, MODE_PRIVATE

@@ -20,11 +20,13 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.potholeapplication.Retrofit2.APICallBack;
 import com.example.potholeapplication.Retrofit2.SavePotholeSatusCallBack;
+import com.example.potholeapplication.class_pothole.RankingAdapter;
 import com.example.potholeapplication.class_pothole.manager.APIManager;
 import com.example.potholeapplication.class_pothole.manager.DialogManager;
 import com.example.potholeapplication.class_pothole.manager.LocalDataManager;
 import com.example.potholeapplication.class_pothole.manager.LocaleManager;
 import com.example.potholeapplication.class_pothole.manager.NetworkManager;
+import com.example.potholeapplication.class_pothole.other.Ranking;
 import com.example.potholeapplication.class_pothole.other.Subinfo;
 import com.example.potholeapplication.class_pothole.request.EmailReq;
 import com.example.potholeapplication.class_pothole.response.APIResponse;
@@ -64,6 +66,7 @@ public class HomeScreenActivity extends AppCompatActivity {
         checkAcceleronmeter();
         setReceivePotholeAlert();
         callGetSubinfoAPI();
+        callGetRankingAPI();
         if(isAPIReturn){
             binding.tvTotalDistances.setText(LocalDataManager.getTotalDistances(context)+"");
             binding.tvFixedPothole.setText(LocalDataManager.getTotalFixedPothole(context)+"");
@@ -164,6 +167,7 @@ public class HomeScreenActivity extends AppCompatActivity {
         networkManager.startMonitoring(new NetworkManager.NetworkStatusListener() {
             @Override
             public void onConnected() {
+                callGetRankingAPI();
                 Intent intent = new Intent("com.example.NETWORK");
                 intent.putExtra("connected", true);
                 sendBroadcast(intent);
@@ -252,6 +256,41 @@ public class HomeScreenActivity extends AppCompatActivity {
     public void setDisplay(){
         binding.tvName.setText(LocalDataManager.getName(this));
         binding.imaUserIcon.setImageBitmap(LocalDataManager.getImageBitmap(context));
+    }
+    public void callGetRankingAPI(){
+        if(!networkManager.isNetworkAvailable()){
+            binding.tvRanking.setText(LocalDataManager.getUserRank(context)+"");
+            return;
+        }
+        APIManager.callGetRanking(new APICallBack<APIResponse<Ranking>>() {
+            @Override
+            public void onSuccess(Response<APIResponse<Ranking>> response) {
+                if(response.body().getData()!=null){
+                    RankingAdapter rankingAdapter=new RankingAdapter(response.body().getData(),context);
+                    for(int i=0;i<rankingAdapter.getData().size();i++){
+                        if(rankingAdapter.getData().get(i).getUsername().equals(LocalDataManager.getUsername(context))){
+                            LocalDataManager.saveUserRank(context,rankingAdapter.getData().get(i).getRanking());
+                            binding.tvRanking.setText(LocalDataManager.getUserRank(context)+"");
+                            return;
+                        }
+                    }
+                    binding.tvRanking.setText(LocalDataManager.getUserRank(context)+"");
+                }
+
+            }
+
+            @Override
+            public void onError(APIResponse<Ranking> errorResponse) {
+                    Log.d("Error",errorResponse.getMessage());
+                    binding.tvRanking.setText(LocalDataManager.getUserRank(context)+"");
+            }
+
+            @Override
+            public void onFailure(Throwable t) {
+                Log.d("Error",t.toString());
+                binding.tvRanking.setText(LocalDataManager.getUserRank(context)+"");
+            }
+        });
     }
     public void callGetSubinfoAPI(){
         if(!networkManager.isNetworkAvailable()){

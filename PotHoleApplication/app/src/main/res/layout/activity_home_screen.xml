@@ -18,23 +18,30 @@
         android:src="@drawable/actress"
         app:civ_border_color="@color/white"
         app:civ_border_width="2dp"
-        app:layout_constraintBottom_toBottomOf="@+id/imaRank"
-        app:layout_constraintEnd_toStartOf="@+id/imaRank"
-        app:layout_constraintTop_toTopOf="@+id/imaRank" />
+        app:layout_constraintBottom_toBottomOf="@+id/cvRank"
+        app:layout_constraintEnd_toStartOf="@+id/cvRank"
+        app:layout_constraintTop_toTopOf="@+id/cvRank" />
 
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/imaRank"
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/cvRank"
         android:layout_width="50dp"
         android:layout_height="50sp"
         android:layout_marginHorizontal="10dp"
         android:layout_marginVertical="10dp"
-        android:src="@drawable/ic_cup"
-        app:civ_border_color="@color/white"
-        app:civ_border_width="2dp"
-        app:civ_circle_background_color="@color/white"
+        app:cardCornerRadius="20dp"
         app:layout_constraintBottom_toTopOf="@+id/guideTop1"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/tvRanking"
+            android:text="1"
+            android:gravity="center"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_margin="2dp"/>
+    </com.google.android.material.card.MaterialCardView>
 
 
 

@@ -60,6 +60,7 @@ public class SettingActivity extends AppCompatActivity {
             binding.tvPoints.setText(LocalDataManager.getTotalReport(context)*10+"");
             isAPIReturn=false;
         }
+        binding.tvRanking.setText(LocalDataManager.getUserRank(context)+"");
         setData();
         setSwitchRealtime();
     }

@@ -197,12 +197,16 @@
                     android:layout_height="match_parent"
                     android:orientation="vertical">
 
-                    <com.google.android.material.imageview.ShapeableImageView
+                    <TextView
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_weight="2"
-                        android:scaleType="fitCenter"
-                        android:src="@drawable/gold"/>
+                        android:text="1"
+                        android:id="@+id/tvRanking"
+                        android:gravity="center"
+                        android:textColor="@color/dark_purple"
+                        android:textStyle="bold"
+                        android:textSize="40sp"/>
 
 
                     <TextView
@@ -210,7 +214,7 @@
                         android:layout_height="match_parent"
                         android:layout_weight="3"
                         android:gravity="center"
-                        android:text="@string/str_golden_member"
+                        android:text="@string/str_rank"
                         android:textColor="@color/dark_purple"
                         android:textSize="14sp" />
                 </LinearLayout>
@@ -223,37 +227,22 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1">
+
             <TextView
-                android:id="@+id/tvNotification"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:drawablePadding="10dp"
-                android:gravity="center|start"
-                android:layout_marginStart="10dp"
                 android:layout_marginTop="30dp"
-                android:text="@string/str_notification"
-                android:textColor="@color/dark_purple"
-                android:textSize="18sp"
-                app:drawableStartCompat="@drawable/ic_notification_off"
-                app:drawableTint="@color/dark_purple"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintLeft_toLeftOf="parent"/>
-            <TextView
                 android:id="@+id/tvRealTime"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
                 android:drawablePadding="10dp"
                 android:gravity="center|start"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="30dp"
                 android:text="@string/str_real_time_detection"
                 android:textColor="@color/dark_purple"
                 android:textSize="18sp"
                 app:drawableStartCompat="@drawable/ic_real_time"
                 app:drawableTint="@color/dark_purple"
-                app:layout_constraintTop_toBottomOf="@id/tvNotification"
                 app:layout_constraintStart_toStartOf="parent"
-                />
+                app:layout_constraintTop_toTopOf="parent" />
             <TextView
                 android:id="@+id/tvEditUser"
                 android:layout_width="wrap_content"
@@ -302,16 +291,7 @@
                 app:drawableTint="@color/dark_purple"
                 app:layout_constraintTop_toBottomOf="@id/tvLanguage"
                 app:layout_constraintStart_toStartOf="parent"/>
-            <androidx.appcompat.widget.SwitchCompat
-                android:id="@+id/switchNotification"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:thumb="@drawable/thumb"
-                android:layout_marginEnd="10dp"
-                android:track="@drawable/track"
-                app:layout_constraintTop_toTopOf="@id/tvNotification"
-                app:layout_constraintBottom_toBottomOf="@id/tvNotification"
-                app:layout_constraintEnd_toEndOf="parent"/>
+
             <androidx.appcompat.widget.SwitchCompat
                 android:id="@+id/switchRealtime"
                 android:layout_width="wrap_content"

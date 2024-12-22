@@ -62,8 +62,6 @@ public class RankingAdapter extends RecyclerView.Adapter<RankingAdapter.ViewHold
             data.get(i).setRanking(ranking);
         }
 
-
-        Toast.makeText(context, stringBuilder.toString(), Toast.LENGTH_LONG).show();
     }
 
     @NonNull
