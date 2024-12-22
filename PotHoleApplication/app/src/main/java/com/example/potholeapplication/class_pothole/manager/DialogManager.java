@@ -15,6 +15,7 @@ import android.widget.TextView;
 import com.example.potholeapplication.R;
 import com.example.potholeapplication.Retrofit2.APICallBack;
 import com.example.potholeapplication.Retrofit2.SavePotholeSatusCallBack;
+import com.example.potholeapplication.Retrofit2.StopShowDialog;
 import com.example.potholeapplication.SplashScreenActivity;
 import com.example.potholeapplication.class_pothole.other.User;
 import com.example.potholeapplication.class_pothole.request.AddPotholeReq;
@@ -289,5 +290,20 @@ public class DialogManager {
                 activity.finish();
             }
         },2000);
+    }
+    public static void showDialogPotholeWarning(Context context, StopShowDialog stopShowDialog) {
+        Dialog dialog = createDialog(context, R.layout.custom_dialog_pothole_warning, false);
+        Button button=dialog.findViewById(R.id.btnConfirm);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                stopShowDialog.onStopShowDialog(true);
+                isDialogShowing=false;
+                dialog.dismiss();
+            }
+        });
+        isDialogShowing=true;
+        dialog.show();
+
     }
 }

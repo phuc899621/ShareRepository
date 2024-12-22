@@ -288,7 +288,9 @@ public class SensorService extends Service {
             Location potholeLocation = new Location("gps");
             potholeLocation.setLatitude(potholes.get(i).getLocationClass().getCoordinates().get(1));
             potholeLocation.setLongitude(potholes.get(i).getLocationClass().getCoordinates().get(0));
-            if(gpsListener.lastLocation.distanceTo(potholeLocation)<10) {
+            if(gpsListener.lastLocation.distanceTo(potholeLocation)<20) {
+                Intent intent = new Intent("com.example.WARNING");
+                sendBroadcast(intent);
                 vibratePhone();
                 return;
             }
@@ -301,7 +303,7 @@ public class SensorService extends Service {
             @Override
             public void run() {
                 saveTotalDistanceToAPI(LocalDataManager.getTotalDistances(context));
-                handler1.postDelayed(this,20000);
+                handler1.postDelayed(this,15000);
             }
         },1000);
     }
@@ -348,7 +350,7 @@ public class SensorService extends Service {
     }
     private void updateDistance() {
         Location currentLocation = gpsListener.lastLocation;
-            if (currentLocation != null && lastLocation != null && lastLocation.distanceTo(currentLocation)>20) {
+            if (currentLocation != null && lastLocation != null && lastLocation.distanceTo(currentLocation)>30) {
                 float distance = lastLocation.distanceTo(currentLocation);
                 addingDistance += distance;
                 LocalDataManager.saveTotalDistances(this, addingDistance);

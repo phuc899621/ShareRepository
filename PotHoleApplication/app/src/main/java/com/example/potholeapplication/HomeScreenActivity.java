@@ -8,6 +8,7 @@ import android.content.IntentFilter;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
@@ -20,6 +21,7 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.potholeapplication.Retrofit2.APICallBack;
 import com.example.potholeapplication.Retrofit2.SavePotholeSatusCallBack;
+import com.example.potholeapplication.Retrofit2.StopShowDialog;
 import com.example.potholeapplication.class_pothole.RankingAdapter;
 import com.example.potholeapplication.class_pothole.manager.APIManager;
 import com.example.potholeapplication.class_pothole.manager.DialogManager;
@@ -31,7 +33,6 @@ import com.example.potholeapplication.class_pothole.other.Subinfo;
 import com.example.potholeapplication.class_pothole.request.EmailReq;
 import com.example.potholeapplication.class_pothole.response.APIResponse;
 import com.example.potholeapplication.databinding.ActivityHomeScreenBinding;
-import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
 
 import retrofit2.Response;
@@ -42,6 +43,7 @@ public class HomeScreenActivity extends AppCompatActivity {
     boolean isAPIReturn=false;//false neu lay api khong thanh cong
     boolean isResume; //kiem tra trang thai activity
     NetworkManager networkManager;
+    boolean isWarning =false;
 
     Snackbar snackBar;
     @Override
@@ -60,6 +62,7 @@ public class HomeScreenActivity extends AppCompatActivity {
         setNetworkMonitor();
         setDisplay();
     }
+    @SuppressLint("UnspecifiedRegisterReceiverFlag")
     @Override
     protected void onResume() {
         super.onResume();
@@ -67,6 +70,7 @@ public class HomeScreenActivity extends AppCompatActivity {
         setReceivePotholeAlert();
         callGetSubinfoAPI();
         callGetRankingAPI();
+        registerReceiver(warningReceiver,new IntentFilter("com.example.WARNING"));
         if(isAPIReturn){
             binding.tvTotalDistances.setText(LocalDataManager.getTotalDistances(context)+"");
             binding.tvFixedPothole.setText(LocalDataManager.getTotalFixedPothole(context)+"");
@@ -87,6 +91,7 @@ public class HomeScreenActivity extends AppCompatActivity {
     protected void onStop() {
         super.onStop();
         unregisterReceiver(potholeReceiver);
+        unregisterReceiver(warningReceiver);
         isResume=false;
     }
 
@@ -208,6 +213,39 @@ public class HomeScreenActivity extends AppCompatActivity {
                             });
                 }
             }
+            if ("com.example.WARNING".equals(intent.getAction())) {
+                if(!DialogManager.isIsDialogShowing() && isResume) {
+                    if(!isWarning){
+                        DialogManager.showDialogPotholeWarning(context,stopShowDialog);
+                        isWarning=true;
+                    }
+                }
+            }
+        }
+    };
+    private final BroadcastReceiver warningReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if ("com.example.WARNING".equals(intent.getAction())) {
+                if(!DialogManager.isIsDialogShowing() && isResume) {
+                    if(!isWarning){
+                        DialogManager.showDialogPotholeWarning(context,stopShowDialog);
+                        isWarning=true;
+                    }
+                }
+            }
+        }
+    };
+    Handler stopShowDialogHandler=new Handler();
+    StopShowDialog stopShowDialog=new StopShowDialog() {
+        @Override
+        public void onStopShowDialog(boolean isStop) {
+            stopShowDialogHandler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    isWarning=false;
+                }
+            },13000);
         }
     };
 

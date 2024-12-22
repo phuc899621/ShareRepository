@@ -16,6 +16,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -38,6 +39,7 @@ import androidx.lifecycle.LifecycleOwner;
 
 import com.example.potholeapplication.Retrofit2.APICallBack;
 import com.example.potholeapplication.Retrofit2.SavePotholeSatusCallBack;
+import com.example.potholeapplication.Retrofit2.StopShowDialog;
 import com.example.potholeapplication.class_pothole.manager.APIManager;
 import com.example.potholeapplication.class_pothole.manager.DialogManager;
 import com.example.potholeapplication.class_pothole.manager.LocalDataManager;
@@ -321,6 +323,7 @@ public class MapViewActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         registerReceiver(potholeReceiver, new IntentFilter("com.example.SHOW_DIALOG"));
+        registerReceiver(warningReceiver, new IntentFilter("com.example.WARNING"));
         callGetPothole();
     }
 
@@ -328,6 +331,7 @@ public class MapViewActivity extends AppCompatActivity {
     protected void onStop() {
         super.onStop();
         unregisterReceiver(potholeReceiver);
+        unregisterReceiver(warningReceiver);
     }
 
     @Override
@@ -950,6 +954,33 @@ public class MapViewActivity extends AppCompatActivity {
                                     }
                                 }
                             });
+                }
+            }
+        }
+    };
+    //--------------------WARNING------------------------
+    boolean isWarning=false;
+    Handler stopShowDialogHandler=new Handler();
+    StopShowDialog stopShowDialog=new StopShowDialog() {
+        @Override
+        public void onStopShowDialog(boolean isStop) {
+            stopShowDialogHandler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    isWarning=false;
+                }
+            },13000);
+        }
+    };
+    private final BroadcastReceiver warningReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if ("com.example.WARNING".equals(intent.getAction())) {
+                if(!DialogManager.isIsDialogShowing()) {
+                    if(!isWarning){
+                        DialogManager.showDialogPotholeWarning(context,stopShowDialog);
+                        isWarning=true;
+                    }
                 }
             }
         }
