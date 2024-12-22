@@ -255,7 +255,7 @@ public class SensorService extends Service {
     }
     private void checkForPotholes() {
         double lastLinear = accelerometerListener.lastLinear;
-        if (lastLinear > 10) {
+        if (lastLinear > 13) {
             double latitude = gpsListener.latitude;
             double longitude = gpsListener.longitude;
             Intent intent = new Intent("com.example.SHOW_DIALOG");
@@ -268,8 +268,8 @@ public class SensorService extends Service {
         }
     }
     private String getPotholeSeverity(double lastLinear){
-        if(lastLinear>20) return "large";
-        if(lastLinear>15) return "medium";
+        if(lastLinear>30) return "large";
+        if(lastLinear>20) return "medium";
         return "small";
     }
     private void startPotholeWarning() {
