@@ -93,17 +93,20 @@
             android:orientation="horizontal"
             android:id="@+id/guideBottomSheet"
             app:layout_constraintGuide_percent="0.75"/>
+
         <TextView
             android:id="@+id/tvTitle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:layout_marginTop="5dp"
             android:gravity="center"
             android:text="@string/str_email_verification"
             android:textColor="@color/dark_purple"
             android:textSize="24sp"
             android:textStyle="bold"
-            app:layout_constraintLeft_toRightOf="@id/guideLeftSheet12"
+            app:layout_constraintEnd_toStartOf="@+id/guideRightSheet88"
+            app:layout_constraintStart_toEndOf="@id/guideLeftSheet12"
             app:layout_constraintTop_toTopOf="parent" />
 
 

@@ -33,65 +33,31 @@ public class LocalDataManager {
     __totalDistances
     __totalFixedPothole
     */
+    /*------------------------------------------------------------------------|
+    |--------------------------------Image------------------------------------|
+    | ------------------------------------------------------------------------*/
+    private static final String userPef="user_info";
+    private static final String langPef="language";
+    private static final String subinfoPef="subinfo";
+    private static final String realtimePef="realtime_detection";
     public static byte[] getImageBytes(Context context) {
-        SharedPreferences sharedPreferences=context.getSharedPreferences("user_info", MODE_PRIVATE);
+        SharedPreferences sharedPreferences=context.getSharedPreferences(userPef, MODE_PRIVATE);
         String base64Image = sharedPreferences.getString("image", null);
         if (base64Image != null) {
             return Base64.decode(base64Image, Base64.DEFAULT);
         }
         return null;
     }
-    /*public static String getNameFromSharePreferences(Context context){
-        SharedPreferences sharedPreferences=context.getSharedPreferences("user_info", MODE_PRIVATE);
-        return sharedPreferences.getString("name","");
-    }*/
     public static void saveImageBytes(Context context, byte[] imageBytes) {
-        SharedPreferences sharedPreferences=context.getSharedPreferences("user_info",MODE_PRIVATE);
+        SharedPreferences sharedPreferences=context.getSharedPreferences(userPef,MODE_PRIVATE);
         String base64Image = Base64.encodeToString(imageBytes, Base64.DEFAULT);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString("image", base64Image);
         editor.apply();
     }
-    public static void saveUsernameName(Context context, String username,String name){
-        SharedPreferences sharedPreferences=context.getSharedPreferences(
-                "user_info",MODE_PRIVATE
-        );
-        SharedPreferences.Editor editor=sharedPreferences.edit();
-        editor.putString("username",username);
-        editor.putString("name",name);
-        editor.apply();
-    }
-
     public static Bitmap getImageBitmap(Context context){
         byte[] imageBytes= getImageBytes(context);
         return BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length);
-    }
-
-    public static String getEmail(Context context){
-        SharedPreferences sharedPreferences=context.getSharedPreferences(
-                "user_info",MODE_PRIVATE
-        );
-        return sharedPreferences.getString("email","");
-    }
-    public static String getUsername(Context context){
-        SharedPreferences sharedPreferences=context.getSharedPreferences(
-                "user_info",MODE_PRIVATE
-        );
-        return sharedPreferences.getString("username","");
-    }
-    public static String getName(Context context){
-        SharedPreferences sharedPreferences=context.getSharedPreferences(
-                "user_info",MODE_PRIVATE
-        );
-        return sharedPreferences.getString("name","");
-    }
-    public  static void saveEmail(Context context,String email){
-        SharedPreferences sharedPreferences=context.getSharedPreferences(
-                "user_info",MODE_PRIVATE
-        );
-        SharedPreferences.Editor editor=sharedPreferences.edit();
-        editor.putString("email",email);
-        editor.apply();
     }
     public static byte[] drawableToByteArray(Context context, int drawableId) {
         // Get drawable bang ID sau do chuyen thanh bitmap
@@ -103,10 +69,51 @@ public class LocalDataManager {
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
         return byteArrayOutputStream.toByteArray();
     }
+    /*------------------------------------------------------------------------|
+    |--------------------------------user_info--------------------------------|
+    | ------------------------------------------------------------------------*/
+    public static void saveUsernameName(Context context, String username,String name){
+        SharedPreferences sharedPreferences=context.getSharedPreferences(
+                userPef,MODE_PRIVATE
+        );
+        SharedPreferences.Editor editor=sharedPreferences.edit();
+        editor.putString("username",username);
+        editor.putString("name",name);
+        editor.apply();
+    }
+
+
+
+    public static String getEmail(Context context){
+        SharedPreferences sharedPreferences=context.getSharedPreferences(
+                userPef,MODE_PRIVATE
+        );
+        return sharedPreferences.getString("email","");
+    }
+    public static String getUsername(Context context){
+        SharedPreferences sharedPreferences=context.getSharedPreferences(
+                userPef,MODE_PRIVATE
+        );
+        return sharedPreferences.getString("username","");
+    }
+    public static String getName(Context context){
+        SharedPreferences sharedPreferences=context.getSharedPreferences(
+                userPef,MODE_PRIVATE
+        );
+        return sharedPreferences.getString("name","");
+    }
+    public  static void saveEmail(Context context,String email){
+        SharedPreferences sharedPreferences=context.getSharedPreferences(
+                userPef,MODE_PRIVATE
+        );
+        SharedPreferences.Editor editor=sharedPreferences.edit();
+        editor.putString("email",email);
+        editor.apply();
+    }
     public static void saveUser(Context context, List<User> userList){
         User user=userList.get(0);
         SharedPreferences sharedPreferences=context.getSharedPreferences(
-                "user_info",MODE_PRIVATE
+                userPef,MODE_PRIVATE
         );
         SharedPreferences.Editor editor=sharedPreferences.edit();
         editor.putString("username",user.getUsername());
@@ -115,9 +122,20 @@ public class LocalDataManager {
         editor.putBoolean("login",true);
         editor.apply();
     }
+    public static void saveLogin(Context context,boolean isLogin){
+        SharedPreferences sharedPreferences=context.getSharedPreferences(
+                userPef,MODE_PRIVATE
+        );
+        SharedPreferences.Editor editor=sharedPreferences.edit();
+        editor.putBoolean("login",isLogin);
+        editor.apply();
+    }
+    /*------------------------------------------------------------------------|
+    |--------------------------------language---------------------------------|
+    | ------------------------------------------------------------------------*/
     public static String getLanguage(Context context) {
         SharedPreferences sharedPreferences = context.getSharedPreferences(
-                "language", MODE_PRIVATE
+                langPef, MODE_PRIVATE
         );
         if (!sharedPreferences.contains("language")) {
             SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -130,16 +148,19 @@ public class LocalDataManager {
     }
     public static void saveLanguage(Context context, String language) {
         SharedPreferences sharedPreferences = context.getSharedPreferences(
-                "language", MODE_PRIVATE
+                langPef, MODE_PRIVATE
         );
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString("language", language);
         editor.apply();
 
     }
+    /*------------------------------------------------------------------------|
+    |---------------------------realtime_detection----------------------------|
+    | ------------------------------------------------------------------------*/
     public static boolean getEnableRealTimeDetection(Context context){
         SharedPreferences sharedPreferences = context.getSharedPreferences(
-                "realtime_detection", MODE_PRIVATE
+                realtimePef, MODE_PRIVATE
         );
         if (!sharedPreferences.contains("enable")) {
             SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -159,7 +180,7 @@ public class LocalDataManager {
     }
     public static boolean setEnableRealTimeDetection(Context context,Boolean enable) {
         SharedPreferences sharedPreferences = context.getSharedPreferences(
-                "realtime_detection", MODE_PRIVATE
+                realtimePef, MODE_PRIVATE
         );
         if (!sharedPreferences.contains("enable")) {
             SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -173,11 +194,14 @@ public class LocalDataManager {
             return enable;
         }
     }
+    /*------------------------------------------------------------------------|
+    |--------------------------------subinfo----------------------------------|
+    | ------------------------------------------------------------------------*/
     public static void saveSubinfo(
             Context context,float totalDistances,int totalReport,int totalFixedPothole
     ){
         SharedPreferences sharedPreferences = context.getSharedPreferences(
-                "subinfo", MODE_PRIVATE
+                subinfoPef, MODE_PRIVATE
         );
         SharedPreferences.Editor editor=sharedPreferences.edit();
         editor.putFloat("totalDistances",totalDistances);
@@ -187,7 +211,7 @@ public class LocalDataManager {
     }
     public static void saveTotalDistances(Context context,float totalDistances){
         SharedPreferences sharedPreferences = context.getSharedPreferences(
-                "subinfo", MODE_PRIVATE
+                subinfoPef, MODE_PRIVATE
         );
         SharedPreferences.Editor editor=sharedPreferences.edit();
         editor.putFloat("totalDistances",totalDistances);
@@ -195,28 +219,21 @@ public class LocalDataManager {
     }
     public static float getTotalDistances(Context context){
         SharedPreferences sharedPreferences = context.getSharedPreferences(
-                "subinfo", MODE_PRIVATE
+                subinfoPef, MODE_PRIVATE
         );
         return sharedPreferences.getFloat("totalDistances",0);
     }
     public static int getTotalReport(Context context){
         SharedPreferences sharedPreferences = context.getSharedPreferences(
-                "subinfo", MODE_PRIVATE
+                subinfoPef, MODE_PRIVATE
         );
         return sharedPreferences.getInt("totalReport",0);
     }
     public static int getTotalFixedPothole(Context context){
         SharedPreferences sharedPreferences = context.getSharedPreferences(
-                "subinfo", MODE_PRIVATE
+                subinfoPef, MODE_PRIVATE
         );
         return sharedPreferences.getInt("totalFixedPothole",0);
     }
-    public static void saveLogin(Context context,boolean isLogin){
-        SharedPreferences sharedPreferences=context.getSharedPreferences(
-                "user_info",MODE_PRIVATE
-        );
-        SharedPreferences.Editor editor=sharedPreferences.edit();
-        editor.putBoolean("login",isLogin);
-        editor.apply();
-    }
+
 }

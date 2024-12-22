@@ -21,6 +21,7 @@ import com.example.potholeapplication.class_pothole.response.APIResponse;
 import com.example.potholeapplication.class_pothole.other.LocationClass;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.card.MaterialCardView;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,7 +33,7 @@ public class DialogManager {
 
     //hàm tao dialog
     private static Dialog createDialog(Context context, int layoutID,boolean isCancelable){
-        Dialog dialog=new Dialog(context);
+        Dialog dialog = new Dialog(context);
         dialog.setContentView(layoutID);
         dialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
         dialog.setCancelable(isCancelable);
@@ -205,6 +206,8 @@ public class DialogManager {
                                              double latitude,String severity){
         Dialog dialog=createDialog(context,R.layout.custom_dialog_save_pothole,true);
 
+        NetworkManager networkManager=new NetworkManager(context);
+
         TextView tvLatitude=dialog.findViewById(R.id.tvLatitude);
         TextView tvLongtitude=dialog.findViewById(R.id.tvLongtitude);
         TextView tvSeverity=dialog.findViewById(R.id.tvSeverity);
@@ -224,6 +227,14 @@ public class DialogManager {
         btnYes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(!networkManager.isNetworkAvailable()){
+                    Snackbar.make(dialog.findViewById(R.id.main),
+                            context.getString(R.string.str_network_unavailable),
+                            Snackbar.LENGTH_LONG).show();
+                    dialog.dismiss();
+                    setIsDialogShowing(false);
+                    return;
+                }
                 dialog.dismiss();
                 List<Double> coordinates=new ArrayList<>();
                 coordinates.add(longtitude);
@@ -246,6 +257,18 @@ public class DialogManager {
             }
         });
     }
+    public static void showDialogWarningThenFinish(Context context) {
+        Dialog dialog = createDialog(context, R.layout.custom_dialog_warning, false);
+        dialog.show();
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                Activity activity = (Activity) context;
+                activity.finish();
+            }
+        },2000);
+    }
     private static void callSavePotholeAPI(Context context, AddPotholeReq addPotholeReq){
 
         APIManager.callAddPothole(addPotholeReq
@@ -267,5 +290,6 @@ public class DialogManager {
                         
                     }
                 });
+
     }
 }

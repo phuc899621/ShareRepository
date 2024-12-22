@@ -18,6 +18,7 @@ import com.example.potholeapplication.class_pothole.manager.APIManager;
 import com.example.potholeapplication.class_pothole.manager.DialogManager;
 import com.example.potholeapplication.class_pothole.manager.LocalDataManager;
 import com.example.potholeapplication.class_pothole.manager.LocaleManager;
+import com.example.potholeapplication.class_pothole.manager.NetworkManager;
 import com.example.potholeapplication.class_pothole.other.Subinfo;
 import com.example.potholeapplication.class_pothole.request.EmailReq;
 import com.example.potholeapplication.class_pothole.response.APIResponse;
@@ -31,6 +32,7 @@ public class SettingActivity extends AppCompatActivity {
     ActivitySettingBinding binding;
     Context context;
     boolean isAPIReturn=false;
+    NetworkManager networkManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +53,7 @@ public class SettingActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        networkManager=new NetworkManager(this);
         callGetSubinfoAPI();
         if(isAPIReturn){
             binding.tvTotalReport.setText(LocalDataManager.getTotalReport(context)+"");
@@ -61,6 +64,11 @@ public class SettingActivity extends AppCompatActivity {
         setSwitchRealtime();
     }
     public void callGetSubinfoAPI(){
+        if(!networkManager.isNetworkAvailable()){
+            binding.tvTotalReport.setText(LocalDataManager.getTotalReport(context)+"");
+            binding.tvPoints.setText(LocalDataManager.getTotalReport(context)*10+"");
+            return;
+        }
         APIManager.callGetSubinfo(
                 new EmailReq(LocalDataManager.getEmail(this)),
                 new APICallBack<APIResponse<Subinfo>>() {
@@ -159,4 +167,6 @@ public class SettingActivity extends AppCompatActivity {
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(LocaleManager.updateLanguage(newBase));
     }
+    //------------------Network------------------
+
 }

@@ -903,6 +903,8 @@ public class MapViewActivity extends AppCompatActivity {
         }
 
     }
+    //----------------------NETWORK--------------------------
+
 
 
 

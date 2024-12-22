@@ -54,6 +54,7 @@ public class HomeScreenActivity extends AppCompatActivity {
         });
         context=this;
         setClickEvent();
+        setNetworkMonitor();
         setDisplay();
     }
     @Override
@@ -61,7 +62,6 @@ public class HomeScreenActivity extends AppCompatActivity {
         super.onResume();
         checkAcceleronmeter();
         setReceivePotholeAlert();
-        setNetworkMonitor();
         callGetSubinfoAPI();
         if(isAPIReturn){
             binding.tvTotalDistances.setText(LocalDataManager.getTotalDistances(context)+"");
@@ -232,17 +232,30 @@ public class HomeScreenActivity extends AppCompatActivity {
         binding.rankinglayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent=new Intent(HomeScreenActivity.this,RankingActivity.class);
-                startActivity(intent);
+                if(networkManager.isNetworkAvailable()){
+                    Intent intent=new Intent(HomeScreenActivity.this,RankingActivity.class);
+                    startActivity(intent);
+                }
+                else {
+                    snackBar = Snackbar.make(binding.main, R.string.str_network_unavailable, Snackbar.LENGTH_LONG);
+                    snackBar.show();
+                }
             }
         });
     }
     public void setDisplay(){
         binding.tvName.setText(LocalDataManager.getName(this));
         binding.imaUserIcon.setImageBitmap(LocalDataManager.getImageBitmap(context));
-
     }
     public void callGetSubinfoAPI(){
+        if(!networkManager.isNetworkAvailable()){
+            snackBar=Snackbar.make(binding.main,R.string.str_network_unavailable,Snackbar.LENGTH_LONG);
+            snackBar.show();
+            binding.tvTotalDistances.setText(LocalDataManager.getTotalDistances(context)+"");
+            binding.tvFixedPothole.setText(LocalDataManager.getTotalFixedPothole(context)+"");
+            binding.tvTotalReport.setText(LocalDataManager.getTotalReport(context)+"");
+            return;
+        }
         APIManager.callGetSubinfo(
                 new EmailReq(LocalDataManager.getEmail(this)),
                 new APICallBack<APIResponse<Subinfo>>() {

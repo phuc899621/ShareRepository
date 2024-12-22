@@ -1,7 +1,10 @@
 package com.example.potholeapplication.edit_user;
 
+import android.annotation.SuppressLint;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
@@ -24,11 +27,13 @@ import com.example.potholeapplication.class_pothole.manager.APIManager;
 import com.example.potholeapplication.class_pothole.manager.DialogManager;
 import com.example.potholeapplication.class_pothole.manager.LocalDataManager;
 import com.example.potholeapplication.class_pothole.manager.LocaleManager;
+import com.example.potholeapplication.class_pothole.manager.NetworkManager;
 import com.example.potholeapplication.class_pothole.other.User;
 import com.example.potholeapplication.class_pothole.request.EditInfoReq;
 import com.example.potholeapplication.class_pothole.response.APIResponse;
 import com.example.potholeapplication.class_pothole.request.EmailReq;
 import com.example.potholeapplication.databinding.ActivityEditUserBinding;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -43,6 +48,7 @@ public class EditUserActivity extends AppCompatActivity {
     ActivityEditUserBinding binding;
     final int PICK_IMAGE=1;
     Context context;
+    NetworkManager networkManager;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,18 +61,26 @@ public class EditUserActivity extends AppCompatActivity {
             return insets;
         });
         context=this;
+        networkManager=new NetworkManager(this);
         setClickEvent();
-        CallGetImageAPI();
+        //CallGetImageAPI();
         setImageInfo();
 
     }
 
+    @SuppressLint("UnspecifiedRegisterReceiverFlag")
     @Override
     protected void onResume() {
         super.onResume();
         //cai dat thong tin user
         setUserInfo();
     }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+    }
+
     @Override
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(LocaleManager.updateLanguage(newBase));
@@ -85,21 +99,34 @@ public class EditUserActivity extends AppCompatActivity {
         binding.btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                callSaveInfoAPI();
+                if(networkManager.isNetworkAvailable()){
+                    callSaveInfoAPI();
+                }else{
+                    Snackbar.make(binding.main,getString(R.string.str_network_unavailable),Snackbar.LENGTH_LONG).show();
+                }
             }
         });
         binding.etEmail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent=new Intent(EditUserActivity.this,EditEmailActivity.class);
-                startActivity(intent);
+                if(networkManager.isNetworkAvailable()){
+                    Intent intent=new Intent(EditUserActivity.this,EditEmailActivity.class);
+                    startActivity(intent);
+                }else{
+                    Snackbar.make(binding.main,getString(R.string.str_network_unavailable),Snackbar.LENGTH_LONG).show();
+                }
+
             }
         });
         binding.etPassword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent=new Intent(EditUserActivity.this,EditPasswordActivity.class);
-                startActivity(intent);
+                if(networkManager.isNetworkAvailable()){
+                    Intent intent=new Intent(EditUserActivity.this,EditPasswordActivity.class);
+                    startActivity(intent);
+                }else{
+                    Snackbar.make(binding.main,getString(R.string.str_network_unavailable),Snackbar.LENGTH_LONG).show();
+                }
             }
         });
         binding.btnChangePicture.setOnClickListener(new View.OnClickListener() {
@@ -231,6 +258,8 @@ public class EditUserActivity extends AppCompatActivity {
                     }
                 });
     }
+    //--------------------NETWORK---------------------
+
 
 
 }

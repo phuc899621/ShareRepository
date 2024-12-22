@@ -2,6 +2,7 @@ package com.example.potholeapplication.Retrofit2;
 
 import com.example.potholeapplication.class_pothole.other.Pothole;
 import com.example.potholeapplication.class_pothole.other.PotholeCountByMonth;
+import com.example.potholeapplication.class_pothole.other.Ranking;
 import com.example.potholeapplication.class_pothole.other.SeverityCount;
 import com.example.potholeapplication.class_pothole.other.Subinfo;
 import com.example.potholeapplication.class_pothole.other.User;
@@ -81,5 +82,7 @@ public interface APIInterface {
     Call<APIResponse<Subinfo>> callGetSubinfo(@Body EmailReq emailReq);
     @POST("api/pothole/save/distance")//luu quang duong di chuyen duoc khi bat pothole detection
     Call<APIResponse<Subinfo>> callSaveDistances(@Body SaveDistanceReq saveDistanceReq);
+    @GET("api/pothole/ranking")
+    Call<APIResponse<Ranking>> callGetRanking();
 
 }

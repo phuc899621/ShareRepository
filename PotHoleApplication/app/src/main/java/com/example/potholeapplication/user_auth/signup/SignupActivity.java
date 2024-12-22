@@ -17,6 +17,7 @@ import com.example.potholeapplication.Retrofit2.APICallBack;
 import com.example.potholeapplication.class_pothole.manager.APIManager;
 import com.example.potholeapplication.class_pothole.manager.DialogManager;
 import com.example.potholeapplication.class_pothole.manager.LocaleManager;
+import com.example.potholeapplication.class_pothole.manager.NetworkManager;
 import com.example.potholeapplication.class_pothole.other.User;
 import com.example.potholeapplication.class_pothole.request.RegisterReq;
 import com.example.potholeapplication.Retrofit2.RetrofitServices;
@@ -25,12 +26,14 @@ import com.example.potholeapplication.class_pothole.request.UserVerificationReq;
 import com.example.potholeapplication.databinding.ActivitySignupBinding;
 import com.example.potholeapplication.Retrofit2.APIInterface;
 import com.example.potholeapplication.user_auth.login.LoginScreenActivity;
+import com.google.android.material.snackbar.Snackbar;
 
 import retrofit2.Response;
 
 public class SignupActivity extends AppCompatActivity {
     ActivitySignupBinding binding;
     Context context;
+    NetworkManager networkManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +47,7 @@ public class SignupActivity extends AppCompatActivity {
             return insets;
         });
         context=this;
+        networkManager=new NetworkManager(this);
         setClickEvent();
 
     }
@@ -52,7 +56,6 @@ public class SignupActivity extends AppCompatActivity {
         super.attachBaseContext(LocaleManager.updateLanguage(newBase));
     }
     public void callUserVerificationAPI(){
-        APIInterface apiService = RetrofitServices.getApiService();
         //lay du lieu
         String username=binding.etUsername.getText().toString().trim();
         String password=binding.etPassword.getText().toString().trim();
@@ -106,7 +109,11 @@ public class SignupActivity extends AppCompatActivity {
         binding.btnSignin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                callUserVerificationAPI();
+                if(networkManager.isNetworkAvailable()){
+                    callUserVerificationAPI();
+                }else{
+                    Snackbar.make(binding.main,getString(R.string.str_network_unavailable),Snackbar.LENGTH_LONG).show();
+                }
             }
         });
         binding.tvHaveAccount.setOnClickListener(new View.OnClickListener() {

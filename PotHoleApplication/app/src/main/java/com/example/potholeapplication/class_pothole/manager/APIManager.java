@@ -5,6 +5,7 @@ import com.example.potholeapplication.Retrofit2.APIInterface;
 import com.example.potholeapplication.Retrofit2.RetrofitServices;
 import com.example.potholeapplication.class_pothole.other.Pothole;
 import com.example.potholeapplication.class_pothole.other.PotholeCountByMonth;
+import com.example.potholeapplication.class_pothole.other.Ranking;
 import com.example.potholeapplication.class_pothole.other.SeverityCount;
 import com.example.potholeapplication.class_pothole.other.Subinfo;
 import com.example.potholeapplication.class_pothole.other.User;
@@ -197,5 +198,12 @@ public class APIManager {
         Call<APIResponse<Subinfo>> call=apiInterface.callSaveDistances(saveDistanceReq);
         Type type = new TypeToken<APIResponse<Subinfo>>() {}.getType();
         setAPIReturn(type,call,subinfoAPICallBack);
+    }
+    //------------------API cho ranking
+    public static void callGetRanking(APICallBack<APIResponse<Ranking>> rankingAPICallBack){
+        getApiInterface();
+        Call<APIResponse<Ranking>> call = apiInterface.callGetRanking();
+        Type type = new TypeToken<APIResponse<Ranking>>() {}.getType();
+        setAPIReturn(type,call, rankingAPICallBack);
     }
 }

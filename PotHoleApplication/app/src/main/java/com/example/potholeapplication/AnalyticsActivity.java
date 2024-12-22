@@ -1,6 +1,10 @@
 package com.example.potholeapplication;
 
+import android.annotation.SuppressLint;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
@@ -12,6 +16,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.potholeapplication.Retrofit2.APICallBack;
 import com.example.potholeapplication.class_pothole.manager.APIManager;
 import com.example.potholeapplication.class_pothole.manager.DialogManager;
+import com.example.potholeapplication.class_pothole.manager.NetworkManager;
 import com.example.potholeapplication.class_pothole.other.PotholeCountByMonth;
 import com.example.potholeapplication.class_pothole.other.SeverityCount;
 import com.example.potholeapplication.class_pothole.request.DayReq;
@@ -44,6 +49,7 @@ public class AnalyticsActivity extends AppCompatActivity {
     float smallCount=0,mediumCount=0,largeCount=0,totalCount=0;
     // Variables for bar data sets
     Context context;
+    NetworkManager networkManager;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,15 +59,25 @@ public class AnalyticsActivity extends AppCompatActivity {
         binding.tvDayMonthBarChart.setText(Calendar.getInstance().get(Calendar.YEAR)+
                 "-"+(Calendar.getInstance().get(Calendar.YEAR)+1));
         context = this;
+        networkManager=new NetworkManager(this);
+
         setClickEvent();
 
     }
 
+    @SuppressLint("UnspecifiedRegisterReceiverFlag")
     @Override
     protected void onResume() {
         super.onResume();
+        registerReceiver(networkReceiver, new IntentFilter("com.example.NETWORK"));
         callAPIGetPotholeCountByMonth();
         callAPIGetPotholeBySeverity();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        unregisterReceiver(networkReceiver);
     }
 
     public void callAPIGetPotholeCountByMonth(){
@@ -294,6 +310,19 @@ public class AnalyticsActivity extends AppCompatActivity {
         },3000);
         binding.idPieChart.invalidate();
     }
+    //----------------NETWORK------------------
+    public BroadcastReceiver networkReceiver=new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if("com.example.NETWORK".equals(intent.getAction())){
+                boolean isConnected=intent.getBooleanExtra("connected",false);
+                if(isConnected){
+                    callAPIGetPotholeCountByMonth();
+                    callAPIGetPotholeBySeverity();
+                }
+            }
+        }
+    };
 
 
 

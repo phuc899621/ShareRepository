@@ -1,5 +1,6 @@
 package com.example.potholeapplication.user_auth.login;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -20,6 +21,7 @@ import com.example.potholeapplication.class_pothole.manager.APIManager;
 import com.example.potholeapplication.class_pothole.manager.DialogManager;
 import com.example.potholeapplication.class_pothole.manager.LocalDataManager;
 import com.example.potholeapplication.class_pothole.manager.LocaleManager;
+import com.example.potholeapplication.class_pothole.manager.NetworkManager;
 import com.example.potholeapplication.class_pothole.request.EmailReq;
 import com.example.potholeapplication.class_pothole.request.LoginReq;
 import com.example.potholeapplication.class_pothole.other.User;
@@ -38,6 +40,7 @@ import retrofit2.Response;
 public class LoginScreenActivity extends AppCompatActivity {
     ActivityLoginScreenBinding binding;
     Context context;
+    NetworkManager networkManager;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,15 +53,14 @@ public class LoginScreenActivity extends AppCompatActivity {
             return insets;
         });
         context=this;
+        networkManager=new NetworkManager(this);
         setClickEvent();
     }
-    @Override
-    protected void onResume() {
-        super.onResume();
 
-
-    }
     public void callLoginAPI(){
+        if(!networkManager.isNetworkAvailable()){
+            return;
+        }
         String username=binding.etUsername.getText().toString().trim();
         String password=binding.etPassword.getText().toString().trim();
         if(username.isEmpty() || password.isEmpty()){
@@ -194,4 +196,5 @@ public class LoginScreenActivity extends AppCompatActivity {
             }
         });
     }
+
 }

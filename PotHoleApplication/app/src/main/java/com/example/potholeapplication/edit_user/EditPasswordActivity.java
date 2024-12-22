@@ -1,6 +1,10 @@
 package com.example.potholeapplication.edit_user;
 
+import android.annotation.SuppressLint;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -41,6 +45,20 @@ public class EditPasswordActivity extends AppCompatActivity {
         context=this;
         setClickEvent();
     }
+
+    @SuppressLint("UnspecifiedRegisterReceiverFlag")
+    @Override
+    protected void onResume() {
+        super.onResume();
+        registerReceiver(networkReceiver, new IntentFilter("com.example.NETWORK"));
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        unregisterReceiver(networkReceiver);
+    }
+
     @Override
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(LocaleManager.updateLanguage(newBase));
@@ -94,4 +112,16 @@ public class EditPasswordActivity extends AppCompatActivity {
             }
         });
     }
+    //----------------NETWORK-------------------
+    public BroadcastReceiver networkReceiver=new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if("com.example.NETWORK".equals(intent.getAction())){
+                boolean isConnected=intent.getBooleanExtra("connected",false);
+                if(!isConnected){
+                    DialogManager.showDialogWarningThenFinish(context);
+                }
+            }
+        }
+    };
 }
