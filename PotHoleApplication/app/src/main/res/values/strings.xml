@@ -133,4 +133,5 @@
     <string name="str_network_unavailable">Network unavailable</string>
     <string name="str_network_available">Network available</string>
     <string name="str_rank">Rank</string>
+    <string name="str_manual_report">Manual Report</string>
 </resources>

@@ -144,6 +144,7 @@ public class SettingActivity extends AppCompatActivity {
 
             }
         });
+
         binding.tvLanguage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -162,6 +163,17 @@ public class SettingActivity extends AppCompatActivity {
                 }
             }
         });
+        binding.tvReport.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try {
+                    Intent intent = new Intent(SettingActivity.this, ManualReportActivity.class);
+                    startActivity(intent);
+                } catch (Exception e) {
+                    Log.e("SettingActivity", "Error starting ManualReportActivity", e);
+                }
+            }
+        });
     }
 
     @Override
@@ -169,5 +181,7 @@ public class SettingActivity extends AppCompatActivity {
         super.attachBaseContext(LocaleManager.updateLanguage(newBase));
     }
     //------------------Network------------------
+
+
 
 }

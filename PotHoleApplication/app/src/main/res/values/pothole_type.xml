@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Danh sách loại sự cố -->
+    <string-array name="pothole_types">
+        <item>Large</item>
+        <item>Medium</item>
+        <item>Small</item>
+        <item>Lỗi khác</item>
+    </string-array>
+</resources>

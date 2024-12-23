@@ -93,4 +93,8 @@
     <string name="str_cannot_save_pothole_due_to_poor_connection">Cannot save pothole due to poor connection</string>
     <string name="str_destination">Destination</string>
     <string name="str_your_destination">Your destination</string>
+    <string name="str_rank">Rank</string>
+    <string name="str_manual_report">Manual Report</string>
+    <string name="str_network_unavailable">Network unavailable</string>
+    <string name="str_network_available">Network available</string>
 </resources>
