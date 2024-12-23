@@ -203,7 +203,7 @@ public class HomeScreenActivity extends AppCompatActivity {
                 double longitude = intent.getDoubleExtra("longitude", 0);
                 String severity= intent.getStringExtra("severity");
                 Toast.makeText(context, severity, Toast.LENGTH_SHORT).show();
-                if(!DialogManager.isIsDialogShowing() && isResume) {
+                if(!DialogManager.isIsDialogSavingPothole() && isResume) {
                     DialogManager.showDialogSavePothole(context,
                             longitude, latitude, severity, new SavePotholeSatusCallBack() {
                                 @Override
@@ -214,7 +214,7 @@ public class HomeScreenActivity extends AppCompatActivity {
                 }
             }
             if ("com.example.WARNING".equals(intent.getAction())) {
-                if(!DialogManager.isIsDialogShowing() && isResume) {
+                if(!DialogManager.isIsDialogSavingPothole() && isResume) {
                     if(!isWarning){
                         DialogManager.showDialogPotholeWarning(context,stopShowDialog);
                         isWarning=true;
@@ -227,7 +227,7 @@ public class HomeScreenActivity extends AppCompatActivity {
         @Override
         public void onReceive(Context context, Intent intent) {
             if ("com.example.WARNING".equals(intent.getAction())) {
-                if(!DialogManager.isIsDialogShowing() && isResume) {
+                if(!DialogManager.isIsDialogSavingPothole() && isResume) {
                     if(!isWarning){
                         DialogManager.showDialogPotholeWarning(context,stopShowDialog);
                         isWarning=true;

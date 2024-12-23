@@ -120,6 +120,7 @@ public class SensorService extends Service {
         LocalDataManager.saveTotalDistances(this,0);
         callGetListPothole();
         setupNetworkReceiver();
+        setupBroadcastReceiver();
         /*networkManager.startMonitoring(new NetworkManager.NetworkStatusListener() {
             @Override
             public void onConnected() {
@@ -163,6 +164,11 @@ public class SensorService extends Service {
         IntentFilter filter = new IntentFilter("com.example.NETWORK");
         registerReceiver(networkReceiver, filter);
     }
+    @SuppressLint("UnspecifiedRegisterReceiverFlag")
+    private void setupBroadcastReceiver(){
+        IntentFilter filter = new IntentFilter("com.example.SAVE_POTHOLE");
+        registerReceiver(potholeSaveReceiver, filter);
+    }
     private final BroadcastReceiver networkReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -170,6 +176,14 @@ public class SensorService extends Service {
                 if(intent.getBooleanExtra("connected",false)) {
                     saveTotalDistanceToAPI(LocalDataManager.getTotalDistances(context));
                 }
+            }
+        }
+    };
+    private final BroadcastReceiver potholeSaveReceiver=new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if("com.example.SAVE_POTHOLE".equals(intent.getAction())){
+                callGetListPothole();
             }
         }
     };
@@ -248,14 +262,14 @@ public class SensorService extends Service {
             public void run() {
                 // Kiểm tra dữ liệu cảm biến và GPS
                 checkForPotholes();
-                handler.postDelayed(this, 800);  // Quét lại sau mỗi giây
+                handler.postDelayed(this, 150);  // Quét lại sau mỗi giây
             }
         };
         handler.post(runnable);
     }
     private void checkForPotholes() {
         double lastLinear = accelerometerListener.lastLinear;
-        if (lastLinear > 13) {
+        if (lastLinear > 10) {
             double latitude = gpsListener.latitude;
             double longitude = gpsListener.longitude;
             Intent intent = new Intent("com.example.SHOW_DIALOG");
@@ -268,8 +282,8 @@ public class SensorService extends Service {
         }
     }
     private String getPotholeSeverity(double lastLinear){
-        if(lastLinear>30) return "large";
-        if(lastLinear>20) return "medium";
+        if(lastLinear>25) return "large";
+        if(lastLinear>15) return "medium";
         return "small";
     }
     private void startPotholeWarning() {
@@ -284,17 +298,21 @@ public class SensorService extends Service {
         handler.post(runnable);
     }
     public void checkForNearByPothole(){
-        for(int i=0;i<potholes.size();i++){
-            Location potholeLocation = new Location("gps");
-            potholeLocation.setLatitude(potholes.get(i).getLocationClass().getCoordinates().get(1));
-            potholeLocation.setLongitude(potholes.get(i).getLocationClass().getCoordinates().get(0));
-            if(gpsListener.lastLocation.distanceTo(potholeLocation)<20) {
-                Intent intent = new Intent("com.example.WARNING");
-                sendBroadcast(intent);
-                vibratePhone();
-                return;
+        if(gpsListener.lastLocation!=null){
+
+            for(int i=0;i<potholes.size();i++){
+                Location potholeLocation = new Location("gps");
+                potholeLocation.setLatitude(potholes.get(i).getLocationClass().getCoordinates().get(1));
+                potholeLocation.setLongitude(potholes.get(i).getLocationClass().getCoordinates().get(0));
+                if(gpsListener.lastLocation.distanceTo(potholeLocation)<40) {//null
+                    Intent intent = new Intent("com.example.WARNING");
+                    sendBroadcast(intent);
+                    vibratePhone();
+                    return;
+                }
             }
         }
+
 
     }
     public void startHandlerSaveDistance(){

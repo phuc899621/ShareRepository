@@ -31,7 +31,8 @@ import java.util.List;
 import retrofit2.Response;
 
 public class DialogManager {
-    private static boolean isDialogShowing=false;
+    private static boolean isDialogSavingPothole =false;
+    private static boolean isDialogWarningPothole =false;
 
     //hàm tao dialog
     private static Dialog createDialog(Context context, int layoutID,boolean isCancelable){
@@ -193,16 +194,16 @@ public class DialogManager {
         tvSmallPercentage.setText(String.format("%.2f%%", small));
 
         dialog.show();
-        setIsDialogShowing(true);
+        setIsDialogSavingPothole(true);
 
     }
 
-    public static boolean isIsDialogShowing() {
-        return isDialogShowing;
+    public static boolean isIsDialogSavingPothole() {
+        return isDialogSavingPothole;
     }
 
-    public static void setIsDialogShowing(boolean isDialogShowing) {
-        DialogManager.isDialogShowing = isDialogShowing;
+    public static void setIsDialogSavingPothole(boolean isDialogSavingPothole) {
+        DialogManager.isDialogSavingPothole = isDialogSavingPothole;
     }
     public static void showDialogSavePothole(Context context,double longtitude,
                                              double latitude,String severity,SavePotholeSatusCallBack callBack){
@@ -225,7 +226,7 @@ public class DialogManager {
 
         dialog.show();
 
-        setIsDialogShowing(true);
+        setIsDialogSavingPothole(true);
         btnYes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -234,7 +235,7 @@ public class DialogManager {
                             context.getString(R.string.str_network_unavailable),
                             Snackbar.LENGTH_LONG).show();
                     dialog.dismiss();
-                    setIsDialogShowing(false);
+                    setIsDialogSavingPothole(false);
                     return ;
                 }
                 dialog.dismiss();
@@ -250,6 +251,8 @@ public class DialogManager {
                             @Override
                             public void onSuccess(Response<APIResponse<User>> response) {
                                 callBack.onComplete(true);
+                                Intent intent=new Intent("com.example.SAVE_POTHOLE");
+                                context.sendBroadcast(intent);
                             }
 
                             @Override
@@ -266,7 +269,7 @@ public class DialogManager {
 
                             }
                         });
-                setIsDialogShowing(false);
+                setIsDialogSavingPothole(false);
 
             }
         });
@@ -275,7 +278,7 @@ public class DialogManager {
             public void onClick(View v) {
                 dialog.dismiss();
                 callBack.onComplete(false);
-                setIsDialogShowing(false);
+                setIsDialogSavingPothole(false);
             }
         });
     }
@@ -298,12 +301,20 @@ public class DialogManager {
             @Override
             public void onClick(View v) {
                 stopShowDialog.onStopShowDialog(true);
-                isDialogShowing=false;
+                isDialogWarningPothole =false;
                 dialog.dismiss();
             }
         });
-        isDialogShowing=true;
+        isDialogWarningPothole =true;
         dialog.show();
 
+    }
+
+    public static boolean isIsDialogWarningPothole() {
+        return isDialogWarningPothole;
+    }
+
+    public static void setIsDialogWarningPothole(boolean isDialogWarningPothole) {
+        DialogManager.isDialogWarningPothole = isDialogWarningPothole;
     }
 }

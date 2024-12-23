@@ -308,6 +308,11 @@ public class MapViewActivity extends AppCompatActivity {
         });
         context=this;
         networkManager=new NetworkManager(this);
+        AnnotationPlugin annotationPlugin = getAnnotations(binding.mapView);
+        potholeAnnotationManager = (PointAnnotationManager) annotationPlugin.createAnnotationManager(
+                AnnotationType.PointAnnotation, null
+        );
+        potholeAnnotationManager.deleteAll();
         init();
         if (checkLocationPermissions()) {
             setupLocationTracking();
@@ -877,6 +882,7 @@ public class MapViewActivity extends AppCompatActivity {
                 potholes=response.body().getData();
                 LocalDataManager.savePotholeList(context,potholes);
                 updatePotholeMarker();
+                Log.d("ERRORRRRRRRRR",potholes.get(potholes.size()-1).getSeverity()+"");
             }
 
             @Override
@@ -895,10 +901,7 @@ public class MapViewActivity extends AppCompatActivity {
     }
     PointAnnotationManager potholeAnnotationManager;
     public void updatePotholeMarker(){
-        AnnotationPlugin annotationPlugin = getAnnotations(binding.mapView);
-        potholeAnnotationManager = (PointAnnotationManager) annotationPlugin.createAnnotationManager(
-                AnnotationType.PointAnnotation, null
-        );
+        potholes= LocalDataManager.getPotholeList(context);
         potholeAnnotationManager.deleteAll();
         Log.d("LOG",iconPotholeSmall+"");
         for(int i=0;i<potholes.size();i++){
@@ -944,7 +947,7 @@ public class MapViewActivity extends AppCompatActivity {
                 double longitude = intent.getDoubleExtra("longitude", 0);
                 String severity= intent.getStringExtra("severity");
                 Toast.makeText(context, severity, Toast.LENGTH_SHORT).show();
-                if(!DialogManager.isIsDialogShowing()) {
+                if(!DialogManager.isIsDialogSavingPothole()) {
                     DialogManager.showDialogSavePothole(context,
                             longitude, latitude, severity, new SavePotholeSatusCallBack() {
                                 @Override
@@ -976,7 +979,7 @@ public class MapViewActivity extends AppCompatActivity {
         @Override
         public void onReceive(Context context, Intent intent) {
             if ("com.example.WARNING".equals(intent.getAction())) {
-                if(!DialogManager.isIsDialogShowing()) {
+                if(!DialogManager.isIsDialogWarningPothole()) {
                     if(!isWarning){
                         DialogManager.showDialogPotholeWarning(context,stopShowDialog);
                         isWarning=true;
