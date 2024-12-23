@@ -14,7 +14,7 @@ public class AccelerometerListener implements SensorEventListener {
     public double lastY=0;
     public double lastZ=0;
     public double lastLinear = 0;
-    BlockingQueue<Double> queue = new LinkedBlockingQueue<>();
+   /* BlockingQueue<Double> queue = new LinkedBlockingQueue<>();
     public double[] getAvgStdMax(){
         List<Double> asList;
         synchronized (queue){
@@ -68,14 +68,14 @@ public class AccelerometerListener implements SensorEventListener {
     }
     float getStDevAccel(){
         return 0;
-    }
+    }*/
     @Override
     public void onSensorChanged(SensorEvent sensorEvent) {
         lastX=sensorEvent.values[0];
         lastY=sensorEvent.values[1];
         lastZ=sensorEvent.values[2];
         lastLinear = Math.sqrt(lastX*lastX+lastY*lastY+lastZ*lastZ);
-        queue.add(lastLinear);
+        //queue.add(lastLinear);
     }
 
 
