@@ -2,12 +2,12 @@
 <project version="4">
   <component name="deploymentTargetSelector">
     <selectionStates>
-      <SelectionState runConfigName="PotHoleApplication.app">
+      <SelectionState runConfigName="app">
         <option name="selectionMode" value="DROPDOWN" />
-        <DropdownSelection timestamp="2024-12-23T10:00:57.023658400Z">
+        <DropdownSelection timestamp="2024-12-23T12:52:22.188630600Z">
           <Target type="DEFAULT_BOOT">
             <handle>
-              <DeviceId pluginId="PhysicalDevice" identifier="serial=R58NC2ABX0P" />
+              <DeviceId pluginId="PhysicalDevice" identifier="serial=45GUM7NZKJDY7HT4" />
             </handle>
           </Target>
         </DropdownSelection>
