@@ -329,8 +329,8 @@
                         <option name="values">
                           <map>
                             <entry key="assetSourceType" value="FILE" />
-                            <entry key="outputName" value="ic_flag" />
-                            <entry key="sourceFile" value="C:\Users\20521\Downloads\ic_flag.svg" />
+                            <entry key="outputName" value="ic_information" />
+                            <entry key="sourceFile" value="C:\Users\20521\Downloads\ic_information.svg" />
                           </map>
                         </option>
                       </PersistentState>
