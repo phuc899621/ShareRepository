@@ -3,17 +3,22 @@
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".ManualReportActivity"
+    android:background="@drawable/background"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     >
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:layout_marginStart="15dp"
+        android:layout_marginRight="15dp">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/titleLayout"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:layout_marginTop="8dp">
 
             <ImageButton
                 android:id="@+id/btnBack"
@@ -26,9 +31,9 @@
 
             <TextView
                 android:id="@+id/tvManualReport"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
+                android:gravity="center"
                 android:text="@string/str_manual_report"
                 android:textColor="@color/dark_purple"
                 android:textSize="24sp"
@@ -38,7 +43,25 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:layout_marginRight="15dp">
+
+            <TextView
+
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:textColor="@color/dark_purple"
+                android:text="Report Description"
+                android:textStyle="bold"
+                android:textSize="22sp" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/dark_purple"
+                android:text="Description of the Pothole"
+                android:textSize="16sp"
+                android:layout_marginTop="8dp" />
 
             <!-- Mô tả sự cố -->
             <EditText
@@ -46,28 +69,44 @@
                 android:layout_width="match_parent"
                 android:layout_height="150dp"
                 android:hint="Mô tả sự cố"
+                android:layout_marginTop="5dp"
                 android:gravity="top"
                 android:inputType="textMultiLine"
                 android:background="@android:drawable/editbox_background" />
 
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:textColor="@color/dark_purple"
+                android:text="Add Photo"
+                android:textStyle="bold"
+                android:textSize="22sp" />
             <!-- Đính kèm hình ảnh -->
             <Button
-                android:id="@+id/btnAddPhoto"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Thêm ảnh"
-                android:drawableStart="@drawable/ic_add_photo"
-                android:layout_marginTop="16dp" />
+               android:id="@+id/btnAddPhoto"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:text="Add image"
+                android:layout_gravity="center"
+               android:drawableLeft="@drawable/ic_add_photo"
+               android:layout_marginTop="8dp" />
+
+
 
             <!-- Vị trí -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Vị trí:"
+                android:textColor="@color/dark_purple"
+                android:text="Location Section"
+                android:textStyle="bold"
+                android:textSize="22sp"
                 android:layout_marginTop="16dp" />
             <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
+                android:layout_marginTop="8dp"
                 android:background="@android:color/darker_gray">
                 <!-- Bản đồ hiển thị tại đây -->
             </FrameLayout>
@@ -75,14 +114,60 @@
                 android:id="@+id/btnGetLocation"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Lấy vị trí của tôi"
+                android:text="Get my location"
+                android:layout_gravity="center"
+                android:drawableLeft="@drawable/ic_location"
                 android:layout_marginTop="8dp" />
 
-            <!-- Loại sự cố -->
-            <Spinner
-                android:id="@+id/spinnerPotholeType"
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/dark_purple"
+                android:text="Pothole Size"
+                android:textStyle="bold"
+                android:textSize="22sp"
+                android:layout_marginTop="16dp" />
+
+            <RelativeLayout
+                android:layout_marginTop="8dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginRight="3dp"
+                android:layout_weight=".28"
+                android:background="@drawable/spinner_background"
+                android:orientation="horizontal">
+
+                <Spinner
+                    android:id="@+id/spinnerPotholeType"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_gravity="center"
+                    android:textSize="18sp"
+                    android:textColor="@color/dark_purple"
+                    android:layout_marginTop="8dp"
+                    android:background="@android:color/transparent"
+                    android:gravity="center"
+                    android:layout_marginLeft="5dp"
+                    android:spinnerMode="dropdown" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_drop" />
+
+            </RelativeLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/dark_purple"
+                android:text="Contact Information"
+                android:textStyle="bold"
+                android:textSize="22sp"
                 android:layout_marginTop="16dp" />
 
             <!-- Thông tin liên hệ -->
@@ -91,7 +176,7 @@
                 android:layout_height="wrap_content"
                 android:hint="Số điện thoại (tùy chọn)"
                 android:inputType="phone"
-                android:layout_marginTop="16dp" />
+                android:layout_marginTop="8dp" />
 
             <!-- Nút gửi -->
             <Button
@@ -104,5 +189,5 @@
                 android:textColor="@android:color/white" />
         </LinearLayout>
     </LinearLayout>
-    
+
 </ScrollView>

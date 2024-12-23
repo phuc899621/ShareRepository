@@ -261,6 +261,24 @@
                 app:drawableTint="@color/dark_purple"
                 app:layout_constraintTop_toBottomOf="@id/tvRealTime"
                 app:layout_constraintStart_toStartOf="parent"/>
+
+            <TextView
+                android:id="@+id/tvPolicy"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="30dp"
+                android:drawablePadding="10dp"
+                android:gravity="center|start"
+                android:text="Policy and Privacy"
+                android:textColor="@color/dark_purple"
+                android:textSize="18sp"
+                app:drawableStartCompat="@drawable/ic_flag"
+                app:drawableTint="@color/dark_purple"
+                app:layout_constraintTop_toBottomOf="@id/tvReport"
+                app:layout_constraintStart_toStartOf="parent"/>
+
             <TextView
                 android:id="@+id/tvLanguage"
                 android:layout_width="wrap_content"
@@ -277,6 +295,7 @@
                 app:drawableTint="@color/dark_purple"
                 app:layout_constraintTop_toBottomOf="@id/tvEditUser"
                 app:layout_constraintStart_toStartOf="parent"/>
+
 
 
             <TextView
@@ -311,7 +330,7 @@
                 android:textSize="18sp"
                 app:drawableStartCompat="@drawable/ic_flag"
                 app:drawableTint="@color/dark_purple"
-                app:layout_constraintTop_toBottomOf="@id/tvReport"
+                app:layout_constraintTop_toBottomOf="@id/tvPolicy"
                 app:layout_constraintStart_toStartOf="parent"/>
 
             <TextView

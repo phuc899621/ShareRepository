@@ -98,4 +98,5 @@
     <string name="str_manual_report">Báo cáo thủ công </string>
     <string name="str_network_unavailable">Mạng không khả dụng</string>
     <string name="str_network_available">Mạng khả dụng</string>
+    <string name="str_choose_type">Chọn loại ổ gà</string>
 </resources>
