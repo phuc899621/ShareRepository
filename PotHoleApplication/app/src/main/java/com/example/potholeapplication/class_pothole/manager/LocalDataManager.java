@@ -268,6 +268,7 @@ public class LocalDataManager {
         // Lấy SharedPreferences
         SharedPreferences sharedPreferences = context.getSharedPreferences(potholePef, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.remove("pothole");
         // Chuyển JSONArray thành String
         editor.putString("pothole", json);
         editor.apply(); // Lưu vào SharedPreferences
@@ -278,6 +279,7 @@ public class LocalDataManager {
             return new ArrayList<>();
         }
         String json=sharedPreferences.getString("pothole","");
+        Log.d("POTHOLELIST",json);
         Gson gson = new Gson();
         Type type = new TypeToken<List<Pothole>>() {}.getType();
         return gson.fromJson(json, type);
