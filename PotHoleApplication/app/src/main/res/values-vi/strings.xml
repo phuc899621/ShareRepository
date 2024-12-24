@@ -99,5 +99,24 @@
     <string name="str_network_unavailable">Mạng không khả dụng</string>
     <string name="str_network_available">Mạng khả dụng</string>
     <string name="str_choose_type">Chọn loại ổ gà</string>
-    <string name="str_report_summitted_successfully">Report summitted successfully</string>
+    <string name="str_policy_description_info">Thu thập dữ liệu gia tốc kế và GPS để phát hiện ổ gà và cung cấp bản đồ. Không thu thập thông tin cá nhân nếu không có sự đồng ý của người dùng.</string>
+    <string name="str_policy_description_info">Thu thập dữ liệu gia tốc kế và GPS để phát hiện ổ gà và cung cấp bản đồ. Không thu thập thông tin cá nhân nếu không có sự đồng ý của người dùng.</string>
+    <string name="str_pothole_type">Loại ổ gà</string>
+    <string name="str_pothole_type">"Loại ổ gà "</string>
+    <string name="str_pothole_type">loại</string>
+    <string name="str_pothole_type">" Loại ổ gà"</string>
+    <string name="str_pothole_size">Kích thước ổ gà</string>
+    <string name="str_pothole_severity">Phân loại ổ gà</string>
+    <string name="str_pothole_description">Mô tả</string>
+    <string name="str_pothole_image">Hình ảnh ổ gà</string>
+    <string name="str_pothole_location">Vị trí ổ gà</string>
+    <string name="str_policy_description_usage">Dữ liệu GPS được sử dụng để đánh dấu và hiển thị ổ gà. Không chia sẻ dữ liệu với bên thứ ba trái phép.</string>
+    <string name="str_policy_description_security">Sử dụng công nghệ hiện đại để bảo vệ dữ liệu người dùng. Truy cập thông tin được xác thực và giới hạn quyền.</string>
+    <string name="str_support_description_user_support">Hỗ trợ qua email khi gặp sự cố trong quá trình sử dụng ứng dụng.\\nEmail hỗ trợ: 22520901@gm.uit.edu.vn</string>
+    <string name="str_support_description_publisher_infor">Phát triển bởi nhóm sinh viên khoa Mạng máy tính, UIT, ĐHQG TP.HCM. Liên hệ qua email hoặc số điện thoại: Email: 22520000@gm.uit.edu.vn | SĐT: 0111111111.</string>
+    <string name="str_user_support">Hỗ Trợ Người Dùng</string>
+    <string name="str_publisher_information">Thông Tin Nhà Phát Hành</string>
+    <string name="str_help_and_support">Trợ Giúp Và Hỗ Trợ</string>
+    <string name="str_info_collect">Thu Thập Thông Tin</string>
+    <string name="str_info_usage">Sử Dụng Thông Tin</string>
 </resources>

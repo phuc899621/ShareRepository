@@ -135,5 +135,24 @@
     <string name="str_rank">Rank</string>
     <string name="str_manual_report">Manual Report</string>
     <string name="str_choose_type">Choose type of pothole</string>
-    <string name="str_report_summitted_successfully">Report summitted successfully</string>
+    <string name="str_pothole_type">Pothole type</string>
+    <string name="str_pothole_size">Pothole size</string>
+    <string name="str_pothole_severity">Pothole severity</string>
+    <string name="str_pothole_description">Pothole description</string>
+    <string name="str_pothole_image">Pothole image</string>
+    <string name="str_pothole_location">Pothole location</string>
+    <string name="str_policy_description_info">Collects accelerometer and GPS data to detect potholes and provide mapping. Does not collect personal information without user consent.</string>
+    <string name="str_policy_description_usage">GPS data is used to mark and display potholes.
+No data is shared with unauthorized third parties.</string>
+    <string name="str_policy_description_security">Implements advanced technologies to secure user data. Access to information is authenticated and restricted.</string>
+
+    <string name="str_support_description_user_support">Provides assistance via email for any app-related issues.\nSupport Email: 22520000@gm.uit.edu.vn</string>
+    <string name="str_support_description_publisher_infor">Developed by Computer Networking students, UIT, VNU-HCM. Contact via email or phone: Email: 22520000@gm.uit.edu.vn | Phone: 0111111111.</string>
+    <string name="ic_policy_description" translatable="false">Privicy Policy Description</string>
+    <string name="str_user_support">User Support</string>
+    <string name="str_publisher_information">Publisher Information</string>
+    <string name="str_help_and_support">Help and Support</string>
+    <string name="str_thanks" translatable="false">Make by team 15 © NT118.P11\nThanks for your support!\nVersion 1.0.0</string>
+    <string name="str_info_collect">Information Collection</string>
+    <string name="str_info_usage">Information Usage</string>
 </resources>
