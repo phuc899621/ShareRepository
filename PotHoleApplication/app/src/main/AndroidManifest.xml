@@ -26,6 +26,9 @@
         android:theme="@style/Theme.PotHoleApplication"
         tools:targetApi="31">
         <activity
+            android:name=".CustomDialogUsActivity"
+            android:exported="false" />
+        <activity
             android:name=".CustomDialogSupportActivity"
             android:exported="false" />
         <activity
