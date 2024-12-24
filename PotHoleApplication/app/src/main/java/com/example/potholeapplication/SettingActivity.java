@@ -180,6 +180,18 @@ public class SettingActivity extends AppCompatActivity {
                 DialogManager.showDialogPolicy(context);
             }
         });
+        binding.tvCustomerSupport.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DialogManager.showDialogSupport(context);
+            }
+        });
+        binding.tvDeveloperInfo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DialogManager.showDialogUs(context);
+            }
+        });
 //
     }
 

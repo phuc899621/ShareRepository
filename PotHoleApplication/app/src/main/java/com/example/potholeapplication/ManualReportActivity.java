@@ -13,6 +13,7 @@ import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -54,7 +55,8 @@ public class ManualReportActivity extends AppCompatActivity {
 
     private EditText descriptionEditText;
     private Spinner issueTypeSpinner;
-    private Button addPhotoButton, getLocationButton, submitButton,backButton;
+    private Button addPhotoButton, getLocationButton, submitButton;
+    ImageButton backButton;
     Bitmap imageBitmap;
     Context context;
     private String photoPath;

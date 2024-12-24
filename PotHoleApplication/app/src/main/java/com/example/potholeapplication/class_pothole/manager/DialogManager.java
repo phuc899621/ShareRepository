@@ -210,7 +210,30 @@ public class DialogManager {
                 dialog.dismiss();
             }
         });
+        dialog.show();
+    }
+    public static void showDialogUs(Context context) {
+        Dialog dialog = createDialog(context, R.layout.custom_dialog_us, true);
 
+        Button btnClose = dialog.findViewById(R.id.btnClose);
+        btnClose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+        dialog.show();
+    }
+    public static void showDialogSupport(Context context) {
+        Dialog dialog = createDialog(context, R.layout.custom_dialog_support, true);
+
+        Button btnClose = dialog.findViewById(R.id.btnClose);
+        btnClose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
         dialog.show();
     }
 
