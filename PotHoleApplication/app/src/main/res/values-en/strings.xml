@@ -115,6 +115,7 @@
     <string name="str_help_and_support">Help and Support</string>
     <string name="str_info_collect">Information Collection</string>
     <string name="str_info_usage">Information Usage</string>
+    <string name="str_report_summitted_successfully">Report summitted successfully</string>
 
 
 </resources>

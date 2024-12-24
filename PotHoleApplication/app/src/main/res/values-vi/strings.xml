@@ -119,4 +119,5 @@
     <string name="str_help_and_support">Trợ Giúp Và Hỗ Trợ</string>
     <string name="str_info_collect">Thu Thập Thông Tin</string>
     <string name="str_info_usage">Sử Dụng Thông Tin</string>
+    <string name="str_report_summitted_successfully">Gửi báo cáo thành công</string>
 </resources>
