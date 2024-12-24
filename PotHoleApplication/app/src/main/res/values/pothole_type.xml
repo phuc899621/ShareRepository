@@ -2,8 +2,8 @@
 <resources>
     <!-- Danh sách loại sự cố -->
     <string-array name="pothole_types">
-        <item>Large</item>
-        <item>Medium</item>
-        <item>Small</item>
+        <item>large</item>
+        <item>medium</item>
+        <item>small</item>
     </string-array>
 </resources>

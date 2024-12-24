@@ -1,11 +1,15 @@
 package com.example.potholeapplication;
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.view.View;
+import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -16,19 +20,43 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
+import com.example.potholeapplication.Retrofit2.APICallBack;
+import com.example.potholeapplication.class_pothole.manager.APIManager;
+import com.example.potholeapplication.class_pothole.manager.DialogManager;
+import com.example.potholeapplication.class_pothole.manager.LocalDataManager;
+import com.example.potholeapplication.class_pothole.manager.LocaleManager;
+import com.example.potholeapplication.class_pothole.other.LocationClass;
+import com.example.potholeapplication.class_pothole.other.Pothole;
+import com.example.potholeapplication.class_pothole.request.ReportReq;
+import com.example.potholeapplication.class_pothole.response.APIResponse;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.color.utilities.Contrast;
+import com.google.gson.Gson;
+
+import java.io.ByteArrayOutputStream;
+import java.util.ArrayList;
+import java.util.List;
+
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
+import retrofit2.Response;
 
 public class ManualReportActivity extends AppCompatActivity {
 
     private static final int REQUEST_IMAGE_CAPTURE = 1;
     private static final int LOCATION_PERMISSION_REQUEST = 2;
 
+    private boolean isImageReady=false;
+
     private EditText descriptionEditText;
     private Spinner issueTypeSpinner;
     private Button addPhotoButton, getLocationButton, submitButton;
+    Bitmap imageBitmap;
+    Context context;
     private String photoPath;
     private Location currentLocation;
     private FusedLocationProviderClient locationProviderClient;
@@ -44,7 +72,7 @@ public class ManualReportActivity extends AppCompatActivity {
         addPhotoButton = findViewById(R.id.btnAddPhoto);
         getLocationButton = findViewById(R.id.btnGetLocation);
         submitButton = findViewById(R.id.btnSubmit);
-
+        context=this;
         // Set up spinner
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
                 this, R.array.pothole_types, android.R.layout.simple_spinner_item);
@@ -61,7 +89,7 @@ public class ManualReportActivity extends AppCompatActivity {
         getLocationButton.setOnClickListener(v -> fetchCurrentLocation());
 
         // Submit button listener
-        submitButton.setOnClickListener(v -> submitReport());
+        submitButton.setOnClickListener(v -> callAPISaveReport());
     }
 
     private void openCamera() {
@@ -91,10 +119,22 @@ public class ManualReportActivity extends AppCompatActivity {
             }
         });
     }
+    private byte[] getImageBytesFromImageView() {
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        imageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
+        return byteArrayOutputStream.toByteArray();
+    }
 
-    private void submitReport() {
+    private void callAPISaveReport() {
         String description = descriptionEditText.getText().toString();
-        String issueType = issueTypeSpinner.getSelectedItem().toString();
+        String severity = issueTypeSpinner.getSelectedItem().toString();
+        byte[] imageBytes = getImageBytesFromImageView();
+        RequestBody requestBody = RequestBody.create(MediaType.parse("image/jpeg"), imageBytes);
+        MultipartBody.Part imagePart = MultipartBody.Part.createFormData("image", "image.jpg", requestBody);
+        if(imageBitmap==null||!isImageReady){
+            Toast.makeText(this, "Please provide image", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
         if (description.isEmpty()) {
             Toast.makeText(this, "Please provide a description", Toast.LENGTH_SHORT).show();
@@ -105,12 +145,34 @@ public class ManualReportActivity extends AppCompatActivity {
             Toast.makeText(this, "Please fetch your location", Toast.LENGTH_SHORT).show();
             return;
         }
+        List<Double> coordinates = new ArrayList<>();
+        coordinates.add(currentLocation.getLongitude());
+        coordinates.add(currentLocation.getLatitude());
+        ReportReq reportReq=new ReportReq(LocalDataManager.getEmail(this)
+                , description, severity, new LocationClass(coordinates));
+        Gson gson = new Gson();
+        String jsonRequest = gson.toJson(reportReq);
 
-        // Submit data (this is just a placeholder, replace with your backend submission logic)
-        Toast.makeText(this, "Report submitted:\n" +
-                "Description: " + description + "\n" +
-                "Issue Type: " + issueType + "\n" +
-                "Location: " + currentLocation.getLatitude() + ", " + currentLocation.getLongitude(), Toast.LENGTH_LONG).show();
+        RequestBody reqBody = RequestBody.create(jsonRequest, MediaType.parse("application/json"));
+        APIManager.callSaveReport(reqBody,
+                imagePart, new APICallBack<APIResponse<Pothole>>() {
+                    @Override
+                    public void onSuccess(Response<APIResponse<Pothole>> response) {
+                        DialogManager.showDialogOkeThenFinish(context,getString(R.string.str_report_summitted_successfully));
+                    }
+
+                    @Override
+                    public void onError(APIResponse<Pothole> errorResponse) {
+                        DialogManager.showDialogErrorString(context, getString(R.string.str_server_error));
+                        Log.d("ErrorAPIReport",errorResponse.getMessage());
+                    }
+
+                    @Override
+                    public void onFailure(Throwable t) {
+                        Toast.makeText(ManualReportActivity.this, "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
+                // Submit data (this is just a placeholder, replace with your backend submission logic)
     }
 
     @Override
@@ -118,7 +180,8 @@ public class ManualReportActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
             // You can handle saving or displaying the photo here
-            Toast.makeText(this, "Photo added successfully", Toast.LENGTH_SHORT).show();
+            imageBitmap = (Bitmap) data.getExtras().get("data");
+            isImageReady=true;
         }
     }
 
@@ -132,5 +195,9 @@ public class ManualReportActivity extends AppCompatActivity {
                 Toast.makeText(this, "Location permission denied", Toast.LENGTH_SHORT).show();
             }
         }
+    }
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(LocaleManager.updateLanguage(newBase));
     }
 }

@@ -135,4 +135,5 @@
     <string name="str_rank">Rank</string>
     <string name="str_manual_report">Manual Report</string>
     <string name="str_choose_type">Choose type of pothole</string>
+    <string name="str_report_summitted_successfully">Report summitted successfully</string>
 </resources>

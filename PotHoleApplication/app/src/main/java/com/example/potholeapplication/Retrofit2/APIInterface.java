@@ -13,6 +13,7 @@ import com.example.potholeapplication.class_pothole.request.EditPasswordReq;
 import com.example.potholeapplication.class_pothole.request.EmailReq;
 import com.example.potholeapplication.class_pothole.request.LoginReq;
 import com.example.potholeapplication.class_pothole.request.RegisterReq;
+import com.example.potholeapplication.class_pothole.request.ReportReq;
 import com.example.potholeapplication.class_pothole.request.SaveDistanceReq;
 import com.example.potholeapplication.class_pothole.response.APIResponse;
 import com.example.potholeapplication.class_pothole.request.ResetPasswordReq;
@@ -84,5 +85,9 @@ public interface APIInterface {
     Call<APIResponse<Subinfo>> callSaveDistances(@Body SaveDistanceReq saveDistanceReq);
     @GET("api/pothole/ranking")
     Call<APIResponse<Ranking>> callGetRanking();
-
+    //-----------------API cho report---------------------
+    @Multipart
+    @POST("api/report/add")
+    Call<APIResponse<Pothole>> callSaveReport(
+            @Part("request") RequestBody email, @Part MultipartBody.Part image);
 }

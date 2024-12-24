@@ -16,6 +16,7 @@ import com.example.potholeapplication.class_pothole.request.EditPasswordReq;
 import com.example.potholeapplication.class_pothole.request.EmailReq;
 import com.example.potholeapplication.class_pothole.request.LoginReq;
 import com.example.potholeapplication.class_pothole.request.RegisterReq;
+import com.example.potholeapplication.class_pothole.request.ReportReq;
 import com.example.potholeapplication.class_pothole.request.ResetPasswordReq;
 import com.example.potholeapplication.class_pothole.request.SaveDistanceReq;
 import com.example.potholeapplication.class_pothole.request.UserVerificationReq;
@@ -205,5 +206,13 @@ public class APIManager {
         Call<APIResponse<Ranking>> call = apiInterface.callGetRanking();
         Type type = new TypeToken<APIResponse<Ranking>>() {}.getType();
         setAPIReturn(type,call, rankingAPICallBack);
+    }
+    public static void callSaveReport(
+            RequestBody reportReq, MultipartBody.Part image,
+            APICallBack<APIResponse<Pothole>> potholeAPICallBack){
+        getApiInterface();
+        Call<APIResponse<Pothole>> call = apiInterface.callSaveReport(reportReq,image);
+        Type type = new TypeToken<APIResponse<Pothole>>() {}.getType();
+        setAPIReturn(type,call,potholeAPICallBack);
     }
 }

@@ -297,6 +297,7 @@ public class DialogManager {
     public static void showDialogPotholeWarning(Context context, StopShowDialog stopShowDialog) {
         Dialog dialog = createDialog(context, R.layout.custom_dialog_pothole_warning, false);
         Button button=dialog.findViewById(R.id.btnConfirm);
+        isDialogWarningPothole =true;
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -305,7 +306,6 @@ public class DialogManager {
                 dialog.dismiss();
             }
         });
-        isDialogWarningPothole =true;
         dialog.show();
 
     }
