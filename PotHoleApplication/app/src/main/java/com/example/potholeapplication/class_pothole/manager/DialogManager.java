@@ -38,7 +38,7 @@ public class DialogManager {
     private static Dialog createDialog(Context context, int layoutID,boolean isCancelable){
         Dialog dialog = new Dialog(context);
         dialog.setContentView(layoutID);
-        dialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT);
         dialog.setCancelable(isCancelable);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
         return dialog;

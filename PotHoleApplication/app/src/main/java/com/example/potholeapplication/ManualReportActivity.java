@@ -158,7 +158,7 @@ public class ManualReportActivity extends AppCompatActivity {
                 imagePart, new APICallBack<APIResponse<Pothole>>() {
                     @Override
                     public void onSuccess(Response<APIResponse<Pothole>> response) {
-                        DialogManager.showDialogOkeThenFinish(context,getString(R.string.str_report_summitted_successfully));
+                        DialogManager.showDialogOkeThenFinish(context,getString(R.string.str_report_submitted_successfully));
                     }
 
                     @Override

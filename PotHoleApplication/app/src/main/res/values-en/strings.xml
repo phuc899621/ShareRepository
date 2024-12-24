@@ -115,6 +115,7 @@
     <string name="str_info_collect">Information Collection</string>
     <string name="str_info_usage">Information Usage</string>
     <string name="str_close">Close</string>
+    <string name="str_report_submitted_successfully">Report submitted successfully</string>
 
 
 </resources>

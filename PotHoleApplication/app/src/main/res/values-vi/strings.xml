@@ -116,4 +116,5 @@
     <string name="str_info_collect">Thu Thập Thông Tin</string>
     <string name="str_info_usage">Sử Dụng Thông Tin</string>
     <string name="str_close">Đóng</string>
+    <string name="str_report_submitted_successfully">Report submitted successfully</string>
 </resources>
