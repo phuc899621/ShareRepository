@@ -84,306 +84,315 @@
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-    <LinearLayout
+    <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:background="@drawable/corner_sheet"
-        android:orientation="vertical"
+        app:cardCornerRadius="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@id/guideTop">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="horizontal"
-            android:layout_weight="2">
-            <com.google.android.material.card.MaterialCardView
+            android:orientation="vertical">
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginVertical="20dp"
-                android:layout_marginHorizontal="10dp"
-                android:layout_weight="1"
-                android:id="@+id/cvYourReports"
-                app:cardCornerRadius="30dp">
-
-                <com.google.android.material.imageview.ShapeableImageView
+                android:orientation="horizontal"
+                android:layout_weight="2">
+                <com.google.android.material.card.MaterialCardView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/custom_data_pothole_report"
-                    android:tint="@color/medium_dark_purple"/>
+                    android:layout_marginVertical="20dp"
+                    android:layout_marginHorizontal="10dp"
+                    android:layout_weight="1"
+                    android:id="@+id/cvYourReports"
+                    app:cardCornerRadius="30dp">
 
-                <LinearLayout
+                    <com.google.android.material.imageview.ShapeableImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/custom_data_pothole_report"
+                        android:tint="@color/medium_dark_purple"/>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:id="@+id/tvTotalReport"
+                            android:gravity="center|bottom"
+                            android:text="0"
+                            android:textColor="@color/white"
+                            android:textSize="25sp" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:text="@string/str_report_you_have_made"
+                            android:textColor="@color/white"
+                            android:textSize="14sp" />
+                    </LinearLayout>
+
+                </com.google.android.material.card.MaterialCardView>
+                <com.google.android.material.card.MaterialCardView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:orientation="vertical">
-                    <TextView
+                    android:layout_marginVertical="20dp"
+                    android:layout_marginHorizontal="10dp"
+                    android:layout_weight="1"
+                    android:id="@+id/cvYourPoints"
+                    app:cardCornerRadius="30dp">
+
+                    <com.google.android.material.imageview.ShapeableImageView
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:id="@+id/tvTotalReport"
-                        android:gravity="center|bottom"
-                        android:text="0"
-                        android:textColor="@color/white"
-                        android:textSize="25sp" />
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/custom_points"
+                        android:tint="@color/yellow_pastel"/>
 
-                    <TextView
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:gravity="center"
-                        android:text="@string/str_report_you_have_made"
-                        android:textColor="@color/white"
-                        android:textSize="14sp" />
-                </LinearLayout>
+                        android:orientation="vertical">
 
-            </com.google.android.material.card.MaterialCardView>
-            <com.google.android.material.card.MaterialCardView
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:id="@+id/tvPoints"
+                            android:gravity="center|bottom"
+                            android:text="0"
+                            android:textColor="@color/dark_purple"
+                            android:textSize="25sp" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:text="@string/str_points"
+                            android:textColor="@color/dark_purple"
+                            android:textSize="14sp" />
+                    </LinearLayout>
+
+                </com.google.android.material.card.MaterialCardView>
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginVertical="20dp"
+                    android:layout_marginHorizontal="10dp"
+                    android:layout_weight="1"
+                    android:id="@+id/cvMemberTypes"
+                    app:cardCornerRadius="30dp">
+
+                    <com.google.android.material.imageview.ShapeableImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scaleType="centerCrop"
+                        android:src="@color/white" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="2"
+                            android:text="1"
+                            android:id="@+id/tvRanking"
+                            android:gravity="center"
+                            android:textColor="@color/dark_purple"
+                            android:textStyle="bold"
+                            android:textSize="40sp"/>
+
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="3"
+                            android:gravity="center"
+                            android:text="@string/str_rank"
+                            android:textColor="@color/dark_purple"
+                            android:textSize="14sp" />
+                    </LinearLayout>
+
+                </com.google.android.material.card.MaterialCardView>
+
+
+            </LinearLayout>
+
+
+            <androidx.core.widget.NestedScrollView
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginVertical="20dp"
-                android:layout_marginHorizontal="10dp"
                 android:layout_weight="1"
-                android:id="@+id/cvYourPoints"
-                app:cardCornerRadius="30dp">
-
-                <com.google.android.material.imageview.ShapeableImageView
+                android:layout_height="match_parent">
+                <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/custom_points"
-                    android:tint="@color/yellow_pastel"/>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical">
+                    android:layout_weight="1">
 
                     <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:id="@+id/tvPoints"
-                        android:gravity="center|bottom"
-                        android:text="0"
+                        android:layout_marginTop="30dp"
+                        android:id="@+id/tvRealTime"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:drawablePadding="10dp"
+                        android:gravity="center|start"
+                        android:text="@string/str_real_time_detection"
                         android:textColor="@color/dark_purple"
-                        android:textSize="25sp" />
+                        android:textSize="18sp"
+                        app:drawableStartCompat="@drawable/ic_real_time"
+                        app:drawableTint="@color/dark_purple"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+                    <TextView
+                        android:id="@+id/tvEditUser"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center|start"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="30dp"
+                        android:textColor="@color/dark_purple"
+                        android:textSize="18sp"
+                        android:drawablePadding="10dp"
+                        android:clickable="true"
+                        android:text="@string/str_edit_user"
+                        app:drawableStartCompat="@drawable/ic_user"
+                        app:drawableTint="@color/dark_purple"
+                        app:layout_constraintTop_toBottomOf="@id/tvRealTime"
+                        app:layout_constraintStart_toStartOf="parent"/>
 
                     <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:gravity="center"
-                        android:text="@string/str_points"
+                        android:id="@+id/tvPolicy"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:clickable="true"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="30dp"
+                        android:drawablePadding="10dp"
+                        android:gravity="center|start"
+                        android:text="Policy and Privacy"
                         android:textColor="@color/dark_purple"
-                        android:textSize="14sp" />
-                </LinearLayout>
-
-            </com.google.android.material.card.MaterialCardView>
-            <com.google.android.material.card.MaterialCardView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginVertical="20dp"
-                android:layout_marginHorizontal="10dp"
-                android:layout_weight="1"
-                android:id="@+id/cvMemberTypes"
-                app:cardCornerRadius="30dp">
-
-                <com.google.android.material.imageview.ShapeableImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:scaleType="centerCrop"
-                    android:src="@color/white" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical">
+                        android:textSize="18sp"
+                        app:drawableStartCompat="@drawable/ic_flag"
+                        app:drawableTint="@color/dark_purple"
+                        app:layout_constraintTop_toBottomOf="@id/tvReport"
+                        app:layout_constraintStart_toStartOf="parent"/>
 
                     <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="2"
-                        android:text="1"
-                        android:id="@+id/tvRanking"
-                        android:gravity="center"
+                        android:id="@+id/tvLanguage"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:clickable="true"
+                        android:gravity="center|start"
+                        android:layout_marginStart="10dp"
+                        android:drawablePadding="10dp"
+                        android:layout_marginTop="30dp"
+                        android:text="@string/str_choose_your_language"
                         android:textColor="@color/dark_purple"
-                        android:textStyle="bold"
-                        android:textSize="40sp"/>
+                        android:textSize="18sp"
+                        app:drawableStartCompat="@drawable/ic_language"
+                        app:drawableTint="@color/dark_purple"
+                        app:layout_constraintTop_toBottomOf="@id/tvEditUser"
+                        app:layout_constraintStart_toStartOf="parent"/>
+
 
 
                     <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="3"
-                        android:gravity="center"
-                        android:text="@string/str_rank"
+                        android:id="@+id/tvReport"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:clickable="true"
+                        android:gravity="center|start"
+                        android:layout_marginStart="10dp"
+                        android:drawablePadding="10dp"
+                        android:layout_marginTop="30dp"
+                        android:text="@string/str_manual_report"
                         android:textColor="@color/dark_purple"
-                        android:textSize="14sp" />
-                </LinearLayout>
+                        android:textSize="18sp"
+                        app:drawableStartCompat="@drawable/ic_warning"
+                        app:drawableTint="@color/dark_purple"
+                        app:layout_constraintTop_toBottomOf="@id/tvLanguage"
+                        app:layout_constraintStart_toStartOf="parent"/>
 
-            </com.google.android.material.card.MaterialCardView>
 
+                    <TextView
+                        android:id="@+id/tvCustomerSupport"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:clickable="true"
+                        android:gravity="center|start"
+                        android:layout_marginStart="10dp"
+                        android:drawablePadding="10dp"
+                        android:layout_marginTop="30dp"
+                        android:text="Support"
+                        android:textColor="@color/dark_purple"
+                        android:textSize="18sp"
+                        app:drawableStartCompat="@drawable/ic_service"
+                        app:drawableTint="@color/dark_purple"
+                        app:layout_constraintTop_toBottomOf="@id/tvPolicy"
+                        app:layout_constraintStart_toStartOf="parent"/>
+
+                    <TextView
+                        android:id="@+id/tvDeveloperInfo"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:clickable="true"
+                        android:gravity="center|start"
+                        android:layout_marginStart="10dp"
+                        android:drawablePadding="10dp"
+                        android:layout_marginTop="30dp"
+                        android:text="About us"
+                        android:textColor="@color/dark_purple"
+                        android:textSize="18sp"
+                        app:drawableStartCompat="@drawable/ic_information"
+                        app:drawableTint="@color/dark_purple"
+                        app:layout_constraintTop_toBottomOf="@id/tvCustomerSupport"
+                        app:layout_constraintStart_toStartOf="parent"/>
+
+                    <TextView
+                        android:id="@+id/tvLogout"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:clickable="true"
+                        android:layout_marginTop="30dp"
+                        android:drawablePadding="10dp"
+                        android:gravity="center|start"
+                        android:layout_marginStart="10dp"
+                        android:text="@string/str_logout"
+                        android:textColor="@color/dark_purple"
+                        android:textSize="18sp"
+                        app:drawableStartCompat="@drawable/ic_logout"
+                        app:drawableTint="@color/dark_purple"
+                        app:layout_constraintTop_toBottomOf="@id/tvDeveloperInfo"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"/>
+
+                    <androidx.appcompat.widget.SwitchCompat
+                        android:id="@+id/switchRealtime"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="10dp"
+                        android:thumb="@drawable/thumb"
+                        android:track="@drawable/track"
+                        app:layout_constraintTop_toTopOf="@id/tvRealTime"
+                        app:layout_constraintBottom_toBottomOf="@id/tvRealTime"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.core.widget.NestedScrollView>
 
         </LinearLayout>
-
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1">
-
-            <TextView
-                android:layout_marginTop="30dp"
-                android:id="@+id/tvRealTime"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:drawablePadding="10dp"
-                android:gravity="center|start"
-                android:text="@string/str_real_time_detection"
-                android:textColor="@color/dark_purple"
-                android:textSize="18sp"
-                app:drawableStartCompat="@drawable/ic_real_time"
-                app:drawableTint="@color/dark_purple"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-            <TextView
-                android:id="@+id/tvEditUser"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center|start"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="30dp"
-                android:textColor="@color/dark_purple"
-                android:textSize="18sp"
-                android:drawablePadding="10dp"
-                android:clickable="true"
-                android:text="@string/str_edit_user"
-                app:drawableStartCompat="@drawable/ic_user"
-                app:drawableTint="@color/dark_purple"
-                app:layout_constraintTop_toBottomOf="@id/tvRealTime"
-                app:layout_constraintStart_toStartOf="parent"/>
-
-            <TextView
-                android:id="@+id/tvPolicy"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:clickable="true"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="30dp"
-                android:drawablePadding="10dp"
-                android:gravity="center|start"
-                android:text="Policy and Privacy"
-                android:textColor="@color/dark_purple"
-                android:textSize="18sp"
-                app:drawableStartCompat="@drawable/ic_flag"
-                app:drawableTint="@color/dark_purple"
-                app:layout_constraintTop_toBottomOf="@id/tvReport"
-                app:layout_constraintStart_toStartOf="parent"/>
-
-            <TextView
-                android:id="@+id/tvLanguage"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:clickable="true"
-                android:gravity="center|start"
-                android:layout_marginStart="10dp"
-                android:drawablePadding="10dp"
-                android:layout_marginTop="30dp"
-                android:text="@string/str_choose_your_language"
-                android:textColor="@color/dark_purple"
-                android:textSize="18sp"
-                app:drawableStartCompat="@drawable/ic_language"
-                app:drawableTint="@color/dark_purple"
-                app:layout_constraintTop_toBottomOf="@id/tvEditUser"
-                app:layout_constraintStart_toStartOf="parent"/>
-
-
-
-            <TextView
-                android:id="@+id/tvReport"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:clickable="true"
-                android:gravity="center|start"
-                android:layout_marginStart="10dp"
-                android:drawablePadding="10dp"
-                android:layout_marginTop="30dp"
-                android:text="@string/str_manual_report"
-                android:textColor="@color/dark_purple"
-                android:textSize="18sp"
-                app:drawableStartCompat="@drawable/ic_warning"
-                app:drawableTint="@color/dark_purple"
-                app:layout_constraintTop_toBottomOf="@id/tvLanguage"
-                app:layout_constraintStart_toStartOf="parent"/>
-
-
-            <TextView
-                android:id="@+id/tvCustomerSupport"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:clickable="true"
-                android:gravity="center|start"
-                android:layout_marginStart="10dp"
-                android:drawablePadding="10dp"
-                android:layout_marginTop="30dp"
-                android:text="Support"
-                android:textColor="@color/dark_purple"
-                android:textSize="18sp"
-                app:drawableStartCompat="@drawable/ic_service"
-                app:drawableTint="@color/dark_purple"
-                app:layout_constraintTop_toBottomOf="@id/tvPolicy"
-                app:layout_constraintStart_toStartOf="parent"/>
-
-            <TextView
-                android:id="@+id/tvDeveloperInfo"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:clickable="true"
-                android:gravity="center|start"
-                android:layout_marginStart="10dp"
-                android:drawablePadding="10dp"
-                android:layout_marginTop="30dp"
-                android:text="About us"
-                android:textColor="@color/dark_purple"
-                android:textSize="18sp"
-                app:drawableStartCompat="@drawable/ic_information"
-                app:drawableTint="@color/dark_purple"
-                app:layout_constraintTop_toBottomOf="@id/tvCustomerSupport"
-                app:layout_constraintStart_toStartOf="parent"/>
-
-            <TextView
-                android:id="@+id/tvLogout"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:clickable="true"
-                android:layout_marginTop="30dp"
-                android:drawablePadding="10dp"
-                android:gravity="center|start"
-                android:layout_marginStart="10dp"
-                android:text="@string/str_logout"
-                android:textColor="@color/dark_purple"
-                android:textSize="18sp"
-                app:drawableStartCompat="@drawable/ic_logout"
-                app:drawableTint="@color/dark_purple"
-                app:layout_constraintTop_toBottomOf="@id/tvDeveloperInfo"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"/>
-
-            <androidx.appcompat.widget.SwitchCompat
-                android:id="@+id/switchRealtime"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="10dp"
-                android:thumb="@drawable/thumb"
-                android:track="@drawable/track"
-                app:layout_constraintTop_toTopOf="@id/tvRealTime"
-                app:layout_constraintBottom_toBottomOf="@id/tvRealTime"
-                app:layout_constraintEnd_toEndOf="parent"
-                />
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-    </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
