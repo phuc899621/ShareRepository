@@ -114,4 +114,9 @@
     <string name="str_policy_description_security">Sử dụng công nghệ hiện đại để bảo vệ dữ liệu người dùng. Truy cập thông tin được xác thực và giới hạn quyền.</string>
     <string name="str_support_description_user_support">Hỗ trợ qua email khi gặp sự cố trong quá trình sử dụng ứng dụng.\\nEmail hỗ trợ: 22520901@gm.uit.edu.vn</string>
     <string name="str_support_description_publisher_infor">Phát triển bởi nhóm sinh viên khoa Mạng máy tính, UIT, ĐHQG TP.HCM. Liên hệ qua email hoặc số điện thoại: Email: 22520000@gm.uit.edu.vn | SĐT: 0111111111.</string>
+    <string name="str_user_support">Hỗ Trợ Người Dùng</string>
+    <string name="str_publisher_information">Thông Tin Nhà Phát Hành</string>
+    <string name="str_help_and_support">Trợ Giúp Và Hỗ Trợ</string>
+    <string name="str_info_collect">Thu Thập Thông Tin</string>
+    <string name="str_info_usage">Sử Dụng Thông Tin</string>
 </resources>

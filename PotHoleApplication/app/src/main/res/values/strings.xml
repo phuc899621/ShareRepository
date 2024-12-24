@@ -148,6 +148,11 @@ No data is shared with unauthorized third parties.</string>
 
     <string name="str_support_description_user_support">Provides assistance via email for any app-related issues.\nSupport Email: 22520000@gm.uit.edu.vn</string>
     <string name="str_support_description_publisher_infor">Developed by Computer Networking students, UIT, VNU-HCM. Contact via email or phone: Email: 22520000@gm.uit.edu.vn | Phone: 0111111111.</string>
-    <string name="ic_policy_description" translatable="false">Policy Privicy Description</string>
-
+    <string name="ic_policy_description" translatable="false">Privicy Policy Description</string>
+    <string name="str_user_support">User Support</string>
+    <string name="str_publisher_information">Publisher Information</string>
+    <string name="str_help_and_support">Help and Support</string>
+    <string name="str_thanks" translatable="false">Make by team 15 © NT118.P11\nThanks for your support!\nVersion 1.0.0</string>
+    <string name="str_info_collect">Information Collection</string>
+    <string name="str_info_usage">Information Usage</string>
 </resources>
