@@ -54,7 +54,7 @@ public class ManualReportActivity extends AppCompatActivity {
 
     private EditText descriptionEditText;
     private Spinner issueTypeSpinner;
-    private Button addPhotoButton, getLocationButton, submitButton;
+    private Button addPhotoButton, getLocationButton, submitButton,backButton;
     Bitmap imageBitmap;
     Context context;
     private String photoPath;
@@ -72,6 +72,8 @@ public class ManualReportActivity extends AppCompatActivity {
         addPhotoButton = findViewById(R.id.btnAddPhoto);
         getLocationButton = findViewById(R.id.btnGetLocation);
         submitButton = findViewById(R.id.btnSubmit);
+        backButton=findViewById(R.id.btnBack);
+
         context=this;
         // Set up spinner
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
@@ -90,6 +92,7 @@ public class ManualReportActivity extends AppCompatActivity {
 
         // Submit button listener
         submitButton.setOnClickListener(v -> callAPISaveReport());
+        backButton.setOnClickListener(v -> finish());
     }
 
     private void openCamera() {
