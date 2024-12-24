@@ -174,6 +174,13 @@ public class SettingActivity extends AppCompatActivity {
                 }
             }
         });
+        binding.tvPolicy.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DialogManager.showDialogPolicy(context);
+            }
+        });
+//
     }
 
     @Override

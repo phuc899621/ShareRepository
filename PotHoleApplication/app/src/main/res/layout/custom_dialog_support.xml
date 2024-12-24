@@ -150,6 +150,15 @@
             </LinearLayout>
 
         </androidx.cardview.widget.CardView>
+
+        <Button
+            android:id="@+id/btnClose"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/str_close"
+            android:layout_gravity="center"
+            android:layout_marginTop="16dp"/>
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

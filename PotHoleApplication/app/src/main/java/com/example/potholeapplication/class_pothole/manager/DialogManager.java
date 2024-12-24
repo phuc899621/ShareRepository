@@ -181,6 +181,8 @@ public class DialogManager {
         });
     }
 
+
+
     //Goi dialog hien thi thong tin lên piechart
     public static void showDialogPieChartDetail(Context context, float large,float medium, float small){
         Dialog dialog=createDialog(context,R.layout.custom_dialog_pie_chart,true);
@@ -196,6 +198,20 @@ public class DialogManager {
         dialog.show();
         setIsDialogSavingPothole(true);
 
+    }
+
+    public static void showDialogPolicy(Context context) {
+        Dialog dialog = createDialog(context, R.layout.custom_dialog_policy, true);
+
+        Button btnClose = dialog.findViewById(R.id.btnClose);
+        btnClose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+        dialog.show();
     }
 
     public static boolean isIsDialogSavingPothole() {

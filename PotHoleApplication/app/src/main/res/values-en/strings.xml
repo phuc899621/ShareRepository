@@ -101,7 +101,6 @@
     <string name="str_pothole_type">Pothole type</string>
     <string name="str_pothole_size">Pothole size</string>
     <string name="str_pothole_severity">Pothole severity</string>
-    <string name="str_pothole_type">Pothole type</string>
     <string name="str_pothole_description">Pothole description</string>
     <string name="str_pothole_image">Pothole image</string>
     <string name="str_pothole_location">Pothole location</string>
@@ -115,7 +114,7 @@
     <string name="str_help_and_support">Help and Support</string>
     <string name="str_info_collect">Information Collection</string>
     <string name="str_info_usage">Information Usage</string>
-    <string name="str_report_summitted_successfully">Report summitted successfully</string>
+    <string name="str_close">Close</string>
 
 
 </resources>

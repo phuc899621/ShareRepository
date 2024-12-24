@@ -100,10 +100,6 @@
     <string name="str_network_available">Mạng khả dụng</string>
     <string name="str_choose_type">Chọn loại ổ gà</string>
     <string name="str_policy_description_info">Thu thập dữ liệu gia tốc kế và GPS để phát hiện ổ gà và cung cấp bản đồ. Không thu thập thông tin cá nhân nếu không có sự đồng ý của người dùng.</string>
-    <string name="str_policy_description_info">Thu thập dữ liệu gia tốc kế và GPS để phát hiện ổ gà và cung cấp bản đồ. Không thu thập thông tin cá nhân nếu không có sự đồng ý của người dùng.</string>
-    <string name="str_pothole_type">Loại ổ gà</string>
-    <string name="str_pothole_type">"Loại ổ gà "</string>
-    <string name="str_pothole_type">loại</string>
     <string name="str_pothole_type">" Loại ổ gà"</string>
     <string name="str_pothole_size">Kích thước ổ gà</string>
     <string name="str_pothole_severity">Phân loại ổ gà</string>
@@ -119,5 +115,5 @@
     <string name="str_help_and_support">Trợ Giúp Và Hỗ Trợ</string>
     <string name="str_info_collect">Thu Thập Thông Tin</string>
     <string name="str_info_usage">Sử Dụng Thông Tin</string>
-    <string name="str_report_summitted_successfully">Gửi báo cáo thành công</string>
+    <string name="str_close">Đóng</string>
 </resources>

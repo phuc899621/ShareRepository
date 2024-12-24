@@ -155,5 +155,5 @@ No data is shared with unauthorized third parties.</string>
     <string name="str_thanks" translatable="false">Make by team 15 © NT118.P11\nThanks for your support!\nVersion 1.0.0</string>
     <string name="str_info_collect">Information Collection</string>
     <string name="str_info_usage">Information Usage</string>
-    <string name="str_report_summitted_successfully">Report summitted successfully</string>
+    <string name="str_close">Close</string>
 </resources>
