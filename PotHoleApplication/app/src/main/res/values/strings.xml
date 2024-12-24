@@ -145,4 +145,9 @@
     <string name="str_policy_description_usage">GPS data is used to mark and display potholes.
 No data is shared with unauthorized third parties.</string>
     <string name="str_policy_description_security">Implements advanced technologies to secure user data. Access to information is authenticated and restricted.</string>
+
+    <string name="str_support_description_user_support">Provides assistance via email for any app-related issues.\nSupport Email: 22520000@gm.uit.edu.vn</string>
+    <string name="str_support_description_publisher_infor">Developed by Computer Networking students, UIT, VNU-HCM. Contact via email or phone: Email: 22520000@gm.uit.edu.vn | Phone: 0111111111.</string>
+    <string name="ic_policy_description" translatable="false">Policy Privicy Description</string>
+
 </resources>
