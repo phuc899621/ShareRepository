@@ -97,60 +97,6 @@
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
-        <androidx.cardview.widget.CardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
-            app:cardBackgroundColor="@color/white"
-            android:padding="16dp"
-            app:cardCornerRadius="20dp"
-            app:cardElevation="4dp">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_margin="10dp"
-                android:gravity="center_vertical">
-
-                <ImageView
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:layout_marginEnd="16dp"
-                    android:contentDescription="@string/ic_policy_description"
-                    android:src="@drawable/ic_usage"
-                    android:scaleType="centerCrop" />
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:layout_margin="10dp"
-                    >
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/str_publisher_information"
-                        android:textColor="@color/dark_purple"
-                        android:textSize="16sp"
-                        android:textStyle="bold" />
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:textSize="12sp"
-                        android:text="@string/str_support_description_publisher_infor"
-                        android:textColor="@color/dark_purple"/>
-
-                </LinearLayout>
-
-            </LinearLayout>
-
-        </androidx.cardview.widget.CardView>
-
         <Button
             android:id="@+id/btnClose"
             android:layout_width="wrap_content"
