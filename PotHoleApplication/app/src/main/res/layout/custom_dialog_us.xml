@@ -29,7 +29,7 @@
             android:layout_marginTop="8dp"
             android:gravity="center"
             android:textColor="@color/dark_purple"
-            android:text="About us"
+            android:text="@string/str_about_us"
             android:textStyle="bold"
             android:textSize="22sp" />
 

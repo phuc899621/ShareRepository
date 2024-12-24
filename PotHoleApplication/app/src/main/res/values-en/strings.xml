@@ -116,6 +116,9 @@
     <string name="str_info_usage">Information Usage</string>
     <string name="str_close">Close</string>
     <string name="str_report_submitted_successfully">Report submitted successfully</string>
+    <string name="str_policy">Privicy and Policy</string>
+    <string name="str_support">Support</string>
+    <string name="str_about_us">About Us</string>
 
 
 </resources>
