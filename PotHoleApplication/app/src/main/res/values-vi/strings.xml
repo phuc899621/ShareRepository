@@ -117,4 +117,7 @@
     <string name="str_info_usage">Sử Dụng Thông Tin</string>
     <string name="str_close">Đóng</string>
     <string name="str_report_submitted_successfully">Report submitted successfully</string>
+    <string name="str_policy">Chính sách bảo mật và điều khoản</string>
+    <string name="str_support">Hỗ trợ</string>
+    <string name="str_about_us">Giới thiệu</string>
 </resources>
